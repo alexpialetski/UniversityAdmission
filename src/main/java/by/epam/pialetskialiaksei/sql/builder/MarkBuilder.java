@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MarkBuilder implements SetBuilder<Mark> {
+public class MarkBuilder extends SetBuilder<Mark> {
     private final static Logger LOG = LogManager
             .getLogger(MarkBuilder.class);
     @Override
@@ -24,6 +24,20 @@ public class MarkBuilder implements SetBuilder<Mark> {
 //            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to mark", e);
+        }
+        return mark;
+    }
+
+    @Override
+    public Mark buildForeign(ResultSet rs) {
+        Mark mark = new Mark();
+        try {
+            mark.setEntrantId(rs.getInt(Fields.ENTRANT_FOREIGN_KEY_ID));
+            mark.setSubjectId(rs.getInt(Fields.ENTITY_ID));
+            mark.setMark(rs.getInt(Fields.MARK_VALUE));
+//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
+        } catch (SQLException e) {
+            LOG.error("Can not unmarshal ResultSet to subject", e);
         }
         return mark;
     }

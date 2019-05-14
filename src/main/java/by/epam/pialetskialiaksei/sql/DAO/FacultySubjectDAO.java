@@ -4,8 +4,12 @@ package by.epam.pialetskialiaksei.sql.DAO;
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.FacultySubject;
+import by.epam.pialetskialiaksei.entity.Subject;
+import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
+import by.epam.pialetskialiaksei.sql.builder.FacultyBuilder;
 import by.epam.pialetskialiaksei.sql.builder.FacultySubjectBuilder;
+import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,15 +18,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 
 public class FacultySubjectDAO extends SqlDAO {
     private FacultySubjectBuilder facultySubjectBuilder = new FacultySubjectBuilder();
+    private FacultyBuilder facultyBuilder = new FacultyBuilder();
+    private SubjectBuilder subjectBuilder = new SubjectBuilder();
 
-    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects;";
-//    private static final String FIND_FACULTY_SUBJECT = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.id = ? LIMIT 1;";
-    private static final String FIND_FACULTY_SUBJECT_BY_ID = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.Faculty_idFaculty = ? LIMIT 3;";
+    //    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects;";
+    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
+                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,\n" +
+                                                            "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
+                                                            "FROM university_admission.faculty_subjects\n" +
+                                                            "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
+                                                            "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id;";
+    private static final String FIND_FACULTY_SUBJECT_BY_ID = "SELECT faculty_subjects.id,\n" +
+                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,\n" +
+                                                            "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
+                                                            "FROM university_admission.faculty_subjects\n" +
+                                                            "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
+                                                            "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
+                                                            "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?\n" +
+                                                            "LIMIT 3;";
     private static final String FIND_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.id = ? LIMIT 3;";
     private static final String INSERT_FACULTY_SUBJECT = "INSERT INTO university_admission.faculty_subjects (university_admission.faculty_subjects.Faculty_idFaculty, university_admission.faculty_subjects.Subject_idSubject) VALUES (?,?);";
     private static final String DELETE_FACULTY_SUBJECT = "DELETE FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.Faculty_idFaculty=? AND university_admission.faculty_subjects.Subject_idSubject=? LIMIT 1;";
@@ -120,36 +140,48 @@ public class FacultySubjectDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not find a faculty subject", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
         return facultySubject;
     }
 
-    public List<FacultySubject> findAll() {
+    public List<FacultyInfoModel> findAll() {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        List<FacultySubject> facultySubjects = new ArrayList<FacultySubject>();
+        List<FacultyInfoModel> facultyInfoModels = new ArrayList<>();
         try {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_ALL_FACULTY_SUBJECTS);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
+            int i = 1;
+            Faculty faculty = null;
+            List<Subject> subjects = new ArrayList<>();
             while (rs.next()) {
-//                facultySubjects.add(unmarshal(rs));
-                facultySubjects.add(facultySubjectBuilder.build(rs));
+                if (i % 3 == 0) {
+                    faculty = facultyBuilder.buildForeign(rs);
+                    subjects.add(subjectBuilder.buildForeign(rs));
+//                    facultyInfoModels.add(new FacultyInfoModel(faculty, new ArrayList<>(subjects));
+                    facultyInfoModels.add(new FacultyInfoModel(faculty, subjects));
+                    subjects = new ArrayList<>();
+                    i = 1;
+                    continue;
+                }
+                subjects.add(subjectBuilder.buildForeign(rs));
+                ++i;
             }
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not find all faculty clientSubjects", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
-        return facultySubjects;
+        return facultyInfoModels;
     }
 
     public List<FacultySubject> find(int facultyId) {
@@ -187,18 +219,4 @@ public class FacultySubjectDAO extends SqlDAO {
      *            - ResultSet record of Faculty Subject
      * @return entity instance of this record
      */
-    private static FacultySubject unmarshal(ResultSet rs) {
-        FacultySubject facultySubject = new FacultySubject();
-        try {
-            facultySubject.setId(rs.getInt(Fields.ENTITY_ID));
-            facultySubject.setFacultyId(rs
-                    .getInt(Fields.FACULTY_FOREIGN_KEY_ID));
-            facultySubject.setSubjectId(rs
-                    .getInt(Fields.SUBJECT_FOREIGN_KEY_ID));
-
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to faculty subject", e);
-        }
-        return facultySubject;
-    }
 }

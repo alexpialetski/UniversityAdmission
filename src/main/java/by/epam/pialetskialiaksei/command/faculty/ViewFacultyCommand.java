@@ -61,18 +61,12 @@ public class ViewFacultyCommand extends Command {
 		User user = userDAO.find(userEmail);
 
 		FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-		List<FacultySubject> facultySubjects = facultySubjectDAO.findAll();
-		List<FacultyInfoModel> facultyInfoModels = new ArrayList<>();
-		Faculty faculty = null;
-		List<Subject> subjects = null;
-		for(int i=0; i<facultySubjects.size(); i++){
-			if(i%3==0){
+		List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
-			}
-		}
-		for(FacultySubject facultySubject: facultySubjects){
+		request.setAttribute("facultiesInfo", facultyInfoModels);
+		LOG.trace("Set the request attribute: 'facultiesInfo' = "
+				+ facultyInfoModels);
 
-		}
 		String role = user.getRole();
 		if ("client".equals(role)) {
 			result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;

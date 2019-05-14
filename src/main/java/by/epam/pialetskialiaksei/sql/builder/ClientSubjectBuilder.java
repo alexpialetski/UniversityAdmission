@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ClientSubjectBuilder implements SetBuilder<ClientSubject> {
+public class ClientSubjectBuilder extends SetBuilder<ClientSubject> {
     private final static Logger LOG = LogManager
             .getLogger(ClientSubjectBuilder.class);
     @Override

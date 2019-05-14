@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
+import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
 import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 
 public class SubjectDAO extends SqlDAO {
     private SubjectBuilder subjectBuilder = new SubjectBuilder();
+    private MarkBuilder markBuilder = new MarkBuilder();
 
     private static final String FIND_ALL_SUBJECTS = "SELECT * FROM university_admission.subject;";
     private static final String FIND_SUBJECT_BY_ID = "SELECT * FROM university_admission.subject WHERE subject.id=? LIMIT 1;";
@@ -33,7 +35,7 @@ public class SubjectDAO extends SqlDAO {
                                                         "       university_admission.subject.name_ru,\n" +
                                                         "       university_admission.subject.name_eng,\n" +
                                                         "       university_admission.mark.value,\n" +
-                                                        "       university_admission.mark.Entrant_idEntrant as entrant_id,\n" +
+                                                        "       university_admission.mark.Entrant_idEntrant as Entrant_idEntrant,\n" +
                                                         "       university_admission.exam_type.exam_type\n" +
                                                         "FROM university_admission.mark\n" +
                                                         "       INNER JOIN university_admission.subject\n" +
@@ -267,7 +269,9 @@ public class SubjectDAO extends SqlDAO {
             while (rs.next()) {
 //                Subject subject = unmarshal(rs);
                 Subject subject = subjectBuilder.build(rs);
-                facultySubjects.add(createClientSubject(rs, subject));
+                Mark mark = markBuilder.buildForeign(rs);
+//                facultySubjects.add(createClientSubject(rs, subject));
+                facultySubjects.add(new ClientSubject(subject, mark));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -278,38 +282,6 @@ public class SubjectDAO extends SqlDAO {
             close(rs);
         }
         return facultySubjects;
-    }
-
-    /**
-     * Unmarshals database Subject record to Subject instance.
-     *
-     * @param rs
-     *            - ResultSet instance.
-     * @return Subject instance of database record
-     */
-    private static Subject unmarshal(ResultSet rs) {
-        Subject subject = new Subject();
-        try {
-            subject.setId(rs.getInt(Fields.ENTITY_ID));
-            subject.setNameRu(rs.getString(Fields.SUBJECT_NAME_RU));
-            subject.setNameEng(rs.getString(Fields.SUBJECT_NAME_ENG));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to subject", e);
-        }
-        return subject;
-    }
-    private static ClientSubject createClientSubject(ResultSet rs, Subject subject){
-        Mark mark = new Mark();
-        try {
-            mark.setEntrantId(rs.getInt("entrant_id"));
-            mark.setSubjectId(rs.getInt(Fields.ENTITY_ID));
-            mark.setMark(rs.getInt(Fields.MARK_VALUE));
-//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to subject", e);
-        }
-        ClientSubject clientSubject = new ClientSubject(subject,mark);
-        return clientSubject;
     }
 }
 

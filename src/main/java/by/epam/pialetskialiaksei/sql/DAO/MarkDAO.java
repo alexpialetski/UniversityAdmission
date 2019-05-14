@@ -22,15 +22,16 @@ import java.util.List;
 
 public class MarkDAO extends SqlDAO {
     private MarkBuilder markBuilder= new MarkBuilder();
+    private SubjectBuilder subjectBuilder = new SubjectBuilder();
 
     private static final String FIND_ALL_MARKS = "SELECT * FROM university_admission.mark;";
     private static final String FIND_MARK = "SELECT * FROM university_admission.mark WHERE mark.id = ? LIMIT 1;";
     private static final String INSERT_MARK = "INSERT INTO university_admission.mark(mark.Entrant_idEntrant,mark.Subject_idSubject,mark.value) VALUES (?,?,?,?);";
     private static final String UPDATE_MARK = "UPDATE mark SET mark.Entrant_idEntrant=?, mark.Subject_idSubject=?,mark.value=? WHERE mark.id=? LIMIT 1;";
     private static final String DELETE_MARK = "DELETE FROM university_admission.mark WHERE mark.id=? LIMIT 1;";
-    private static final String FIND_MARKS_OF_ENTRANT = "SELECT university_admission.subject.id as subject_id,\n" +
-                                                        "       university_admission.subject.name_ru,\n" +
-                                                        "       university_admission.subject.name_eng,\n" +
+    private static final String FIND_MARKS_OF_ENTRANT = "SELECT university_admission.subject.id as Subject_idSubject,\n" +
+                                                        "       university_admission.subject.name_ru as Subject_name_ru,\n" +
+                                                        "       university_admission.subject.name_eng as Subject_name_eng,\n" +
                                                         "       university_admission.mark.id,\n" +
                                                         "       university_admission.mark.value,\n" +
                                                         "       university_admission.mark.Entrant_idEntrant,\n" +
@@ -42,9 +43,9 @@ public class MarkDAO extends SqlDAO {
 //                                                        "       INNER JOIN university_admission.exam_type\n" +
 //                                                        "                  ON university_admission.mark.exam_type_id= university_admission.exam_type.id\n" +
                                                         "WHERE university_admission.mark.Entrant_idEntrant = ?;";
-    private static final String FIND_SUBJECTS_OF_ENTRANT = "SELECT university_admission.subject.id as subject_id,\n" +
-                                                            "       university_admission.subject.name_ru,\n" +
-                                                            "       university_admission.subject.name_eng\n" +
+    private static final String FIND_SUBJECTS_OF_ENTRANT = "SELECT university_admission.subject.id as Subject_idSubject,\n" +
+                                                            "       university_admission.subject.name_ru as Subject_name_ru,\n" +
+                                                            "       university_admission.subject.name_eng as Subject_name_eng\n" +
                                                             "FROM university_admission.mark\n" +
                                                             "       inner join university_admission.subject on mark.Subject_idSubject = subject.id\n" +
                                                             "WHERE university_admission.mark.Entrant_idEntrant = ?;";
@@ -217,7 +218,8 @@ public class MarkDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             while (rs.next()) {
-                Subject subject = unmarshalSubject(rs);
+//                Subject subject = unmarshalSubject(rs);
+                Subject subject = subjectBuilder.buildForeign(rs);
 //                Mark mark = unmarshal(rs);
                 Mark mark = markBuilder.build(rs);
                 ClientSubject clientSubject = new ClientSubject(subject,mark);
@@ -246,7 +248,8 @@ public class MarkDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             while (rs.next()) {
-                Subject subject = unmarshalSubject(rs);
+//                Subject subject = unmarshalSubject(rs);
+                Subject subject = subjectBuilder.buildForeign(rs);
                 subjects.add(subject);
             }
         } catch (SQLException e) {
@@ -293,29 +296,4 @@ public class MarkDAO extends SqlDAO {
      * @param rs - ResultSet record in Mark table
      * @return Mark instance of this record
      */
-    private static Mark unmarshal(ResultSet rs) {
-        Mark mark = new Mark();
-        try {
-            mark.setId(rs.getInt(Fields.ENTITY_ID));
-            mark.setEntrantId(rs.getInt(Fields.ENTRANT_FOREIGN_KEY_ID));
-            mark.setSubjectId(rs.getInt(Fields.SUBJECT_FOREIGN_KEY_ID));
-            mark.setMark(rs.getByte(Fields.MARK_VALUE));
-//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to mark", e);
-        }
-        return mark;
-    }
-
-    private static Subject unmarshalSubject(ResultSet rs) {
-        Subject subject = new Subject();
-        try {
-            subject.setId(rs.getInt(Fields.SUBJECT_ID));
-            subject.setNameRu(rs.getString(Fields.SUBJECT_NAME_RU));
-            subject.setNameEng(rs.getString(Fields.SUBJECT_NAME_ENG));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to subject", e);
-        }
-        return subject;
-    }
 }

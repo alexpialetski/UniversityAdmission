@@ -76,6 +76,14 @@ public class LoginCommand extends Command {
 //			LOG.error("errorMessage: User is not registered or did not complete his registration.");
 //			result = null;
 		} else {
+//			HttpSession oldSession = request.getSession(false);
+//			HttpSession session = request.getSession(true);
+//			if(oldSession != null){
+//				String lang = (String) oldSession.getAttribute("lang");
+//				session.setAttribute("lang", lang);
+//			}else{
+//				session.setAttribute("lang", "ru");
+//			}
 			HttpSession session = request.getSession(true);
 
 			session.setAttribute("user", user.getEmail());

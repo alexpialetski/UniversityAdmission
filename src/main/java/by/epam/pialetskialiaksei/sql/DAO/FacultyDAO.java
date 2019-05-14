@@ -119,7 +119,7 @@ public class FacultyDAO extends SqlDAO {
             if (!rs.next()) {
                 faculty = null;
             } else {
-                faculty = unmarshal(rs);
+//                faculty = unmarshal(rs);
                 faculty = facultyBuilder.build(rs);
             }
         } catch (SQLException e) {
@@ -180,7 +180,7 @@ public class FacultyDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not find all faculties", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
@@ -193,17 +193,4 @@ public class FacultyDAO extends SqlDAO {
      * @param rs - ResultSet record
      * @return Faculty instance of this record
      */
-    private static Faculty unmarshal(ResultSet rs) {
-        Faculty faculty = new Faculty();
-        try {
-            faculty.setId(rs.getInt(Fields.ENTITY_ID));
-            faculty.setNameRu(rs.getString(Fields.FACULTY_NAME_RU));
-            faculty.setNameEng(rs.getString(Fields.FACULTY_NAME_ENG));
-            faculty.setTotalSeats(rs.getByte(Fields.FACULTY_TOTAL_SEATS));
-            faculty.setBudgetSeats(rs.getByte(Fields.FACULTY_BUDGET_SEATS));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to faculty", e);
-        }
-        return faculty;
-    }
 }

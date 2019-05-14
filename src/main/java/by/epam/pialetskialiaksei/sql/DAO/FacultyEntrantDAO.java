@@ -166,17 +166,4 @@ public class FacultyEntrantDAO extends SqlDAO {
      *            - ResultSet record in Faculty Entrants table
      * @return Faculty Entrant instance of given record
      */
-    private static FacultyEntrant unmarshal(ResultSet rs) {
-        FacultyEntrant facultyEntrant = new FacultyEntrant();
-        try {
-            facultyEntrant.setId(rs.getInt(Fields.ENTITY_ID));
-            facultyEntrant.setFacultyId(rs
-                    .getInt(Fields.FACULTY_FOREIGN_KEY_ID));
-            facultyEntrant.setEntrantId(rs
-                    .getInt(Fields.ENTRANT_FOREIGN_KEY_ID));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to faculty entrant", e);
-        }
-        return facultyEntrant;
-    }
 }

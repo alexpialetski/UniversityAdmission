@@ -243,21 +243,7 @@ public class EntrantDAO extends SqlDAO {
      * @param rs - ResultSet record
      * @return Entrant instance of this record
      */
-    private static Entrant unmarshal(ResultSet rs) {
-        Entrant entrant = new Entrant();
-        try {
-            entrant.setId(rs.getInt(Fields.ENTITY_ID));
-            entrant.setCity(rs.getString(Fields.ENTRANT_CITY));
-            entrant.setDistrict(rs.getString(Fields.ENTRANT_DISTRICT));
-            entrant.setSchool(rs.getString(Fields.ENTRANT_SCHOOL));
-            entrant.setUserId(rs.getInt(Fields.USER_FOREIGN_KEY_ID));
-            entrant.setDiplomaMark(rs.getInt(Fields.ENTRANT_DIPLOMA_MARK));
-            entrant.setBlockedStatus(rs.getBoolean(Fields.ENTRANT_IS_BLOCKED));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to entrant", e);
-        }
-        return entrant;
-    }
+
 }
 
 

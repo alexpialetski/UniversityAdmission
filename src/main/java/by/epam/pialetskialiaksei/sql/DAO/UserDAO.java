@@ -274,21 +274,5 @@ public class UserDAO extends SqlDAO {
      * @param rs - record from result set
      * @return User instance of database record.
      */
-    private static User unmarshal(ResultSet rs) {
-        User user = new User();
-        try {
-            user.setId(rs.getInt(Fields.ENTITY_ID));
-            user.setFirstName(rs.getString(Fields.USER_FIRST_NAME));
-            user.setLastName(rs.getString(Fields.USER_LAST_NAME));
-            user.setEmail(rs.getString(Fields.USER_EMAIL));
-            user.setPassword(rs.getString(Fields.USER_PASSWORD));
-            user.setRole(rs.getString(Fields.USER_ROLE));
-            user.setLang(rs.getString(Fields.USER_LANG));
-//            user.setActiveStatus(rs.getBoolean(Fields.USER_ACTIVE_STATUS));
-        } catch (SQLException e) {
-            LOG.error("Can not unmarshal result set to user", e);
-        }
-        return user;
-    }
 }
 

@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EntrantBuilder implements SetBuilder<Entrant> {
+public class EntrantBuilder extends SetBuilder<Entrant> {
     private final static Logger LOG = LogManager
             .getLogger(EntrantBuilder.class);
     @Override

@@ -26,10 +26,14 @@ public class Fields {
     public static final String FACULTY_BUDGET_SEATS = "budget_seats";
     public static final String FACULTY_TOTAL_SEATS = "total_seats";
     public static final String FACULTY_FOREIGN_KEY_ID = "Faculty_idFaculty";
+    public static final String FACULTY_FOREIGN_NAME_RU = "Faculty_name_ru";
+    public static final String FACULTY_FOREIGN_NAME_ENG = "Faculty_name_eng";
 
     public static final String SUBJECT_NAME_RU = "name_ru";
     public static final String SUBJECT_NAME_ENG = "name_eng";
     public static final String SUBJECT_FOREIGN_KEY_ID = "Subject_idSubject";
+    public static final String SUBJECT_FOREIGN_NAME_RU = "Subject_name_ru";
+    public static final String SUBJECT_FOREIGN_NAME_ENG = "Subject_name_eng";
     public static final String SUBJECT_ID = "subject_id";
 
     public static final String MARK_VALUE = "value";
