@@ -1,0 +1,32 @@
+body{
+  height: 100%;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+
+}
+
+.form-container{
+  height: 80%;
+}
+
+.main-container{
+  height: 600px;
+}
+
+.btn{
+  display:inline-block;
+  border:0.10em solid rgba(255,255,255,0.2);
+  border-radius:2em;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-sizing: border-box;
+  text-decoration:none;
+  font-family:'Roboto',sans-serif;
+  font-weight:900;
+  font-size: 22px;
+  color: white;
+  text-align:center;
+  transition: all 0.2s;
+}

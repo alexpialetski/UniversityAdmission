@@ -1,0 +1,72 @@
+<!-- Header - top area. -->
+
+<div class="header">
+    <a href="#default" class="logo default"><fmt:message key="header.logo"/></a>
+    <ul class="header-right">
+        <input class="active default" type="submit" value="Home">
+        <form class="form" action="controller" method="GET">
+            <input type="hidden" name="command" value="viewProfile">
+            <input class="default" type="submit" value="<fmt:message key="header.profile"/>">
+        </form>
+        <input type="submit" class="default" value="Contact">
+        <input type="submit" class="default" value="About">
+        <form class="form" action="controller" method="GET">
+            <input type="hidden" name="command" value="faculties">
+            <input class="default" type="submit" value="<fmt:message key="header.faculties"/>">
+        </form>
+        <form class="form" action="controller" method="POST">
+            <input type="hidden" name="command" value="logout">
+            <input class="default" type="submit" value="<fmt:message key="header.logout"/>">
+        </form>
+        <%--<div class="dropdown">--%>
+            <%--<div class="dropbtn">RU</div>--%>
+            <%--<div class="dropdown-content">--%>
+                <%--<a href="#">RU</a>--%>
+                <%--<a href="#">EN</a>--%>
+            <%--</div>--%>
+        <%--</div>--%>
+        <ul id="dropdown">
+            <li class="dropdown">
+                <a href="javascript:void(0)" class="dropbtn"><fmt:message key="language.choose"/></a>
+                <ul class="dropdown-content">
+                    <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=en"><li><img src="http://i64.tinypic.com/fd60km.png"/><fmt:message key="language.en"/></li></a>
+                    <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=ru"><li><img src="http://i63.tinypic.com/10zmzyb.png"/><fmt:message key="language.ru"/></li></a>
+                </ul>
+            </li>
+        </ul>
+            <%--<ul class="languagepicker roundborders large">--%>
+                <%--<a href="#nl"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Nederlands</li></a>--%>
+                <%--<a href="#en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>--%>
+                <%--<a href="#de"><li><img src="http://i63.tinypic.com/10zmzyb.png"/>German</li></a>--%>
+                <%--<a href="#fr"><li><img src="http://i65.tinypic.com/300b30k.png"/>Français</li></a>--%>
+                <%--<a href="#es"><li><img src="http://i68.tinypic.com/avo5ky.png"/>Español</li></a>--%>
+                <%--<a href="#it"><li><img src="http://i65.tinypic.com/23jl6bn.png"/>Italiano</li></a>--%>
+            <%--</ul>--%>
+    </ul>
+</div>
+
+<%--<div class="menu">--%>
+<%--<a href="controller?command=viewAllFaculties"><fmt:message--%>
+<%--key="header.faculties" /></a>--%>
+<%--<c:choose>--%>
+<%--<c:when test="${empty user}">--%>
+<%--<a href="welcome.jsp"> <fmt:message--%>
+<%--key="header.login" /></a>--%>
+<%--<a href="controller?command=client_registration"><fmt:message--%>
+<%--key="header.register" /></a>--%>
+<%--</c:when>--%>
+<%--<c:otherwise>--%>
+<%--<c:if test="${userRole eq 'admin'}">--%>
+<%--<a href="controller?command=viewAllSubjects"><fmt:message--%>
+<%--key="header.clientSubjects" /></a>--%>
+<%--</c:if>--%>
+<%--<a href="controller?command=viewProfile"><fmt:message--%>
+<%--key="header.profile" /></a>--%>
+<%--<a href="controller?command=logout"><fmt:message--%>
+<%--key="header_jspf.anchor.logout" /></a>--%>
+<%--</c:otherwise>--%>
+<%--</c:choose>--%>
+<%--</div>--%>
+
+
+

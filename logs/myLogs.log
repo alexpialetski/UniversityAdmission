@@ -1,0 +1,11 @@
+24.04.2019 09:43:44,717 ERROR UserDAO:281 - Can not unmarshal result set to user
+java.sql.SQLException: Column 'role_id' not found.
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:965) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:898) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:887) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:861) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at com.mysql.jdbc.ResultSetImpl.findColumn(ResultSetImpl.java:1078) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at com.mysql.jdbc.ResultSetImpl.getString(ResultSetImpl.java:5175) ~[mysql-connector-java-5.1.47-bin.jar:5.1.47]
+	at by.epam.pialetskialiaksei.sql.DAO.UserDAO.unmarshal(UserDAO.java:277) [classes/:?]
+	at by.epam.pialetskialiaksei.sql.DAO.UserDAO.find(UserDAO.java:197) [classes/:?]
+	at by.epam.pialetskialiaksei.TEST_CLASS.main(TEST_CLASS.java:22) [classes/:?]
