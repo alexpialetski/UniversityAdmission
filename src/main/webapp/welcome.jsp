@@ -32,8 +32,8 @@
             <input type="password" name="password" placeholder="<fmt:message key="welcome_jsp.label.password" />" class="input-field" required>
         </div>
         <input type="submit" class="btn" style="background-color:#4e9af1" value="<fmt:message key="welcome_jsp.button.login" />">
-        <c:if test="${not empty errorMessage}">
-            <h3>${errorMessage}</h3>
+        <c:if test="${not empty message}">
+            <h3>${message}</h3>
         </c:if>
     </form>
     <p><fmt:message key="welcome_jsp.label.not_registered_msg" />

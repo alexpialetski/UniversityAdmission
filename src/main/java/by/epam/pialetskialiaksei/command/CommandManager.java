@@ -1,6 +1,8 @@
 package by.epam.pialetskialiaksei.command;
 
 import by.epam.pialetskialiaksei.command.api.Command;
+import by.epam.pialetskialiaksei.command.faculty.ApplyFacultyCommand;
+import by.epam.pialetskialiaksei.command.faculty.UnApplyFacultyCommand;
 import by.epam.pialetskialiaksei.command.faculty.ViewFacultyCommand;
 import by.epam.pialetskialiaksei.command.profile.*;
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
@@ -24,6 +26,8 @@ public class CommandManager {
         commands.put("changeDiploma", new ChangeDiplomaCommand());
         commands.put("logout", new LogoutCommand());
         commands.put("viewFaculties", new ViewFacultyCommand());
+        commands.put("applyOnFaculty", new ApplyFacultyCommand());
+        commands.put("unApplyOnFaculty", new UnApplyFacultyCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

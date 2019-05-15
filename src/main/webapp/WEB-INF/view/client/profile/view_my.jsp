@@ -90,7 +90,7 @@
         <div class="info" style="border: solid 2pt rgb(255, 0, 200);">
             <h2><fmt:message key="profile.view_jsp.label.subjects"/></h2>
             <c:if test="${not empty marks}">
-                <input id="entrant_subjectss" type="hidden" value=${marks}>
+                <%--<input id="entrant_subjectss" type="hidden" value=${marks}>--%>
                 <div id="entrant_subjects" style="border: solid 2pt rgb(0, 255, 21);">
                     <c:forEach var="mark_subject" items="${marks}">
                         <div class="subject-field"
@@ -112,6 +112,8 @@
                 <div id="all_subjects"></div>
             </c:if>
             <c:if test="${empty marks}">
+                <div id="entrant_subjects" style="border: solid 2pt rgb(0, 255, 21);"></div>
+                <div id="all_subjects"></div>
                 <div class="noSubjects">
                     <h1><b><fmt:message key="profile.view_jsp.label.no_subjects_message"/></b></h1>
                 </div>
@@ -224,7 +226,6 @@
 
         $("#subject_change").click(subject_change_click);
 
-
         function subject_change_click() {
             alert("Dont subject_change_click!!");
             $("#subject_submit").show();
@@ -232,6 +233,10 @@
             $("#subject_change").hide();
             $(".subject-field input").attr("disabled", false);
 
+            if ($('.noSubjects').length) {
+                alert("element(s) found");
+                $('.noSubjects').hide();
+            }
 
             let entrant_subjects = $(".subject-field");
             for (let i = 0; i < entrant_subjects.length; i++) {
@@ -355,31 +360,44 @@
 
         function subject_cancel_click() {
             alert("Dont subject_cancel_click!!");
-            let subjects =
-            ${jsonMarks}.
-            clientSubjects;
-            $("div #entrant_subjects").empty();
-            $("div #all_subjects").empty();
-            for (var i = 0; i < subjects.length; i++) {
-                let subjectName;
-                <c:if test="${sessionScope.lang eq 'ru'}">
-                subjectName = subjects[i].subject.nameRu;
-                </c:if>
-                <c:if test="${sessionScope.lang eq 'en'}">
-                subjectName = subjects[i].subject.nameEng;
-                </c:if>
-                $("div #entrant_subjects").append(
-                    "<div class=\"subject-field\" style=\"display:flex; justify-content: space-between;\">" +
-                    "   <input type=\"hidden\" class=\"id\" id=\"" + subjects[i].subject.id + "\" disabled>" +
-                    // "   <h4>" + subjects[i].subject.nameEng + "</h4>" +
-                    "   <h4>" + subjectName + "</h4>" +
-                    "   <input type=\"number\" class=\"mark no-spinners\" placeholder=\"" + subjects[i].mark.mark + "\" disabled>" +
-                    "</div>"
-                );
+            if ($('.noSubjects').length) {
+                alert("element(s) found");
+                $("div #entrant_subjects").empty();
+                $("div #all_subjects").empty();
+                $("div #entrant_subjects").append("<div class=\"noSubjects\">\n" +
+                    "                               <h1><b><fmt:message key="profile.view_jsp.label.no_subjects_message"/></b></h1>\n" +
+                    "                           </div>");
+                $("#subject_cancel").hide();
+                $("#subject_submit").hide();
+                $("#subject_change").show();
+            } else {
+                alert("nothing found");
+                let subjects =
+                ${jsonMarks}.
+                clientSubjects;
+                $("div #entrant_subjects").empty();
+                $("div #all_subjects").empty();
+                for (var i = 0; i < subjects.length; i++) {
+                    let subjectName;
+                    <c:if test="${sessionScope.lang eq 'ru'}">
+                    subjectName = subjects[i].subject.nameRu;
+                    </c:if>
+                    <c:if test="${sessionScope.lang eq 'en'}">
+                    subjectName = subjects[i].subject.nameEng;
+                    </c:if>
+                    $("div #entrant_subjects").append(
+                        "<div class=\"subject-field\" style=\"display:flex; justify-content: space-between;\">" +
+                        "   <input type=\"hidden\" class=\"id\" id=\"" + subjects[i].subject.id + "\" disabled>" +
+                        // "   <h4>" + subjects[i].subject.nameEng + "</h4>" +
+                        "   <h4>" + subjectName + "</h4>" +
+                        "   <input type=\"number\" class=\"mark no-spinners\" placeholder=\"" + subjects[i].mark.mark + "\" disabled>" +
+                        "</div>"
+                    );
+                }
+                    $("#subject_cancel").hide();
+                    $("#subject_submit").hide();
+                    $("#subject_change").show();
             }
-            $("#subject_cancel").hide();
-            $("#subject_submit").hide();
-            $("#subject_change").show();
         }
 
 

@@ -67,9 +67,9 @@ public class LoginCommand extends Command {
 		User user = userDAO.find(email, password);
 		LOG.trace("User found: " + user);
 		if (user == null) {
-			request.setAttribute("errorMessage",
+			request.setAttribute("message",
 					"Cannot find user with such login/password");
-			LOG.error("errorMessage: Cannot find user with such login/password");
+			LOG.error("message: Cannot find user with such login/password");
 			result = null;
 //		} else if (!user.getActiveStatus()) {
 //			request.setAttribute("errorMessage", "You are not registered!");

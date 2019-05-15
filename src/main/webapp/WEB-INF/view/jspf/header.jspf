@@ -12,7 +12,7 @@
         <input type="submit" class="default" value="About">
         <form class="form" action="controller" method="GET">
             <input type="hidden" name="command" value="viewFaculties">
-            <input class="default" type="submit" value="<fmt:message key="header.faculties"/>">
+            <input id="facultiesHeader" class="default" type="submit" value="<fmt:message key="header.faculties"/>">
         </form>
         <form class="form" action="controller" method="POST">
             <input type="hidden" name="command" value="logout">

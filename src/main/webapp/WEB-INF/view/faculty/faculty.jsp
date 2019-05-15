@@ -64,6 +64,7 @@
                 for (let i = 0; i < facultiesGson.length; i++) {
                     let info = document.createElement("div");
                     $(info).attr("class", "info");
+                    $(info).attr("id", facultiesGson[i].faculty.id);
                     // $(element).append("<div class=\"info\">\n" +
                     $(info).append(
                         "                <div class=\"photo-greeting\" style=\"border: solid 2pt rgb(0, 4, 255);\">" +
@@ -105,13 +106,56 @@
                     $(info).append(subjects);//
                     // $(element).append( subjects);
                     // $(element).append(
-                    $(info).append(
                         <c:if test="${role eq client}">
-                        "                               <input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.button.apply"/>\">\n"
-                        </c:if>);
-                        // "                    </div>");
-                    $(element).append(info);
-
+                            <c:choose>
+                                <c:when test="${not empty applied}">
+                                    let facultyId = facultiesGson[i].faculty.id;
+                                    if(facultyId === ${applied}){
+                                        let button_apply = document.createElement("input");
+                                        $(button_apply).attr("type", "button");
+                                        $(button_apply).attr("class", "btn");
+                                        $(button_apply).val("<fmt:message key="faculty.button.pick_up_documents"/>");
+                                        button_apply.addEventListener("click", unapply_button_click);
+                                        <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"unapply_button_click()\"value=\"<fmt:message key="faculty.button.pick_up_documents"/>\">");--%>
+                                        $(info).append(button_apply);
+                                    }else{
+                                        let button_unapply = document.createElement("input");
+                                        $(button_unapply).attr("type", "button");
+                                        $(button_unapply).attr("class", "btn");
+                                        $(button_unapply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
+                                        button_unapply.addEventListener("click", apply_button_click);
+                                        <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
+                                        $(info).append(button_unapply);
+                                    }
+                                </c:when>
+                                <c:otherwise>
+                                    <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
+                                    let button_apply = document.createElement("input");
+                                    $(button_apply).attr("type", "button");
+                                    $(button_apply).attr("class", "btn");
+                                    $(button_apply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
+                                    button_apply.addEventListener("click", apply_button_click);
+                                    <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
+                                    $(info).append(button_apply);
+                                </c:otherwise>
+                            </c:choose>
+                        </c:if>
+                        <%--<c:if test="${role eq client}">--%>
+                        <%--"                               <input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.button.apply"/>\">\n"--%>
+                    <%--</c:if>);--%>
+                    // "                    </div>");
+                    <c:choose>
+                        <c:when test="${not empty applied}">
+                            if(facultyId === ${applied}){
+                                $(element).prepend(info);
+                            }else{
+                                $(element).append(info);
+                            }
+                        </c:when>
+                        <c:otherwise>
+                            $(element).append(info);
+                        </c:otherwise>
+                    </c:choose>
                 }
 
 
@@ -125,22 +169,60 @@
 
         function apply_button_click() {
             alert("apply_button_click!!");
+            <c:choose>
+                <c:when test="${not empty applied}">
+                    alert("you are already applied");
+                </c:when>
+                <c:otherwise>
+                    let button = event.target;
+                    let subject_div = $(button).parent();
+                    let facultyId = $(subject_div).attr("id");
+                    $.ajax({
+                        url: 'controller',
+                        type: 'get',
+                        data: {command: "applyOnFaculty", type: "AJAX", facultyId: facultyId},
+                        headers: {
+                            Accept: "application/json; charset=utf-8",
+                            "Content-Type": "application/json; charset=utf-8"
+                        },
+                        success: function (data) {
+                            if(data === 'error'){
+                                alert("cant apply");
+                            }else{
+                                alert("successful");
+                                $("#facultiesHeader").click();
+                                // document.location.reload(true);
+                            }
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+                            $('#content').html(errorMsg);
+                        }
+                    });
+                </c:otherwise>
+            </c:choose>
+        }
+
+        function unapply_button_click() {
+            alert("unapply_button_click!!");
             let button = event.target;
             let subject_div = $(button).parent();
             let facultyId = $(subject_div).attr("id");
             $.ajax({
                 url: 'controller',
                 type: 'get',
-                data: {command: "applyOnFaculty", type: "AJAX", facultyId: facultyId},
+                data: {command: "unApplyOnFaculty", type: "AJAX", facultyId: facultyId},
                 headers: {
                     Accept: "application/json; charset=utf-8",
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-                    if(data.eq('error')){
+                    if(data === 'error'){
                         alert("cant apply");
                     }else{
                         alert("successful");
+                        $("#facultiesHeader").click();
+                        // document.location.reload(true);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {

@@ -68,16 +68,15 @@ public class ViewFacultyCommand extends Command {
 		UserDAO userDAO = new UserDAO();
 		User user = userDAO.find(userEmail);
 
+		EntrantDAO entrantDAO = new EntrantDAO();
+		Entrant entrant = entrantDAO.find(user);
 
+		FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+        FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
+        if(facultyEntrant != null){
+            request.setAttribute("applied", facultyEntrant.getFacultyId());
+        }
 
-//		FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-//		List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
-//
-//		request.setAttribute("facultiesInfo", facultyInfoModels);
-//		LOG.trace("Set the request attribute: 'facultiesInfo' = "
-//				+ facultyInfoModels);
-
-//		String role = user.getRole();
 		String role = String.valueOf(session.getAttribute("userRole"));
 		if ("client".equals(role)) {
 			result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
@@ -96,12 +95,6 @@ public class ViewFacultyCommand extends Command {
 		FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
 		List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
-		String facultiesJson = new Gson().toJson(facultyInfoModels);
-
-//		byte[] ptext = facultiesJson.getBytes(StandardCharsets.ISO_8859_1);
-//		String value = new String(ptext, StandardCharsets.UTF_16);
-
-		return facultiesJson;
-//		return value;
+        return new Gson().toJson(facultyInfoModels);
 	}
 }

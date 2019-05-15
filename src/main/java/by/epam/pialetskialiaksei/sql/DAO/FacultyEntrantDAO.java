@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.epam.pialetskialiaksei.Fields;
+import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.FacultyEntrant;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultyEntrantBuilder;
@@ -22,9 +23,10 @@ public class FacultyEntrantDAO extends SqlDAO {
     private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.faculty_entrants;";
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
-    private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
+    private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String INSERT_FACULTY_ENTRANT = "INSERT INTO university_admission.faculty_entrants(faculty_entrants.Faculty_idFaculty,faculty_entrants.Entrant_idEntrant) VALUES (?,?);";
     private static final String DELETE_FACULTY_ENTRANT = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.id=? LIMIT 1;";
+    private static final String DELETE_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty=? and faculty_entrants.Entrant_idEntrant=? LIMIT 1;";
 
     private final static Logger LOG = LogManager
             .getLogger(FacultyEntrantDAO.class);
@@ -42,7 +44,7 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getEntrantId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
@@ -51,7 +53,7 @@ public class FacultyEntrantDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not create a faculty entrant", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
@@ -62,16 +64,16 @@ public class FacultyEntrantDAO extends SqlDAO {
         PreparedStatement pstmt = null;
         try {
             connection = getConnection();
-            pstmt = connection.prepareStatement(DELETE_FACULTY_ENTRANT);
-            pstmt.setInt(1, entity.getId());
-
+            pstmt = connection.prepareStatement(DELETE_FACULTY_ENTRANT_BY_FOREIGN_KEYS);
+            pstmt.setInt(1, entity.getFacultyId());
+            pstmt.setInt(2, entity.getEntrantId());
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not delete a faculty entrant", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
         }
     }
@@ -85,6 +87,34 @@ public class FacultyEntrantDAO extends SqlDAO {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_FACULTY_ENTRANT_BY_ID);
             pstmt.setInt(1, entityPK);
+            rs = pstmt.executeQuery();
+//            connection.commit();
+            if (!rs.next()) {
+                facultyEntrant = null;
+            } else {
+//                facultyEntrant = unmarshal(rs);
+                facultyEntrant = facultyEntrantBuilder.build(rs);
+            }
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not find a faculty entrant", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
+        }
+        return facultyEntrant;
+    }
+
+    public FacultyEntrant find(Entrant entrant) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        FacultyEntrant facultyEntrant = null;
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(FIND_FACULTY_ENTRANT_BY_ENTRANT_ID);
+            pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
 //            connection.commit();
             if (!rs.next()) {
