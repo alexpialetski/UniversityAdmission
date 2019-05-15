@@ -23,7 +23,7 @@ public class CommandManager {
         commands.put("changeSubjects", new ChangeSubjectsCommand());
         commands.put("changeDiploma", new ChangeDiplomaCommand());
         commands.put("logout", new LogoutCommand());
-        commands.put("faculties", new ViewFacultyCommand());
+        commands.put("viewFaculties", new ViewFacultyCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

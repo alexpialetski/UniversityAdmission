@@ -22,6 +22,7 @@ public class FacultyEntrantDAO extends SqlDAO {
     private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.faculty_entrants;";
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
+    private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String INSERT_FACULTY_ENTRANT = "INSERT INTO university_admission.faculty_entrants(faculty_entrants.Faculty_idFaculty,faculty_entrants.Entrant_idEntrant) VALUES (?,?);";
     private static final String DELETE_FACULTY_ENTRANT = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.id=? LIMIT 1;";
 
@@ -85,7 +86,7 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_ENTRANT_BY_ID);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             if (!rs.next()) {
                 facultyEntrant = null;
             } else {
@@ -96,7 +97,7 @@ public class FacultyEntrantDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not find a faculty entrant", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }

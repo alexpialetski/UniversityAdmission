@@ -4,7 +4,7 @@
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 
-<html  lang="${sessionScope.lang}">
+<html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Client-view</title>
@@ -61,8 +61,10 @@
                 <input type="text" class="input-field" name="school"
                        placeholder="<fmt:message key="registration.label.school"/>"
                        value="<c:out value="${requestScope.school}"></c:out>" required="required" disabled>
-                <button type="submit" id="profile_submit" class="btn" style="display: none"><fmt:message key="registration.button.submit"/></button>
-                <button type="button" id="profile_change" class="btn"><fmt:message key="profile.view_jsp.button.change"/></button>
+                <button type="submit" id="profile_submit" class="btn" style="display: none"><fmt:message
+                        key="registration.button.submit"/></button>
+                <button type="button" id="profile_change" class="btn"><fmt:message
+                        key="profile.view_jsp.button.change"/></button>
             </form>
         </div>
 
@@ -76,9 +78,12 @@
             <c:if test="${empty diploma}">
                 <span><b><fmt:message key="profile.view_jsp.label.no_diploma_message"/></b></span>
             </c:if>
-            <input type="button" id="diploma_cancel" class="btn" style="display: none" value="<fmt:message key="profile.view_jsp.button.cancel"/>">
-            <input type="button" id="diploma_submit" class="btn" style="display: none" value="<fmt:message key="profile.view_jsp.button.submit"/>">
-            <input type="button" id="diploma_change" class="btn" value="<fmt:message key="profile.view_jsp.button.change"/>">
+            <input type="button" id="diploma_cancel" class="btn" style="display: none"
+                   value="<fmt:message key="profile.view_jsp.button.cancel"/>">
+            <input type="button" id="diploma_submit" class="btn" style="display: none"
+                   value="<fmt:message key="profile.view_jsp.button.submit"/>">
+            <input type="button" id="diploma_change" class="btn"
+                   value="<fmt:message key="profile.view_jsp.button.change"/>">
             <h4 id="errorDiploma" style="display: none"></h4>
         </div>
 
@@ -107,11 +112,16 @@
                 <div id="all_subjects"></div>
             </c:if>
             <c:if test="${empty marks}">
-                <h1><b><fmt:message key="profile.view_jsp.label.no_subjects_message"/></b></h1>
+                <div class="noSubjects">
+                    <h1><b><fmt:message key="profile.view_jsp.label.no_subjects_message"/></b></h1>
+                </div>
             </c:if>
-            <input type="button" id="subject_cancel" class="btn" style="display: none" value="<fmt:message key="profile.view_jsp.button.cancel"/>">
-            <input type="button" id="subject_submit" class="btn" style="display: none" value="<fmt:message key="profile.view_jsp.button.submit"/>">
-            <input type="button" id="subject_change" class="btn" value="<fmt:message key="profile.view_jsp.button.change"/>">
+            <input type="button" id="subject_cancel" class="btn" style="display: none"
+                   value="<fmt:message key="profile.view_jsp.button.cancel"/>">
+            <input type="button" id="subject_submit" class="btn" style="display: none"
+                   value="<fmt:message key="profile.view_jsp.button.submit"/>">
+            <input type="button" id="subject_change" class="btn"
+                   value="<fmt:message key="profile.view_jsp.button.change"/>">
             <h1 id="error"></h1>
         </div>
     </div>
@@ -214,12 +224,14 @@
 
         $("#subject_change").click(subject_change_click);
 
+
         function subject_change_click() {
             alert("Dont subject_change_click!!");
             $("#subject_submit").show();
             $("#subject_cancel").show();
             $("#subject_change").hide();
             $(".subject-field input").attr("disabled", false);
+
 
             let entrant_subjects = $(".subject-field");
             for (let i = 0; i < entrant_subjects.length; i++) {
@@ -260,10 +272,10 @@
 
                         let subject = document.createElement('h4');
                         <c:if test="${sessionScope.lang eq 'ru'}">
-                            $(subject).text(clientSubjects[i].nameRu);
+                        $(subject).text(clientSubjects[i].nameRu);
                         </c:if>
                         <c:if test="${sessionScope.lang eq 'en'}">
-                            $(subject).text(clientSubjects[i].nameEng);
+                        $(subject).text(clientSubjects[i].nameEng);
                         </c:if>
                         subject.classList.add("subject");
 
@@ -343,7 +355,6 @@
 
         function subject_cancel_click() {
             alert("Dont subject_cancel_click!!");
-            <%--let subjectsJson = ${jsonMarks};--%>
             let subjects =
             ${jsonMarks}.
             clientSubjects;
@@ -352,10 +363,10 @@
             for (var i = 0; i < subjects.length; i++) {
                 let subjectName;
                 <c:if test="${sessionScope.lang eq 'ru'}">
-                    subjectName = subjects[i].subject.nameRu;
+                subjectName = subjects[i].subject.nameRu;
                 </c:if>
                 <c:if test="${sessionScope.lang eq 'en'}">
-                    subjectName = subjects[i].subject.nameEng;
+                subjectName = subjects[i].subject.nameEng;
                 </c:if>
                 $("div #entrant_subjects").append(
                     "<div class=\"subject-field\" style=\"display:flex; justify-content: space-between;\">" +
@@ -370,6 +381,7 @@
             $("#subject_submit").hide();
             $("#subject_change").show();
         }
+
 
         $("#subject_submit").click(subject_submit_click);
 

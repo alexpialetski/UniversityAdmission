@@ -11,20 +11,13 @@
         <input type="submit" class="default" value="Contact">
         <input type="submit" class="default" value="About">
         <form class="form" action="controller" method="GET">
-            <input type="hidden" name="command" value="faculties">
+            <input type="hidden" name="command" value="viewFaculties">
             <input class="default" type="submit" value="<fmt:message key="header.faculties"/>">
         </form>
         <form class="form" action="controller" method="POST">
             <input type="hidden" name="command" value="logout">
             <input class="default" type="submit" value="<fmt:message key="header.logout"/>">
         </form>
-        <%--<div class="dropdown">--%>
-            <%--<div class="dropbtn">RU</div>--%>
-            <%--<div class="dropdown-content">--%>
-                <%--<a href="#">RU</a>--%>
-                <%--<a href="#">EN</a>--%>
-            <%--</div>--%>
-        <%--</div>--%>
         <ul id="dropdown">
             <li class="dropdown">
                 <a href="javascript:void(0)" class="dropbtn"><fmt:message key="language.choose"/></a>
