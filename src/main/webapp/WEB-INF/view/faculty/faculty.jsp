@@ -60,7 +60,7 @@
 
                 // let element = document.getElementById('all_subjects');
                 let element = $('.content');
-                $(element).append("<h1><fmt:message key="faculty.label.faculties"/></h1>");
+                $(element).append("<h1 id=\"facultyLabel\"><fmt:message key="faculty.label.faculties"/></h1>");
                 for (let i = 0; i < facultiesGson.length; i++) {
                     let info = document.createElement("div");
                     $(info).attr("class", "info");
@@ -82,7 +82,7 @@
                         "                        </h1>" +
                         "                    </div>" +
                         "                </div>" +
-                        "                <div>" +
+                        "                <div id=\"faculty-label\">" +
                         "                    <fmt:message key="faculty.label.temp"/>" +
                         "                </div>");
                     let subjects = document.createElement("div");
@@ -116,7 +116,6 @@
                                         $(button_apply).attr("class", "btn");
                                         $(button_apply).val("<fmt:message key="faculty.button.pick_up_documents"/>");
                                         button_apply.addEventListener("click", unapply_button_click);
-                                        <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"unapply_button_click()\"value=\"<fmt:message key="faculty.button.pick_up_documents"/>\">");--%>
                                         $(info).append(button_apply);
                                     }else{
                                         let button_unapply = document.createElement("input");
@@ -124,30 +123,24 @@
                                         $(button_unapply).attr("class", "btn");
                                         $(button_unapply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
                                         button_unapply.addEventListener("click", apply_button_click);
-                                        <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
                                         $(info).append(button_unapply);
                                     }
                                 </c:when>
                                 <c:otherwise>
-                                    <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
                                     let button_apply = document.createElement("input");
                                     $(button_apply).attr("type", "button");
                                     $(button_apply).attr("class", "btn");
                                     $(button_apply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
                                     button_apply.addEventListener("click", apply_button_click);
-                                    <%--$(info).append("<input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.view_jsp.button.apply"/>\">");--%>
                                     $(info).append(button_apply);
                                 </c:otherwise>
                             </c:choose>
                         </c:if>
-                        <%--<c:if test="${role eq client}">--%>
-                        <%--"                               <input class=\"btn\" type=\"button\" onclick=\"apply_button_click()\"value=\"<fmt:message key="faculty.button.apply"/>\">\n"--%>
-                    <%--</c:if>);--%>
-                    // "                    </div>");
                     <c:choose>
                         <c:when test="${not empty applied}">
                             if(facultyId === ${applied}){
-                                $(element).prepend(info);
+                                // $(element).prepend(info);
+                                $(info).insertAfter("#facultyLabel");
                             }else{
                                 $(element).append(info);
                             }
@@ -186,11 +179,12 @@
                             "Content-Type": "application/json; charset=utf-8"
                         },
                         success: function (data) {
-                            if(data === 'error'){
-                                alert("cant apply");
-                            }else{
+                            let dataJson = JSON.parse(data);
+                            if(dataJson.error === 'none'){
                                 alert("successful");
                                 $("#facultiesHeader").click();
+                            }else{
+                                alert("Cant apply:" + dataJson.error);
                                 // document.location.reload(true);
                             }
                         },

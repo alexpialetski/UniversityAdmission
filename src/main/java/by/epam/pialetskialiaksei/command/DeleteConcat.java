@@ -3,7 +3,14 @@ package by.epam.pialetskialiaksei.command;
 public class DeleteConcat {
     // Ctrl-Shift-J -> delete pluses
     public static void main(String[] args) {
-        String s = "<footer class=\"footer-distributed\">\n    <div class=\"footer-left\">\n        <h3>Company<span>logo</span></h3>\n        <p class=\"footer-links\">\n            <a href=\"#\">Home</a>\n            ·\n            <a href=\"#\">Blog</a>\n            ·\n            <a href=\"#\">Pricing</a>\n            ·\n            <a href=\"#\">About</a>\n            ·\n            <a href=\"#\">Faq</a>\n            ·\n            <a href=\"#\">Contact</a>\n        </p>\n        <p class=\"footer-company-name\">Company Name &copy; 2015</p>\n    </div>\n\n    <div class=\"footer-center\">\n        <div>\n            <i class=\"fa fa-map-marker\"></i>\n            <p><span>21 Revolution Street</span> Paris, France</p>\n        </div>\n        <div>\n            <i class=\"fa fa-phone\"></i>\n            <p>+1 555 123456</p>\n        </div>\n        <div>\n            <i class=\"fa fa-envelope\"></i>\n            <p><a href=\"mailto:support@company.com\">support@company.com</a></p>\n        </div>\n    </div>\n    <div class=\"footer-right\">\n        <p class=\"footer-company-about\">\n            <span>About the company</span>\n            Lorem ipsum dolor sit amet, consectateur adispicing elit. Fusce euismod convallis velit, eu auctor lacus\n            vehicula sit amet.\n        </p>\n        <div class=\"footer-icons\">\n            <a href=\"#\"><i class=\"fa fa-facebook\"></i></a>\n            <a href=\"#\"><i class=\"fa fa-twitter\"></i></a>\n            <a href=\"#\"><i class=\"fa fa-linkedin\"></i></a>\n            <a href=\"#\"><i class=\"fa fa-github\"></i></a>\n        </div>\n    </div>\n</footer>";
-        System.out.println(s.replaceAll("\\n", ""));
+        String s = "SELECT faculty_subjects.id,\\n\" +\n                                                            \"       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,\\n\" +\n                                                            \"       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\\n\" +\n                                                            \"FROM university_admission.faculty_subjects\\n\" +\n                                                            \"       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\\n\" +\n                                                            \"       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\\n\" +\n                                                            \"WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?\\n\" +\n                                                            \"LIMIT 3;";
+//        System.out.println(s.replaceAll("\\n", ""));
+        s = s.replaceAll("\\n", "");
+//        System.out.println(s.replaceAll("\\\\n", ""));
+        s = s.replaceAll("\\\\n", "");
+//        System.out.println(s.replaceAll("\"", ""));
+        s = s.replaceAll("\"", "");
+        System.out.println(s.replaceAll("\\+", ""));
+//        System.out.println(s.replaceAll("[\\+|\\n|\\\\n|\"]", ""));
     }
 }

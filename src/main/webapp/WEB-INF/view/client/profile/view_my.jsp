@@ -394,9 +394,9 @@
                         "</div>"
                     );
                 }
-                    $("#subject_cancel").hide();
-                    $("#subject_submit").hide();
-                    $("#subject_change").show();
+                $("#subject_cancel").hide();
+                $("#subject_submit").hide();
+                $("#subject_change").show();
             }
         }
 
@@ -467,10 +467,15 @@
         let mark_id =
         ${jsonMarks}.
         clientSubjects
+        let lengthOfMarks = mark_id.length;
         let obj = [];
         for (let i = 0; i < subjects.length; i++) {
             let mark = {};
-            mark.id = mark_id[i].mark.id;
+            if(lengthOfMarks > 0) {
+                mark.id = mark_id[i].mark.id;
+            }else{
+                mark.id = -1;
+            }
             mark.subjectId = parseInt(subjects[i].getAttribute('id'));
             mark.entrantId = "?";
             mark.mark = parseInt(getValueOfInput(subjects[i].getElementsByClassName('mark')));
@@ -486,7 +491,7 @@
     }
 
     function validateMark(mark) {
-        return !(mark < 0 || mark > 100 || mark == null);
+        return mark != null && mark > 0 && mark <= 100 && /^[1-9]\d*$/.test(mark);
     }
 
     function validateMarks(subjects) {

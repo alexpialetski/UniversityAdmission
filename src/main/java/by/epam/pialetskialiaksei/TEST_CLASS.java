@@ -10,6 +10,9 @@ import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
 import by.epam.pialetskialiaksei.sql.DAO.SubjectDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
+import by.epam.pialetskialiaksei.sql.connection.BasicConnectionPool;
+import by.epam.pialetskialiaksei.sql.connection.ConnectionPoolManager;
+import by.epam.pialetskialiaksei.sql.connection.api.ConnectionPool;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

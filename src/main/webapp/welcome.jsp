@@ -26,7 +26,7 @@
         <input type="hidden" name="command" value="login">
         <input type="hidden" name="type" value="POST">
         <div class="input-form">
-            <input type="text" name="email" placeholder="<fmt:message key="profile.view_jsp.label.email"/>" class="input-field" required>
+            <input type="email" name="email" placeholder="<fmt:message key="profile.view_jsp.label.email"/>" class="input-field" required>
         </div>
         <div class="input-form">
             <input type="password" name="password" placeholder="<fmt:message key="welcome_jsp.label.password" />" class="input-field" required>

@@ -26,7 +26,7 @@ public class MarkDAO extends SqlDAO {
 
     private static final String FIND_ALL_MARKS = "SELECT * FROM university_admission.mark;";
     private static final String FIND_MARK = "SELECT * FROM university_admission.mark WHERE mark.id = ? LIMIT 1;";
-    private static final String INSERT_MARK = "INSERT INTO university_admission.mark(mark.Entrant_idEntrant,mark.Subject_idSubject,mark.value) VALUES (?,?,?,?);";
+    private static final String INSERT_MARK = "INSERT INTO university_admission.mark(mark.Entrant_idEntrant,mark.Subject_idSubject,mark.value) VALUES (?,?,?);";
     private static final String UPDATE_MARK = "UPDATE mark SET mark.Entrant_idEntrant=?, mark.Subject_idSubject=?,mark.value=? WHERE mark.id=? LIMIT 1;";
     private static final String DELETE_MARK = "DELETE FROM university_admission.mark WHERE mark.id=? LIMIT 1;";
     private static final String FIND_MARKS_OF_ENTRANT = "SELECT university_admission.subject.id as Subject_idSubject,\n" +
@@ -80,6 +80,30 @@ public class MarkDAO extends SqlDAO {
             close(connection);
             close(pstmt);
             close(rs);
+        }
+    }
+
+    public void create(Mark[] entity) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = getConnection();
+            for(Mark mark: entity) {
+                pstmt = connection.prepareStatement(INSERT_MARK);
+                int counter = 1;
+                // pstmt.setInt(1, user.getId());
+                pstmt.setInt(counter++, mark.getEntrantId());
+                pstmt.setInt(counter++, mark.getSubjectId());
+                pstmt.setInt(counter++, mark.getMark());
+
+                pstmt.execute();
+            }
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not create a mark", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
         }
     }
 
@@ -164,9 +188,7 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
             connection.commit();
-            if (!rs.next()) {
-                mark = null;
-            } else {
+            if (rs.next()) {
 //                mark = unmarshal(rs);
                 mark = markBuilder.build(rs);
             }

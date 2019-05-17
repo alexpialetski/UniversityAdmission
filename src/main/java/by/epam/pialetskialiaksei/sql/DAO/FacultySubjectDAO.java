@@ -119,22 +119,20 @@ public class FacultySubjectDAO extends SqlDAO {
         }
     }
 
-    public FacultySubject findById(int entityPK) {
+    public List<Subject> findById(int entityPK) {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        FacultySubject facultySubject = null;
+        List<Subject> subjects = null;
         try {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_FACULTY_SUBJECT_BY_ID);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-            connection.commit();
-            if (!rs.next()) {
-                facultySubject = null;
-            } else {
-//                facultySubject = unmarshal(rs);
-                facultySubject = facultySubjectBuilder.build(rs);
+//            connection.commit();
+            subjects = new ArrayList<>();
+            while (rs.next()) {
+                subjects.add(subjectBuilder.buildForeign(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -144,7 +142,7 @@ public class FacultySubjectDAO extends SqlDAO {
             close(pstmt);
             close(rs);
         }
-        return facultySubject;
+        return subjects;
     }
 
     public List<FacultyInfoModel> findAll() {
@@ -156,7 +154,6 @@ public class FacultySubjectDAO extends SqlDAO {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_ALL_FACULTY_SUBJECTS);
             rs = pstmt.executeQuery();
-//            connection.commit();
             int i = 1;
             Faculty faculty = null;
             List<Subject> subjects = new ArrayList<>();
@@ -164,7 +161,6 @@ public class FacultySubjectDAO extends SqlDAO {
                 if (i % 3 == 0) {
                     faculty = facultyBuilder.buildForeign(rs);
                     subjects.add(subjectBuilder.buildForeign(rs));
-//                    facultyInfoModels.add(new FacultyInfoModel(faculty, new ArrayList<>(subjects));
                     facultyInfoModels.add(new FacultyInfoModel(faculty, subjects));
                     subjects = new ArrayList<>();
                     i = 1;

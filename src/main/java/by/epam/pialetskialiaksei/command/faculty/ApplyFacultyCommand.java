@@ -2,14 +2,9 @@ package by.epam.pialetskialiaksei.command.faculty;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.entity.Entrant;
-import by.epam.pialetskialiaksei.entity.FacultyEntrant;
-import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
-import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
-import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
-import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
-import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
+import by.epam.pialetskialiaksei.sql.DAO.*;
 import by.epam.pialetskialiaksei.util.ActionType;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -76,7 +72,7 @@ public class ApplyFacultyCommand extends Command {
     protected String doAjax(HttpServletRequest request, HttpServletResponse response) {
         String alreadyApplied = request.getParameter("applied");
         if (alreadyApplied != null) {
-            return "error";
+            return "{\"error\":\"You are already applied\"}";
         } else {
             HttpSession session = request.getSession(false);
             String userEmail = String.valueOf(session.getAttribute("user"));
@@ -89,8 +85,22 @@ public class ApplyFacultyCommand extends Command {
             FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
 
             int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-            facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
-            return "";
+
+            try {
+                MarkDAO markDAO = new MarkDAO();
+                List<Subject> subjectsOfEntrant = markDAO.findSubjectsOfEntrant(entrant);
+                FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+                List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
+                if(subjectsOfEntrant.equals(facultySubjects)){
+                    FacultyDAO facultyDAO = new FacultyDAO();
+                    facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
+                    return "{\"error\":\"none\"}";
+                }else{
+                    return "{\"error\":\"Not the same subjects\"}";
+                }
+            }catch (Exception ignored){
+                return "{error:\"Problems with applying, update page pls...\"}";
+            }
         }
     }
 }

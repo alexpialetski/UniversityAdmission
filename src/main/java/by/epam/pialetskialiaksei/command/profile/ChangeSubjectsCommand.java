@@ -76,7 +76,11 @@ public class ChangeSubjectsCommand extends Command {
 
         MarkDAO markDAO = new MarkDAO();
 
-        markDAO.update(marks);
+        if(marks[0].getId() != -1){
+            markDAO.update(marks);
+        }else{
+            markDAO.create(marks);
+        }
         return "";
     }
 }
