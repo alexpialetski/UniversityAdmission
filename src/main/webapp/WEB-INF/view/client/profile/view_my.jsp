@@ -12,16 +12,19 @@
     <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/scrollButton.js"></script>
+    <script src="js/sideBar.js"></script>
 </head>
 <body>
 
 <%--<ctg:header company="University admission"/>--%>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
-<ctg:navbar/>
+<%--<ctg:navbar/>--%>
+<%@ include file="/WEB-INF/view/jspf/navbar.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -484,10 +487,6 @@
         }
         // obj.marks = marks;
         return JSON.stringify(obj);
-    }
-
-    function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle('active');
     }
 
     function validateMark(mark) {

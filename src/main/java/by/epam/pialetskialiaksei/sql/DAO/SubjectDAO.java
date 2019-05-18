@@ -32,17 +32,17 @@ public class SubjectDAO extends SqlDAO {
     private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT university_admission.subject.id, university_admission.subject.name_ru, university_admission.subject.name_eng FROM university_admission.subject,university_admission.faculty_subjects WHERE faculty_subjects.Faculty_idFaculty = ? AND university_admission.faculty_subjects.Subject_idSubject=university_admission.subject.id ;";
     private static final String FIND_ALL_NOT_FACULTY_SUBJECTS = "SELECT university_admission.subject.id, university_admission.subject.name_ru, university_admission.subject.name_eng FROM university_admission.subject LEFT JOIN university_admission.Faculty_Subjects ON university_admission.Faculty_Subjects.Subject_idSubject = university_admission.subject.id AND university_admission.Faculty_Subjects.Faculty_idFaculty = ? WHERE university_admission.Faculty_Subjects.id IS NULL;";
     private static final String FIND_MARKS_OF_ENTRANT = "SELECT university_admission.subject.id,\n" +
-                                                        "       university_admission.subject.name_ru,\n" +
-                                                        "       university_admission.subject.name_eng,\n" +
-                                                        "       university_admission.mark.value,\n" +
-                                                        "       university_admission.mark.Entrant_idEntrant as Entrant_idEntrant,\n" +
-                                                        "       university_admission.exam_type.exam_type\n" +
-                                                        "FROM university_admission.mark\n" +
-                                                        "       INNER JOIN university_admission.subject\n" +
-                                                        "                  ON university_admission.mark.Subject_idSubject = university_admission.subject.id\n" +
-                                                        "       INNER JOIN university_admission.exam_type\n" +
-                                                        "                  ON university_admission.mark.exam_type_id= university_admission.exam_type.id\n" +
-                                                        "WHERE university_admission.mark.Entrant_idEntrant = ?;";
+            "       university_admission.subject.name_ru,\n" +
+            "       university_admission.subject.name_eng,\n" +
+            "       university_admission.mark.value,\n" +
+            "       university_admission.mark.Entrant_idEntrant as Entrant_idEntrant,\n" +
+            "       university_admission.exam_type.exam_type\n" +
+            "FROM university_admission.mark\n" +
+            "       INNER JOIN university_admission.subject\n" +
+            "                  ON university_admission.mark.Subject_idSubject = university_admission.subject.id\n" +
+            "       INNER JOIN university_admission.exam_type\n" +
+            "                  ON university_admission.mark.exam_type_id= university_admission.exam_type.id\n" +
+            "WHERE university_admission.mark.Entrant_idEntrant = ?;";
 
 
     private final static Logger LOG = LogManager
@@ -98,7 +98,28 @@ public class SubjectDAO extends SqlDAO {
             releaseConnection(connection);
             close(pstmt);
         }
+    }
 
+    public void update(Subject[] entity) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = getConnection();
+            for (Subject subject : entity) {
+                pstmt = connection.prepareStatement(UPDATE_SUBJECT);
+                pstmt.setString(1, subject.getNameRu());
+                pstmt.setString(2, subject.getNameEng());
+                pstmt.setInt(3, subject.getId());
+                pstmt.executeUpdate();
+            }
+//            connection.commit();
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not update a subject", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+        }
     }
 
     public void delete(Subject entity) {
@@ -255,7 +276,7 @@ public class SubjectDAO extends SqlDAO {
         return facultySubjects;
     }
 
-    public List<ClientSubject> findMarks(Entrant entrant){
+    public List<ClientSubject> findMarks(Entrant entrant) {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;

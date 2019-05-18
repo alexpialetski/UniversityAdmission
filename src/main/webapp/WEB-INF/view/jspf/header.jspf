@@ -4,20 +4,16 @@
     <a href="#default" class="logo default"><fmt:message key="header.logo"/></a>
     <ul class="header-right">
         <input class="active default" type="submit" value="Home">
-        <form class="form" action="controller" method="GET">
-            <input type="hidden" name="command" value="viewProfile">
-            <input class="default" type="submit" value="<fmt:message key="header.profile"/>">
-        </form>
+        <%--<form class="form" action="controller" method="GET">--%>
+            <%--<input type="hidden" name="command" value="viewProfile">--%>
+            <%--<input class="default" type="submit" value="<fmt:message key="header.profile"/>">--%>
+        <%--</form>--%>
         <input type="submit" class="default" value="Contact">
         <input type="submit" class="default" value="About">
-        <form class="form" action="controller" method="GET">
-            <input type="hidden" name="command" value="viewFaculties">
-            <input id="facultiesHeader" class="default" type="submit" value="<fmt:message key="header.faculties"/>">
-        </form>
-        <form class="form" action="controller" method="POST">
-            <input type="hidden" name="command" value="logout">
-            <input class="default" type="submit" value="<fmt:message key="header.logout"/>">
-        </form>
+        <%--<form class="form" action="controller" method="GET">--%>
+            <%--<input type="hidden" name="command" value="viewFaculties">--%>
+            <%--<input id="facultiesHeader" class="default" type="submit" value="<fmt:message key="header.faculties"/>">--%>
+        <%--</form>--%>
         <ul id="dropdown">
             <li class="dropdown">
                 <a href="javascript:void(0)" class="dropbtn"><fmt:message key="language.choose"/></a>
@@ -27,6 +23,11 @@
                 </ul>
             </li>
         </ul>
+        <form class="form" action="controller" method="POST">
+            <input type="hidden" name="command" value="logout">
+            <input class="default" type="submit" value="<fmt:message key="header.logout"/>">
+        </form>
+
             <%--<ul class="languagepicker roundborders large">--%>
                 <%--<a href="#nl"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Nederlands</li></a>--%>
                 <%--<a href="#en"><li><img src="http://i64.tinypic.com/fd60km.png"/>English</li></a>--%>

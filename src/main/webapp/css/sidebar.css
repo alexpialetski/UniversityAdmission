@@ -1,0 +1,57 @@
+#sidebar{
+    min-width: 100px;
+    position: absolute;
+    width: 20%;
+    height: 100%;
+    background: rgb(235, 235, 235);
+    left:0;
+    transition: all 400ms linear;
+}
+#sidebar.active{
+    left:-20%;
+}
+#sidebar ul li{
+    list-style: none;
+    padding: 15px 0px;
+    border-bottom: 1px solid rgba(100,100,100,0.3);
+    cursor: pointer;
+}
+
+#sidebar ul li .default{
+    color: rgba(37, 37, 37, 0.9);
+    font-size: 14pt;
+    padding:20px 0px;
+}
+
+#sidebar ul li a{
+    display: block;
+    text-decoration: none;
+    margin: -15px 0px;
+}
+
+#sidebar ul li input   {
+    border:none;
+    margin: -18px 0px;
+    background: none;
+}
+
+#sidebar .toggle-btn{
+    position: absolute;
+    left:85%;
+    top: 10px;
+}
+
+/*#sidebar .toggle-btn .active{*/
+.activeToggle{
+    /*left:120%;*/
+    margin-left: 25%;
+    transition: all 400ms linear;
+}
+
+#sidebar .toggle-btn span{
+    display: block;
+    width: 30px;
+    height: 5px;
+    background: #151719;
+    margin: 5px 0px;
+}

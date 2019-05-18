@@ -6,6 +6,8 @@ import by.epam.pialetskialiaksei.command.faculty.UnApplyFacultyCommand;
 import by.epam.pialetskialiaksei.command.faculty.ViewFacultyCommand;
 import by.epam.pialetskialiaksei.command.profile.*;
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
+import by.epam.pialetskialiaksei.command.subject.UpdateSubjectsCommand;
+import by.epam.pialetskialiaksei.command.subject.ViewAllSubjectsCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +30,8 @@ public class CommandManager {
         commands.put("viewFaculties", new ViewFacultyCommand());
         commands.put("applyOnFaculty", new ApplyFacultyCommand());
         commands.put("unApplyOnFaculty", new UnApplyFacultyCommand());
+        commands.put("viewAllSubjects", new ViewAllSubjectsCommand());
+        commands.put("updateSubjects", new UpdateSubjectsCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);
