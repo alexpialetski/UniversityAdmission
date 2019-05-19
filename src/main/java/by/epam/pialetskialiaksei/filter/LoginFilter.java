@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
 
-@WebFilter(filterName = "LoginFilter", urlPatterns = {"/*"})
+//@WebFilter(filterName = "LoginFilter", urlPatterns = {"/*"})
 public class LoginFilter implements Filter {
     private static final String PARAM_NAME = "command";
     private static final String PARAM = "login";

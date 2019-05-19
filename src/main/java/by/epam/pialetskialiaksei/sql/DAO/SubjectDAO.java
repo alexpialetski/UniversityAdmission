@@ -62,7 +62,7 @@ public class SubjectDAO extends SqlDAO {
             pstmt.setString(2, entity.getNameEng());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
@@ -132,6 +132,26 @@ public class SubjectDAO extends SqlDAO {
 
             pstmt.execute();
             connection.commit();
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not delete a subject", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+        }
+    }
+
+    public void delete(int[] entity) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = getConnection();
+            for(int id: entity){
+                pstmt = connection.prepareStatement(DELETE_SUBJECT);
+                pstmt.setInt(1, id);
+                pstmt.execute();
+            }
+//            connection.commit();
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not delete a subject", e);

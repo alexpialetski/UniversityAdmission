@@ -25,6 +25,7 @@ public class ControllerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
         String type = request.getParameter("type");
+        LOGGER.trace("Type of command: " + type);
         if (type == null) {
             process(request, response, ActionType.GET);
         } else {

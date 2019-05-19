@@ -6,6 +6,9 @@ import by.epam.pialetskialiaksei.command.faculty.UnApplyFacultyCommand;
 import by.epam.pialetskialiaksei.command.faculty.ViewFacultyCommand;
 import by.epam.pialetskialiaksei.command.profile.*;
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
+import by.epam.pialetskialiaksei.command.registration.SendConfirmationRegistrationCommand;
+import by.epam.pialetskialiaksei.command.subject.AddSubjectCommand;
+import by.epam.pialetskialiaksei.command.subject.DeleteSubjectCommand;
 import by.epam.pialetskialiaksei.command.subject.UpdateSubjectsCommand;
 import by.epam.pialetskialiaksei.command.subject.ViewAllSubjectsCommand;
 import org.apache.logging.log4j.LogManager;
@@ -32,6 +35,9 @@ public class CommandManager {
         commands.put("unApplyOnFaculty", new UnApplyFacultyCommand());
         commands.put("viewAllSubjects", new ViewAllSubjectsCommand());
         commands.put("updateSubjects", new UpdateSubjectsCommand());
+        commands.put("deleteSubject", new DeleteSubjectCommand());
+        commands.put("addSubject", new AddSubjectCommand());
+        commands.put("sendConfirmation", new SendConfirmationRegistrationCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

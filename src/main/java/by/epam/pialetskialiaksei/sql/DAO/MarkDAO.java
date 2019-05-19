@@ -77,7 +77,7 @@ public class MarkDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not create a mark", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }

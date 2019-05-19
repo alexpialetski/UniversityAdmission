@@ -5,6 +5,14 @@
          version="4.0">
     <display-name>SummaryTask4</display-name>
 
+    <resource-ref>
+        <description>University admission mail</description>
+        <res-ref-name>mail/Session</res-ref-name>
+        <res-type>javax.mail.Session</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
     <welcome-file-list>
         <welcome-file>welcome.jsp</welcome-file>
     </welcome-file-list>

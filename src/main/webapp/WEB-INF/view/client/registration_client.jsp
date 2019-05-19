@@ -8,13 +8,57 @@
     <title>Registration</title>
     <link rel="stylesheet" type="text/css" href="css/registration-example.css">
     <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/dialog.css">
 </head>
+<script src="js/dialog.js"></script>
+<script src="js/jquery-1.11.2.min.js"></script>
+<script>
+    function sendConfirmation(val){
+        alert("Send confirm");
+        let first_name = $('input[name="first_name"]').val();
+        let last_name = $('input[name="last_name"]').val();
+        let email  = $('input[name="email"]').val();
+        let password = $('input[name="password"]').val();
+        let lang = "${sessionScope.lang}";
+        $.ajax({
+            url: 'controller',
+            type: 'get',
+            data: {command: "sendConfirmation", type: "AJAX",
+                first_name: first_name, last_name: last_name, email: email, password: password, lang: lang},
+            headers: {
+                Accept: "application/json; charset=utf-8",
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            success: function (data) {
+                alert("success");
+                // document.location.reload(true)
+                // subject_cancel_click();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("error");
+                var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+                $('#content').html(errorMsg);
+            }
+        });
+        // document.getElementById('status').innerHTML = val;
+    }
+</script>
 <body>
 <img src="images/bg-login.jpg" class="bg-image">
 <ul>
     <li><a href="?command=client_registration&sessionLocale=en"><fmt:message key="language.en" /></a></li>
     <li><a href="?command=client_registration&sessionLocale=ru"><fmt:message key="language.ru" /></a></li>
 </ul>
+<div id="dialogoverlay"></div>
+<div id="dialogbox">
+    <div>
+        <div id="dialogboxhead"></div>
+        <div id="dialogboxbody"></div>
+        <div id="dialogboxfoot"></div>
+    </div>
+</div>
+<h1 id="status">Default Text</h1>
+<button onclick="Prompt.render('Type some text:','sendConfirmation')">Change Text</button>
 <div class="main-container">
     <h1><fmt:message key="header.register" /></h1>
     <form  action="controller" method="POST" class="form-container">
