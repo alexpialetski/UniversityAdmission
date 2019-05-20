@@ -10,13 +10,13 @@ Footer (bottom area).
                 <input type="hidden" name="command" value="viewProfile">
                 <input class="default" type="submit" value="<fmt:message key="header.profile"/>">
             </form></li>
-        <li><a class="default" href="#">About</a></li>
-        <li><a class="default" href="#">Contact</a></li>
+        <%--<li><a class="default" href="#">About</a></li>--%>
+        <%--<li><a class="default" href="#">Contact</a></li>--%>
         <li>
             <form class="form" action="controller" method="GET">
                 <input type="hidden" name="command" value="viewFaculties">
                 <%--<input id="default facultiesHeader" class="default" type="submit" value="<fmt:message key="header.faculties"/>">--%>
-                <input id="default facultiesHeader" class="default" type="submit" value="<fmt:message key="navbar.faculties"/>">
+                <input id="facultiesHeader" class="default" type="submit" value="<fmt:message key="navbar.faculties"/>">
             </form>
         </li>
             <li>

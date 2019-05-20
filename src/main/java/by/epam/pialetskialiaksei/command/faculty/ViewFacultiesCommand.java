@@ -2,16 +2,8 @@ package by.epam.pialetskialiaksei.command.faculty;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.entity.Entrant;
-import by.epam.pialetskialiaksei.entity.FacultyEntrant;
-import by.epam.pialetskialiaksei.entity.User;
-import by.epam.pialetskialiaksei.model.FacultyInfoModel;
-import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
-import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
-import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
-import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
-import by.epam.pialetskialiaksei.util.ActionType;
-import com.google.gson.Gson;
+import by.epam.pialetskialiaksei.entity.*;
+import by.epam.pialetskialiaksei.sql.DAO.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,24 +12,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * View profile command.
  *
  * @author Mark Norkin
  */
-public class UnApplyFacultyCommand implements Command {
+public class ViewFacultiesCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
 
-    private static final Logger LOG = LogManager.getLogger(UnApplyFacultyCommand.class);
+    private static final Logger LOG = LogManager.getLogger(ViewFacultiesCommand.class);
 
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException, ServletException {
         LOG.debug("Command execution starts");
+        String result = null;
+
         HttpSession session = request.getSession(false);
         String userEmail = String.valueOf(session.getAttribute("user"));
         UserDAO userDAO = new UserDAO();
@@ -46,9 +39,18 @@ public class UnApplyFacultyCommand implements Command {
         EntrantDAO entrantDAO = new EntrantDAO();
         Entrant entrant = entrantDAO.find(user);
 
-        int facultyId = Integer.parseInt(request.getParameter("facultyId"));
         FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        facultyEntrantDAO.delete(new FacultyEntrant(facultyId, entrant.getId()));
-        return "";
+        FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
+        if (facultyEntrant != null) {
+            request.setAttribute("applied", facultyEntrant.getFacultyId());
+        }
+
+        String role = String.valueOf(session.getAttribute("userRole"));
+        if ("client".equals(role)) {
+            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+        } else if ("admin".equals(role)) {
+            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+        }
+        return result;
     }
 }

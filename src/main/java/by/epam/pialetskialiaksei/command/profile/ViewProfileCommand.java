@@ -26,96 +26,73 @@ import org.apache.logging.log4j.Logger;
  * View profile command.
  *
  * @author Mark Norkin
- *
  */
-public class ViewProfileCommand extends Command {
+public class ViewProfileCommand implements Command {
 
-	private static final long serialVersionUID = -3071536593627692473L;
+    private static final long serialVersionUID = -3071536593627692473L;
 
-	private static final Logger LOG = LogManager.getLogger(ViewProfileCommand.class);
+    private static final Logger LOG = LogManager.getLogger(ViewProfileCommand.class);
 
-	@Override
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response, ActionType actionType)
-			throws IOException, ServletException {
-		LOG.debug("Command execution starts");
+    @Override
+    public String execute(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException, ServletException {
+        LOG.debug("Command execution starts");
+        String result = null;
 
-		String result = null;
+        HttpSession session = request.getSession(false);
+        String userEmail = String.valueOf(session.getAttribute("user"));
 
-		if (actionType == ActionType.GET) {
-			result = doGet(request, response);
-		}
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.find(userEmail);
 
-		LOG.debug("Command execution finished");
+        request.setAttribute("first_name", user.getFirstName());
+        LOG.trace("Set the request attribute: 'first_name' = "
+                + user.getFirstName());
+        request.setAttribute("last_name", user.getLastName());
+        LOG.trace("Set the request attribute: 'last_name' = "
+                + user.getLastName());
+        request.setAttribute("email", user.getEmail());
+        LOG.trace("Set the request attribute: 'email' = " + user.getEmail());
+        request.setAttribute("role", user.getRole());
+        LOG.trace("Set the request attribute: 'role' = " + user.getRole());
 
-		return result;
-	}
+        String role = user.getRole();
 
-	/**
-	 * Forwards user to his profile page, based on his role.
-	 *
-	 * @return path to user profile
-	 */
-	protected String doGet(HttpServletRequest request,
-						   HttpServletResponse response) {
-		String result = null;
+        if ("client".equals(role)) {
+            // should not be null !!
+            EntrantDAO entrantDAO = new EntrantDAO();
+            Entrant entrant = entrantDAO.find(user);
 
-		HttpSession session = request.getSession(false);
-		String userEmail = String.valueOf(session.getAttribute("user"));
+            request.setAttribute("city", entrant.getCity());
+            LOG.trace("Set the request attribute: 'city' = "
+                    + entrant.getCity());
+            request.setAttribute("district", entrant.getDistrict());
+            LOG.trace("Set the request attribute: 'district' = "
+                    + entrant.getDistrict());
+            request.setAttribute("school", entrant.getSchool());
+            LOG.trace("Set the request attribute: 'school' = "
+                    + entrant.getSchool());
+            request.setAttribute("diploma", entrant.getDiplomaMark());
+            LOG.trace("Set the request attribute: 'diploma' = "
+                    + entrant.getDiplomaMark());
 
-		UserDAO userDAO = new UserDAO();
-		User user = userDAO.find(userEmail);
-
-		request.setAttribute("first_name", user.getFirstName());
-		LOG.trace("Set the request attribute: 'first_name' = "
-				+ user.getFirstName());
-		request.setAttribute("last_name", user.getLastName());
-		LOG.trace("Set the request attribute: 'last_name' = "
-				+ user.getLastName());
-		request.setAttribute("email", user.getEmail());
-		LOG.trace("Set the request attribute: 'email' = " + user.getEmail());
-		request.setAttribute("role", user.getRole());
-		LOG.trace("Set the request attribute: 'role' = " + user.getRole());
-
-		String role = user.getRole();
-
-		if ("client".equals(role)) {
-			// should not be null !!
-			EntrantDAO entrantDAO = new EntrantDAO();
-			Entrant entrant = entrantDAO.find(user);
-
-			request.setAttribute("city", entrant.getCity());
-			LOG.trace("Set the request attribute: 'city' = "
-					+ entrant.getCity());
-			request.setAttribute("district", entrant.getDistrict());
-			LOG.trace("Set the request attribute: 'district' = "
-					+ entrant.getDistrict());
-			request.setAttribute("school", entrant.getSchool());
-			LOG.trace("Set the request attribute: 'school' = "
-					+ entrant.getSchool());
-			request.setAttribute("diploma", entrant.getDiplomaMark());
-			LOG.trace("Set the request attribute: 'diploma' = "
-					+ entrant.getDiplomaMark());
-
-			MarkDAO markDAO = new MarkDAO();
-			List<ClientSubject> marks = markDAO.findMarks(entrant);
+            MarkDAO markDAO = new MarkDAO();
+            List<ClientSubject> marks = markDAO.findMarks(entrant);
             ClientSubjectsModel jsonMarks = new ClientSubjectsModel(marks);
             Gson gson = new Gson();
 //            request.setAttribute("jsonMarks", gson.toJson(jsonMarks).toString());
             request.setAttribute("jsonMarks", gson.toJson(jsonMarks));
-			request.setAttribute("marks", marks);
-			LOG.trace("Set the request attribute: 'marks' = "
-					+ marks);
+            request.setAttribute("marks", marks);
+            LOG.trace("Set the request attribute: 'marks' = "
+                    + marks);
 
-			result = Path.FORWARD_CLIENT_PROFILE;
-		} else if ("admin".equals(role)) {
-			result = Path.FORWARD_ADMIN_PROFILE;
-		}
-		return result;
-	}
+            result = Path.FORWARD_CLIENT_PROFILE;
+        } else if ("admin".equals(role)) {
+//            result = Path.FORWARD_ADMIN_PROFILE;
+            result = Path.FORWARD_ADMIN_PROFILE;
+        }
+        return result;
+    }
 
-	@Override
-	protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-		return null;
-	}
 }

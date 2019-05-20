@@ -59,8 +59,10 @@ public class ControllerServlet extends HttpServlet {
         // execute command and get forward address
         String path = null;
         try {
-            path = command.execute(request, response, actionType);
-            request.getSession().setAttribute("prevCommand", commandName);
+            if(actionType!= ActionType.AJAX) {
+                request.getSession().setAttribute("prevCommand", commandName);
+            }
+            path = command.execute(request, response);
         } catch (Exception e) {
             throw new ServletException(e);
         }

@@ -17,32 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class EditProfileCommand extends Command {
-    private static final Logger LOG = LogManager.getLogger(CommandManager.class);
+public class EditProfileCommand implements Command {
+    private static final Logger LOG = LogManager.getLogger(EditProfileCommand.class);
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, ActionType actionType) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         LOG.debug("Start executing Command");
-
-        String result = null;
-
-        switch (actionType){
-            case GET: result = doGet(request, response);
-                break;
-            case POST: result = doPost(request, response);
-                break;
-        }
-
-        LOG.debug("End executing command");
-        return result;
-    }
-
-    @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) {
-        return null;
-    }
-
-    @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         String role = String.valueOf(session.getAttribute("userRole"));
 

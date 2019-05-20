@@ -15,13 +15,14 @@ import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
 import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 public class SubjectDAO extends SqlDAO {
-    private SubjectBuilder subjectBuilder = new SubjectBuilder();
-    private MarkBuilder markBuilder = new MarkBuilder();
+//    private SubjectBuilder subjectBuilder = new SubjectBuilder();
+//    private MarkBuilder markBuilder = new MarkBuilder();
 
     private static final String FIND_ALL_SUBJECTS = "SELECT * FROM university_admission.subject;";
     private static final String FIND_SUBJECT_BY_ID = "SELECT * FROM university_admission.subject WHERE subject.id=? LIMIT 1;";
@@ -176,7 +177,8 @@ public class SubjectDAO extends SqlDAO {
                 subject = null;
             } else {
 //                subject = unmarshal(rs);
-                subject = subjectBuilder.build(rs);
+//                subject = subjectBuilder.build(rs);
+                subject = (Subject) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -206,7 +208,8 @@ public class SubjectDAO extends SqlDAO {
                 subject = null;
             } else {
 //                subject = unmarshal(rs);
-                subject = subjectBuilder.build(rs);
+//                subject = subjectBuilder.build(rs);
+                subject = (Subject) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -231,7 +234,8 @@ public class SubjectDAO extends SqlDAO {
 //            connection.commit();
             while (rs.next()) {
 //                subjects.add(unmarshal(rs));
-                subjects.add(subjectBuilder.build(rs));
+//                subjects.add(subjectBuilder.build(rs));
+                subjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -257,7 +261,8 @@ public class SubjectDAO extends SqlDAO {
 //            connection.commit();
             while (rs.next()) {
 //                facultySubjects.add(unmarshal(rs));
-                facultySubjects.add(subjectBuilder.build(rs));
+//                facultySubjects.add(subjectBuilder.build(rs));
+                facultySubjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -283,7 +288,8 @@ public class SubjectDAO extends SqlDAO {
             connection.commit();
             while (rs.next()) {
 //                facultySubjects.add(unmarshal(rs));
-                facultySubjects.add(subjectBuilder.build(rs));
+//                facultySubjects.add(subjectBuilder.build(rs));
+                facultySubjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -307,9 +313,11 @@ public class SubjectDAO extends SqlDAO {
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
 //            connection.commit();
+            MarkBuilder markBuilder = new MarkBuilder();
             while (rs.next()) {
 //                Subject subject = unmarshal(rs);
-                Subject subject = subjectBuilder.build(rs);
+//                Subject subject = subjectBuilder.build(rs);
+                Subject subject = (Subject) createBuilder().build(rs);
                 Mark mark = markBuilder.buildForeign(rs);
 //                facultySubjects.add(createClientSubject(rs, subject));
                 facultySubjects.add(new ClientSubject(subject, mark));
@@ -323,6 +331,11 @@ public class SubjectDAO extends SqlDAO {
             close(rs);
         }
         return facultySubjects;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new SubjectBuilder();
     }
 }
 

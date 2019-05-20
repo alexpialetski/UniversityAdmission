@@ -10,20 +10,31 @@ import java.util.List;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Entrant;
+import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.FacultyEntrant;
+import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultyEntrantBuilder;
+import by.epam.pialetskialiaksei.sql.builder.UserBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 public class FacultyEntrantDAO extends SqlDAO {
-    private FacultyEntrantBuilder facultyEntrantBuilder = new FacultyEntrantBuilder();
+//    private FacultyEntrantBuilder facultyEntrantBuilder = new FacultyEntrantBuilder();
 
     private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.faculty_entrants;";
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
+    private static final String FIND_FACULTY_USER_BY_FACULTY_ID = "SELECT user.id as User_idUser,user.first_name,user.last_name,user.email,user.password,user.lang,role.role_name\n" +
+                                                                    "FROM university_admission.faculty_entrants\n" +
+                                                                    "       inner join university_admission.entrant e\n" +
+                                                                    "                  on faculty_entrants.Entrant_idEntrant = e.id\n" +
+                                                                    "       inner join user on e.User_idUser = user.id\n" +
+                                                                    "       inner join role on user.role_id = role.id\n" +
+                                                                    "WHERE faculty_entrants.Faculty_idFaculty = ?;";
     private static final String INSERT_FACULTY_ENTRANT = "INSERT INTO university_admission.faculty_entrants(faculty_entrants.Faculty_idFaculty,faculty_entrants.Entrant_idEntrant) VALUES (?,?);";
     private static final String DELETE_FACULTY_ENTRANT = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.id=? LIMIT 1;";
     private static final String DELETE_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty=? and faculty_entrants.Entrant_idEntrant=? LIMIT 1;";
@@ -93,7 +104,8 @@ public class FacultyEntrantDAO extends SqlDAO {
                 facultyEntrant = null;
             } else {
 //                facultyEntrant = unmarshal(rs);
-                facultyEntrant = facultyEntrantBuilder.build(rs);
+//                facultyEntrant = facultyEntrantBuilder.build(rs);
+                facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -104,6 +116,33 @@ public class FacultyEntrantDAO extends SqlDAO {
             close(rs);
         }
         return facultyEntrant;
+    }
+
+    public List<User> findUsers(int entityPK) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        FacultyEntrant facultyEntrant = null;
+        List<User> users =  new ArrayList<>();
+        UserBuilder userBuilder = new UserBuilder();
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(FIND_FACULTY_USER_BY_FACULTY_ID);
+            pstmt.setInt(1, entityPK);
+            rs = pstmt.executeQuery();
+            while(rs.next()){
+                users.add(userBuilder.buildForeign(rs));
+            }
+//            connection.commit();
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not find a faculty entrant", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
+        }
+        return users;
     }
 
     public FacultyEntrant find(Entrant entrant) {
@@ -121,7 +160,8 @@ public class FacultyEntrantDAO extends SqlDAO {
                 facultyEntrant = null;
             } else {
 //                facultyEntrant = unmarshal(rs);
-                facultyEntrant = facultyEntrantBuilder.build(rs);
+//                facultyEntrant = facultyEntrantBuilder.build(rs);
+                facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -152,7 +192,8 @@ public class FacultyEntrantDAO extends SqlDAO {
                 facultyEntrant = null;
             } else {
 //                facultyEntrant = unmarshal(rs);
-                facultyEntrant = facultyEntrantBuilder.build(rs);
+//                facultyEntrant = facultyEntrantBuilder.build(rs);
+                facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -177,7 +218,8 @@ public class FacultyEntrantDAO extends SqlDAO {
             connection.commit();
             while (rs.next()) {
 //                facultyEntrants.add(unmarshal(rs));
-                facultyEntrants.add(facultyEntrantBuilder.build(rs));
+//                facultyEntrants.add(facultyEntrantBuilder.build(rs));
+                facultyEntrants.add((FacultyEntrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -188,6 +230,11 @@ public class FacultyEntrantDAO extends SqlDAO {
             close(rs);
         }
         return facultyEntrants;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new FacultyEntrantBuilder();
     }
 
     /**

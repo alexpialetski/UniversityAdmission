@@ -13,7 +13,8 @@ public final class Path {
         public static final String REDIRECT_ADMIN_REGISTRATION_PAGE = "controller?command=admin_registration";
 
         public static final String REDIRECT_TO_PROFILE = "controller?command=viewProfile";
-        public static final String REDIRECT_TO_FACULTY = "controller?command=viewFaculty&name_eng=";
+//        public static final String REDIRECT_TO_FACULTY = "controller?command=viewFaculty&name_eng=";
+        public static final String REDIRECT_TO_FACULTY = "controller?command=viewFaculty&facultyId=?";
 //        public static final String REDIRECT_TO_SUBJECT = "controller?command=viewSubject&name_eng=";
         public static final String REDIRECT_TO_SUBJECT = "controller?command=viewSubject&name_eng=";
         public static final String REDIRECT_TO_VIEW_ALL_FACULTIES = "controller?command=viewAllFaculties";

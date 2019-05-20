@@ -1,9 +1,5 @@
 package by.epam.pialetskialiaksei.sql.builder.manager;
 
-import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.command.faculty.ViewFacultyCommand;
-import by.epam.pialetskialiaksei.command.profile.*;
-import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
 import by.epam.pialetskialiaksei.sql.builder.*;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;

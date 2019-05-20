@@ -4,6 +4,7 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultyBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +19,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 public class FacultyDAO extends SqlDAO {
-    private FacultyBuilder facultyBuilder = new FacultyBuilder();
+//    private FacultyBuilder facultyBuilder = new FacultyBuilder();
 
     private static final String FIND_ALL_FACULTIES = "SELECT * FROM university_admission.faculty;";
     private static final String FIND_FACULTY_BY_ID = "SELECT * FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
@@ -115,18 +116,19 @@ public class FacultyDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_BY_ID);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             if (!rs.next()) {
                 faculty = null;
             } else {
 //                faculty = unmarshal(rs);
-                faculty = facultyBuilder.build(rs);
+//                faculty = facultyBuilder.build(rs);
+                faculty = (Faculty) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not find a faculty", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
@@ -149,7 +151,8 @@ public class FacultyDAO extends SqlDAO {
                 faculty = null;
             } else {
 //                faculty = unmarshal(rs);
-                faculty = facultyBuilder.build(rs);
+//                faculty = facultyBuilder.build(rs);
+                faculty = (Faculty)createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -174,7 +177,8 @@ public class FacultyDAO extends SqlDAO {
             connection.commit();
             while (rs.next()) {
 //                faculties.add(unmarshal(rs));
-                faculties.add(facultyBuilder.build(rs));
+//                faculties.add(facultyBuilder.build(rs));
+                faculties.add((Faculty) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -185,6 +189,11 @@ public class FacultyDAO extends SqlDAO {
             close(rs);
         }
         return faculties;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new FacultyBuilder();
     }
 
     /**

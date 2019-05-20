@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="css/general.css">
 </head>
 <body>
-<img src="images/bg-login.jpg" class="bg-image">
+<img src="images/bg-login.jpg" class="bg-image" style="background-size: cover;background-position: center;">
 <ul>
     <li><a href="?sessionLocale=en"><fmt:message key="language.en" /></a></li>
     <li><a href="?sessionLocale=ru"><fmt:message key="language.ru" /></a></li>

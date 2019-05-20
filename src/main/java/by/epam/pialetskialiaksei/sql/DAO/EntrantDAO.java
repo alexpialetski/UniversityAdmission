@@ -6,6 +6,7 @@ import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.EntrantBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ import java.util.List;
 import static org.apache.logging.log4j.core.util.Closer.close;
 
 public class EntrantDAO extends SqlDAO {
-    private EntrantBuilder entrantBuilder = new EntrantBuilder();
+//    private EntrantBuilder entrantBuilder = new EntrantBuilder();
 
     private static final String FIND_ALL_ENTRANTS = "SELECT id, city, district, school, User_idUser, diploma_mark, isBlocked\n" +
                                                     "FROM university_admission.entrant;";
@@ -145,7 +146,8 @@ public class EntrantDAO extends SqlDAO {
                 entrant = null;
             } else {
 //                entrant = unmarshal(rs);
-                entrant = entrantBuilder.build(rs);
+//                entrant = entrantBuilder.build(rs);
+                entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -173,7 +175,8 @@ public class EntrantDAO extends SqlDAO {
                 entrant = null;
             } else {
 //                entrant = unmarshal(rs);
-                entrant = entrantBuilder.build(rs);
+//                entrant = entrantBuilder.build(rs);
+                entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -198,7 +201,9 @@ public class EntrantDAO extends SqlDAO {
 //            connection.commit();
             while (rs.next()) {
 //                users.add(unmarshal(rs));
-                users.add(entrantBuilder.build(rs));
+//                users.add(entrantBuilder.build(rs));
+                users.add((Entrant) createBuilder().build(rs));
+
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -224,7 +229,8 @@ public class EntrantDAO extends SqlDAO {
 //            connection.commit();
             while (rs.next()) {
 //                facultyEntrants.add(unmarshal(rs));
-                facultyEntrants.add(entrantBuilder.build(rs));
+//                facultyEntrants.add(entrantBuilder.build(rs));
+                facultyEntrants.add((Entrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -235,6 +241,11 @@ public class EntrantDAO extends SqlDAO {
             close(rs);
         }
         return facultyEntrants;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new EntrantBuilder();
     }
 
     /**

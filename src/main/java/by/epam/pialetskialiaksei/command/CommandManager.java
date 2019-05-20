@@ -1,9 +1,7 @@
 package by.epam.pialetskialiaksei.command;
 
 import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.command.faculty.ApplyFacultyCommand;
-import by.epam.pialetskialiaksei.command.faculty.UnApplyFacultyCommand;
-import by.epam.pialetskialiaksei.command.faculty.ViewFacultyCommand;
+import by.epam.pialetskialiaksei.command.faculty.*;
 import by.epam.pialetskialiaksei.command.profile.*;
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
 import by.epam.pialetskialiaksei.command.registration.SendConfirmationRegistrationCommand;
@@ -26,11 +24,15 @@ public class CommandManager {
         commands.put("viewProfile", new ViewProfileCommand());
         commands.put("client_registration", new ClientRegistrationCommand());
         commands.put("editProfile", new EditProfileCommand());
-        commands.put("getAllSubjects", new GetAllSubjectsCommand());
+        commands.put("getOtherSubjects", new GetOtherSubjectsCommand());
         commands.put("changeSubjects", new ChangeSubjectsCommand());
+        commands.put("changeFacultySubjects", new ChangeFacultySubjectsCommand());
         commands.put("changeDiploma", new ChangeDiplomaCommand());
         commands.put("logout", new LogoutCommand());
-        commands.put("viewFaculties", new ViewFacultyCommand());
+        commands.put("viewFaculties", new ViewFacultiesCommand());
+        commands.put("viewFaculty", new ViewFacultyCommand());
+        commands.put("getFacultySubjects", new GetFacultySubjectsCommand());
+        commands.put("getAllFaculties", new GetAllFacultiesCommand());
         commands.put("applyOnFaculty", new ApplyFacultyCommand());
         commands.put("unApplyOnFaculty", new UnApplyFacultyCommand());
         commands.put("viewAllSubjects", new ViewAllSubjectsCommand());
@@ -38,6 +40,8 @@ public class CommandManager {
         commands.put("deleteSubject", new DeleteSubjectCommand());
         commands.put("addSubject", new AddSubjectCommand());
         commands.put("sendConfirmation", new SendConfirmationRegistrationCommand());
+        commands.put("getFacultyUsers", new GetFacultyUsersCommand());
+        commands.put("editFaculty", new EditFacultyCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

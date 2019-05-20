@@ -5,6 +5,7 @@ import by.epam.pialetskialiaksei.entity.Role;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.UserBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends SqlDAO {
-    private UserBuilder userBuilder = new UserBuilder();
+//    private UserBuilder userBuilder = new UserBuilder();
 
     private static final String FIND_ALL_USERS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name, user.lang\n" +
                                                     "FROM university_admission.user\n" +
@@ -171,7 +172,8 @@ public class UserDAO extends SqlDAO {
                 user = null;
             } else {
 //                user = unmarshal(rs);
-                user = userBuilder.build(rs);
+//                user = userBuilder.build(rs);
+                user = (User) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -200,7 +202,8 @@ public class UserDAO extends SqlDAO {
                 user = null;
             } else {
 //                user = unmarshal(rs);
-                user = userBuilder.build(rs);
+//                user = userBuilder.build(rs);
+                user = (User) createBuilder().build(rs);
             }
 //            connection.commit();
         } catch (SQLException e) {
@@ -229,7 +232,8 @@ public class UserDAO extends SqlDAO {
                 user = null;
             } else {
 //                user = unmarshal(rs);
-                user = userBuilder.build(rs);
+//                user = userBuilder.build(rs);
+                user = (User) createBuilder().build(rs);
             }
 //            connection.commit();
         } catch (SQLException e) {
@@ -255,7 +259,8 @@ public class UserDAO extends SqlDAO {
             connection.commit();
             while (rs.next()) {
 //                users.add(unmarshal(rs));
-                users.add(userBuilder.build(rs));
+//                users.add(userBuilder.build(rs));
+                users.add((User) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -266,6 +271,11 @@ public class UserDAO extends SqlDAO {
             close(rs);
         }
         return users;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new UserBuilder();
     }
 
     /**

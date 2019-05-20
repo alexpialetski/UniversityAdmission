@@ -23,41 +23,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChangeSubjectsCommand extends Command {
+public class ChangeSubjectsCommand implements Command {
     private static final long serialVersionUID = -3071536593627692473L;
 
-    private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
+    private static final Logger LOG = LogManager.getLogger(ChangeSubjectsCommand.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response, ActionType actionType) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         LOG.debug("Start executing Command");
-
-        String result = null;
-
-        switch (actionType){
-            case GET: result = doGet(request, response);
-                break;
-            case POST: result = doPost(request, response);
-                break;
-            case AJAX: result = doAjax(request, response);
-                break;
-        }
-
-        LOG.debug("End executing command");
-        return result;
-    }
-
-    @Override
-    protected String doGet(HttpServletRequest request, HttpServletResponse response) {
-        return null;
-    }
-
-    @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-        return null;
-    }
-
-    protected String doAjax(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         String userEmail = String.valueOf(session.getAttribute("user"));
 
@@ -68,17 +41,17 @@ public class ChangeSubjectsCommand extends Command {
         Entrant entrant = entrantDAO.find(user);
 
         String jsonString = request.getParameter("subjects");
-        jsonString = jsonString.replaceAll("\\?", entrant.getId()+"");
-        LOG.info("Json of subjects to change: "+jsonString);
+        jsonString = jsonString.replaceAll("\\?", entrant.getId() + "");
+        LOG.info("Json of subjects to change: " + jsonString);
         Gson gson = new Gson();
 
         Mark[] marks = gson.fromJson(jsonString, Mark[].class);
 
         MarkDAO markDAO = new MarkDAO();
 
-        if(marks[0].getId() != -1){
+        if (marks[0].getId() != -1) {
             markDAO.update(marks);
-        }else{
+        } else {
             markDAO.create(marks);
         }
         return "";

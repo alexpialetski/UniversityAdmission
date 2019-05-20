@@ -3,6 +3,7 @@ package by.epam.pialetskialiaksei.sql.DAO;
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -66,5 +67,10 @@ public class ReportSheetDAO extends SqlDAO {
             LOG.error("Can not unmarshal ResultSet to report sheet", e);
         }
         return reportSheet;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return null;
     }
 }

@@ -80,12 +80,14 @@
                 <%--<input type="submit" class="btn">--%>
                 <%--</form>--%>
             </div>
-            <input type="button" id="subject_add" class="btn"
-                   value="<fmt:message key="subject.list_jsp.button.add"/>">
-            <input type="button" id="subject_add_submit" class="btn"
-                   value="<fmt:message key="profile.view_jsp.button.submit"/>" style="display: none">
-            <input type="button" id="subject_add_cancel" class="btn"
-                   value="<fmt:message key="profile.view_jsp.button.cancel"/>" style="display: none">
+            <div class="info">
+                <input type="button" id="subject_add" class="btn"
+                       value="<fmt:message key="subject.list_jsp.button.add"/>">
+                <input type="button" id="subject_add_submit" class="btn"
+                       value="<fmt:message key="profile.view_jsp.button.submit"/>" style="display: none">
+                <input type="button" id="subject_add_cancel" class="btn"
+                       value="<fmt:message key="profile.view_jsp.button.cancel"/>" style="display: none">
+            </div>
         </div>
         <div class="info">
             <input type="button" id="subject_delete" class="btn"
@@ -112,15 +114,14 @@
             let table = document.createElement('table');
             table.id = 't01';
             $(table).append("<tr>" +
-                "        <th class=\"hidden\" style=\"display:none\">Delete</th> " +
                 "        <th>Subject id</th>\n" +
                 "        <th>Subject ru</th>\n" +
                 "        <th>Subject eng</th>\n" +
+                "        <th class=\"hidden\" style=\"display:none\">Delete</th> " +
                 "    </tr>");
             let subjectsJson = ${subjectsGson};
             for (let i = 0; i < subjectsJson.length; ++i) {
                 $(table).append("<tr>" +
-                    "           <td class=\"hidden\" style=\"display:none\"><input  id=\"" + subjectsJson[i].id + "\" type=\"checkbox\"></td>" +
                     "            <td><input class=\"no-spinners\" type=\"number\" value=\"" + subjectsJson[i].id + "\"\n" +
                     "                       disabled>\n" +
                     "            </td>\n" +
@@ -130,6 +131,7 @@
                     "            <td><input class=\"input-field\" type=\"text\"\n" +
                     "                       placeholder=\"" + subjectsJson[i].nameEng + "\"\n" +
                     "                       disabled></td>\n" +
+                    "           <td class=\"hidden\" style=\"display:none\"><input  id=\"" + subjectsJson[i].id + "\" type=\"checkbox\"></td>" +
                     "        </tr>");
             }
             $(parent).prepend(table);
@@ -162,10 +164,11 @@
         function subject_submit_click() {
             <%--let s = ${subjectsGson};--%>
 
-            let childs = document.getElementsByTagName("td");
+            // let childs = document.getElementsByTagName('td input');
+            let childs = $('td input');
             let jsonString = makeJsonOfSubjects(childs);
 
-            alert("new");
+            // alert("new");
             $.ajax({
                 url: 'controller',
                 type: 'get',
@@ -315,16 +318,19 @@
             let subject = {};
             for (let i = 0; i < subjects.length; i++) {
                 // let subjectInput = subjectsRows[i].innerHTML;
-                let value = getValueOfInput(subjects[i].innerHTML);
+                // let value = getValueOfInput(subjects[i].innerHTML);
+                let value = getValueOfInput(subjects[i]);
                 if (counter === 1) {
                     subject.id = value;
                 } else if (counter === 2) {
                     subject.nameRu = value;
-                } else {
+                } else if (counter === 3){
                     subject.nameEng = value;
                     obj.push(subject);
                     subject = {};
-                    counter = 0
+                    // counter = 0
+                }else{
+                    counter = 0;
                 }
                 ++counter;
             }

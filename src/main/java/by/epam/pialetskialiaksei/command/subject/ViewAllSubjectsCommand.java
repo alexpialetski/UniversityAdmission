@@ -29,52 +29,32 @@ import java.util.List;
  * View profile command.
  *
  * @author Mark Norkin
- *
  */
-public class ViewAllSubjectsCommand extends Command {
+public class ViewAllSubjectsCommand implements Command {
 
-	private static final long serialVersionUID = -3071536593627692473L;
+    private static final long serialVersionUID = -3071536593627692473L;
 
-	private static final Logger LOG = LogManager.getLogger(ViewAllSubjectsCommand.class);
+    private static final Logger LOG = LogManager.getLogger(ViewAllSubjectsCommand.class);
 
-	@Override
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response, ActionType actionType)
-			throws IOException, ServletException {
-		LOG.debug("Command execution starts");
+    @Override
+    public String execute(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException, ServletException {
+        LOG.debug("Command execution starts");
+        String result = null;
 
-		String result = null;
+        HttpSession session = request.getSession(false);
 
-		if (actionType == ActionType.GET) {
-			result = doGet(request, response);
-		}
-
-		LOG.debug("Command execution finished");
-
-		return result;
-	}
-
-	/**
-	 * Forwards user to his profile page, based on his role.
-	 *
-	 * @return path to user profile
-	 */
-	protected String doGet(HttpServletRequest request,
-						   HttpServletResponse response) {
-		String result = null;
-
-		HttpSession session = request.getSession(false);
-
-		String role = (String) session.getAttribute("userRole");
+        String role = (String) session.getAttribute("userRole");
 
 // TODO: 18.05.2019 delete client.equals
-		if ("admin".equals(role)||"client".equals(role)) {
-			SubjectDAO subjectDAO = new SubjectDAO();
-			List<Subject> allSubjects = subjectDAO.findAll();
+        if ("admin".equals(role) || "client".equals(role)) {
+            SubjectDAO subjectDAO = new SubjectDAO();
+            List<Subject> allSubjects = subjectDAO.findAll();
 
-			LOG.trace("Set the request attribute: 'allSubjects' = "
-					+ allSubjects);
-			request.setAttribute("allSubjects", allSubjects);
+            LOG.trace("Set the request attribute: 'allSubjects' = "
+                    + allSubjects);
+            request.setAttribute("allSubjects", allSubjects);
             Gson gson = new Gson();
 
             String subjectsJson = gson.toJson(allSubjects);
@@ -83,15 +63,10 @@ public class ViewAllSubjectsCommand extends Command {
             request.setAttribute("subjectsGson", subjectsJson);
 
             result = Path.FORWARD_SUBJECT_VIEW_ALL_ADMIN;
-		}
+        }
 //		} else if ("client".equals(role)) {
 //			result = Path.REDIRECT_TO_PROFILE;
 //		}
-		return result;
-	}
-
-	@Override
-	protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-		return null;
-	}
+        return result;
+    }
 }

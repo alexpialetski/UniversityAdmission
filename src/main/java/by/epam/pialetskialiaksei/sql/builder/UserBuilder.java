@@ -24,7 +24,23 @@ public class UserBuilder extends SetBuilder<User> {
             user.setPassword(rs.getString(Fields.USER_PASSWORD));
             user.setRole(rs.getString(Fields.USER_ROLE));
             user.setLang(rs.getString(Fields.USER_LANG));
-//            user.setActiveStatus(rs.getBoolean(Fields.USER_ACTIVE_STATUS));
+        } catch (SQLException e) {
+            LOG.error("Can not unmarshal result set to user", e);
+        }
+        return user;
+    }
+
+    @Override
+    public User buildForeign(ResultSet rs) {
+        User user = new User();
+        try {
+            user.setId(rs.getInt(Fields.USER_FOREIGN_KEY_ID));
+            user.setFirstName(rs.getString(Fields.USER_FIRST_NAME));
+            user.setLastName(rs.getString(Fields.USER_LAST_NAME));
+            user.setEmail(rs.getString(Fields.USER_EMAIL));
+            user.setPassword(rs.getString(Fields.USER_PASSWORD));
+            user.setRole(rs.getString(Fields.USER_ROLE));
+            user.setLang(rs.getString(Fields.USER_LANG));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal result set to user", e);
         }

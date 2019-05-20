@@ -12,7 +12,7 @@ public abstract class SqlDAO {
     protected void releaseConnection(Connection connection){
         ConnectionPoolManager.getInstance().releaseConnection(connection);
     }
-//    protected abstract SetBuilder createBuilder();
+    protected abstract SetBuilder createBuilder();
     protected void rollback(Connection connection){
         try {
             connection.rollback();

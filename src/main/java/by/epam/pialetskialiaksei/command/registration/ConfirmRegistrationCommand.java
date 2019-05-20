@@ -13,28 +13,28 @@ import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Invoked when client registers in system.
  *
  * @author Mark Norkin
+ *
  */
-public class ClientRegistrationCommand implements Command {
+public class ConfirmRegistrationCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+	private static final long serialVersionUID = -3071536593627692473L;
 
-    private static final Logger LOG = LogManager.getLogger(ClientRegistrationCommand.class);
+	private static final Logger LOG = LogManager.getLogger(ConfirmRegistrationCommand.class);
 
 
-    @Override
-    public String execute(HttpServletRequest request,
-                          HttpServletResponse response)
-            throws IOException, ServletException {
+	@Override
+	public String execute(HttpServletRequest request,
+			HttpServletResponse response)
+			throws IOException, ServletException {
         LOG.debug("Start executing Command");
         String email = request.getParameter(Fields.USER_EMAIL);
         String password = request.getParameter(Fields.USER_PASSWORD);
@@ -78,5 +78,5 @@ public class ClientRegistrationCommand implements Command {
             result = Path.WELCOME_PAGE;
         }
         return result;
-    }
+	}
 }

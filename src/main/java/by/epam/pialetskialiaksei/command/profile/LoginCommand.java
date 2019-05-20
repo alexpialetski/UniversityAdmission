@@ -19,63 +19,37 @@ import org.apache.logging.log4j.Logger;
  * Invoked when user logins in the system.
  *
  * @author Mark Norkin.
- *
  */
-public class LoginCommand extends Command {
+public class LoginCommand implements Command {
 
-	private static final long serialVersionUID = -3071536593627692473L;
+    private static final long serialVersionUID = -3071536593627692473L;
 
-	private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
+    private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
 
-	@Override
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response, ActionType actionType)
-			throws IOException, ServletException {
+    @Override
+    public String execute(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException, ServletException {
 
-		LOG.debug("Start executing Command");
+        LOG.debug("Start executing Command");
+        String result = null;
 
-		String result = null;
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-		switch (actionType){
-			case GET: result = doGet(request, response);
-				break;
-			case POST: result = doPost(request, response);
-				break;
-		}
-		LOG.debug("End executing command");
-		return result;
-	}
-
-	@Override
-	protected String doGet(HttpServletRequest request, HttpServletResponse response) {
-		return null;
-	}
-
-	/**
-	 * Logins user in system. As first page displays view of all faculties.
-	 *
-	 * @return path to the view of all faculties.
-	 */
-	protected String doPost(HttpServletRequest request,
-							HttpServletResponse response) {
-		String result = null;
-
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-
-		UserDAO userDAO = new UserDAO();
-		User user = userDAO.find(email, password);
-		LOG.trace("User found: " + user);
-		if (user == null) {
-			request.setAttribute("message",
-					"Cannot find user with such login/password");
-			LOG.error("message: Cannot find user with such login/password");
-			result = null;
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.find(email, password);
+        LOG.trace("User found: " + user);
+        if (user == null) {
+            request.setAttribute("message",
+                    "Cannot find user with such login/password");
+            LOG.error("message: Cannot find user with such login/password");
+            result = null;
 //		} else if (!user.getActiveStatus()) {
 //			request.setAttribute("errorMessage", "You are not registered!");
 //			LOG.error("errorMessage: User is not registered or did not complete his registration.");
 //			result = null;
-		} else {
+        } else {
 //			HttpSession oldSession = request.getSession(false);
 //			HttpSession session = request.getSession(true);
 //			if(oldSession != null){
@@ -84,23 +58,23 @@ public class LoginCommand extends Command {
 //			}else{
 //				session.setAttribute("lang", "ru");
 //			}
-			HttpSession session = request.getSession(true);
+            HttpSession session = request.getSession(true);
 
-			session.setAttribute("user", user.getEmail());
-			LOG.trace("Set the session attribute 'user' = " + user.getEmail());
+            session.setAttribute("user", user.getEmail());
+            LOG.trace("Set the session attribute 'user' = " + user.getEmail());
 
-			session.setAttribute("userRole", user.getRole());
-			LOG.trace("Set the session attribute: 'userRole' = "
-					+ user.getRole());
+            session.setAttribute("userRole", user.getRole());
+            LOG.trace("Set the session attribute: 'userRole' = "
+                    + user.getRole());
 
-			session.setAttribute("lang", user.getLang());
-			LOG.trace("Set the session attribute 'lang' = " + user.getLang());
+            session.setAttribute("lang", user.getLang());
+            LOG.trace("Set the session attribute 'lang' = " + user.getLang());
 
-			LOG.info("User: " + user + " logged as " + user.getRole());
+            LOG.info("User: " + user + " logged as " + user.getRole());
 
-			result = Path.REDIRECT_TO_PROFILE;
-		}
-		return result;
-	}
+            result = Path.REDIRECT_TO_PROFILE;
+        }
+        return result;
 
+    }
 }

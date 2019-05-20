@@ -9,26 +9,26 @@ import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import by.epam.pialetskialiaksei.util.ActionType;
+import by.epam.pialetskialiaksei.util.MailUtils;
 import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * Invoked when client registers in system.
  *
  * @author Mark Norkin
  */
-public class ClientRegistrationCommand implements Command {
+public class SendConfirmationRegistrationCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
 
-    private static final Logger LOG = LogManager.getLogger(ClientRegistrationCommand.class);
+    private static final Logger LOG = LogManager.getLogger(SendConfirmationRegistrationCommand.class);
 
 
     @Override
@@ -37,15 +37,21 @@ public class ClientRegistrationCommand implements Command {
             throws IOException, ServletException {
         LOG.debug("Start executing Command");
         String email = request.getParameter(Fields.USER_EMAIL);
+        LOG.trace("Get the request attribute: 'email' = "
+                + email);
         String password = request.getParameter(Fields.USER_PASSWORD);
+        LOG.trace("Get the request attribute: 'password' = "
+                + password);
         String firstName = request.getParameter(Fields.USER_FIRST_NAME);
+        LOG.trace("Get the request attribute: 'firstName' = "
+                + firstName);
         String lastName = request.getParameter(Fields.USER_LAST_NAME);
-
+        LOG.trace("Get the request attribute: 'lastName' = "
+                + lastName);
         String lang = request.getParameter(Fields.USER_LANG);
+        LOG.trace("Get the request attribute: 'lang' = "
+                + lang);
 
-        String town = request.getParameter(Fields.ENTRANT_CITY);
-        String district = request.getParameter(Fields.ENTRANT_DISTRICT);
-        String school = request.getParameter(Fields.ENTRANT_SCHOOL);
 
         String result = null;
 
@@ -53,30 +59,17 @@ public class ClientRegistrationCommand implements Command {
                 lastName, email, password, lang);
 
         LOG.trace(valid);
-        valid = ProfileInputValidator.validateEntrantParameters(town, district,
-                school);
 
         if (!valid) {
             request.setAttribute("errorMessage", "Please fill all fields!");
             LOG.error("errorMessage: Not all fields are filled");
             result = Path.REDIRECT_CLIENT_REGISTRATION_PAGE;
-        } else if (valid) {
+        } else {
             User user = new User(email, password, firstName, lastName,
                     Role.CLIENT, lang);
-            UserDAO userDAO = new UserDAO();
-            userDAO.create(user);
-            LOG.trace("User record created: " + user);
-
-            Entrant entrant = new Entrant(town, district, school, user, true);
-            EntrantDAO entrantDAO = new EntrantDAO();
-            entrantDAO.create(entrant);
-            LOG.trace("Entrant record created: " + entrant);
-
-//			MailUtils.sendConfirmationEmail(user);
-//			request.setAttribute("successfulMessage",
-//					"Your account was created. Check your email and confirm your registration.");
-            result = Path.WELCOME_PAGE;
+            String token = MailUtils.sendConfirmationEmail(user);
+            LOG.trace("Confirmation token:" + token);
         }
-        return result;
+        return "{\"error\":\"none\"}";
     }
 }

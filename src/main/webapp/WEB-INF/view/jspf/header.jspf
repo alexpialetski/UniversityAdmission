@@ -3,13 +3,13 @@
 <div class="header">
     <a href="#default" class="logo default"><fmt:message key="header.logo"/></a>
     <ul class="header-right">
-        <input class="active default" type="submit" value="Home">
+        <%--<input class="active default" type="submit" value="Home">--%>
         <%--<form class="form" action="controller" method="GET">--%>
             <%--<input type="hidden" name="command" value="viewProfile">--%>
             <%--<input class="default" type="submit" value="<fmt:message key="header.profile"/>">--%>
         <%--</form>--%>
-        <input type="submit" class="default" value="Contact">
-        <input type="submit" class="default" value="About">
+        <%--<input type="submit" class="default" value="Contact">--%>
+        <%--<input type="submit" class="default" value="About">--%>
         <%--<form class="form" action="controller" method="GET">--%>
             <%--<input type="hidden" name="command" value="viewFaculties">--%>
             <%--<input id="facultiesHeader" class="default" type="submit" value="<fmt:message key="header.faculties"/>">--%>

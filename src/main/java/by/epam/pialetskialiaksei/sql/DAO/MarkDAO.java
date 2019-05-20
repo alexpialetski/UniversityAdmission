@@ -9,6 +9,7 @@ import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultySubjectBuilder;
 import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
 import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,8 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MarkDAO extends SqlDAO {
-    private MarkBuilder markBuilder= new MarkBuilder();
-    private SubjectBuilder subjectBuilder = new SubjectBuilder();
+//    private MarkBuilder markBuilder= new MarkBuilder();
+//    private SubjectBuilder subjectBuilder = new SubjectBuilder();
 
     private static final String FIND_ALL_MARKS = "SELECT * FROM university_admission.mark;";
     private static final String FIND_MARK = "SELECT * FROM university_admission.mark WHERE mark.id = ? LIMIT 1;";
@@ -190,7 +191,8 @@ public class MarkDAO extends SqlDAO {
             connection.commit();
             if (rs.next()) {
 //                mark = unmarshal(rs);
-                mark = markBuilder.build(rs);
+//                mark = markBuilder.build(rs);
+                mark = (Mark) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -215,7 +217,8 @@ public class MarkDAO extends SqlDAO {
             connection.commit();
             while (rs.next()) {
 //                users.add(unmarshal(rs));
-                users.add(markBuilder.build(rs));
+//                users.add(markBuilder.build(rs));
+                users.add((Mark) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
@@ -239,11 +242,13 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
 //            connection.commit();
+            SubjectBuilder subjectBuilder = new SubjectBuilder();
             while (rs.next()) {
 //                Subject subject = unmarshalSubject(rs);
                 Subject subject = subjectBuilder.buildForeign(rs);
 //                Mark mark = unmarshal(rs);
-                Mark mark = markBuilder.build(rs);
+//                Mark mark = markBuilder.build(rs);
+                Mark mark = (Mark) createBuilder().build(rs);
                 ClientSubject clientSubject = new ClientSubject(subject,mark);
                 clientSubjects.add(clientSubject);
             }
@@ -268,6 +273,7 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_SUBJECTS_OF_ENTRANT);
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
+            SubjectBuilder subjectBuilder = new SubjectBuilder();
 //            connection.commit();
             while (rs.next()) {
 //                Subject subject = unmarshalSubject(rs);
@@ -283,6 +289,11 @@ public class MarkDAO extends SqlDAO {
             close(rs);
         }
         return subjects;
+    }
+
+    @Override
+    protected SetBuilder createBuilder() {
+        return new MarkBuilder();
     }
 
 //    public Mark findDiplomaMark(Entrant entrant){

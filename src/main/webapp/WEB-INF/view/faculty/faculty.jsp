@@ -55,7 +55,7 @@
         $.ajax({
             url: 'controller',
             type: 'get',
-            data: {command: "viewFaculties", type: "AJAX"},
+            data: {command: "getAllFaculties", type: "AJAX"},
             headers: {
                 Accept: "application/json; charset=utf-8",
                 "Content-Type": "application/json; charset=utf-8"
@@ -111,7 +111,7 @@
                     $(info).append(subjects);//
                     // $(element).append( subjects);
                     // $(element).append(
-                    <c:if test="${role eq client}">
+                    <c:if test="${userRole eq 'client'}">
                     <c:choose>
                     <c:when test="${not empty applied}">
                     let facultyId = facultiesGson[i].faculty.id;
@@ -140,7 +140,7 @@
                     $(info).append(button_apply);
                     </c:otherwise>
                     </c:choose>
-                    </c:if>
+
                     <c:choose>
                     <c:when test="${not empty applied}">
                     if (facultyId === ${applied}) {
@@ -154,6 +154,16 @@
                     $(element).append(info);
                     </c:otherwise>
                     </c:choose>
+                    </c:if>
+
+                    <c:if test="${userRole eq 'admin' or userRole eq 'client'}">
+                    $(info).append("<form type='GET' action='controller'>" +
+                        "<input type='submit' class='btn' value='Change'>" +
+                        "<input type='hidden' name='command' value='viewFaculty'>" +
+                        "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>  " +
+                        "</form>");
+                    // $(info).append("<a href='controller?command=viewFaculty&facultyId'>");
+                    </c:if>
                 }
 
 
@@ -245,7 +255,7 @@
                 hasOne = true;
             }
         }
-        if(!hasOne){
+        if (!hasOne) {
             // let facultyLabel = document.getElementById("facultyLabel");
             // let message = document.createElement("h1");
             // $(message).css("color", "red");
@@ -254,7 +264,7 @@
             // $(message).innerHTML = "No results";
             // $(message).insertAfter(facultyLabel);
             $("#message").css("display", "inline-block");
-        }else{
+        } else {
             $("#message").css("display", "none");
         }
     }

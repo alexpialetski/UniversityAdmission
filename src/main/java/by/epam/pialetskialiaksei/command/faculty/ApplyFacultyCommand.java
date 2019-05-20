@@ -23,7 +23,8 @@ import java.util.List;
  *
  * @author Mark Norkin
  */
-public class ApplyFacultyCommand extends Command {
+//public class ApplyFacultyCommand extends Command {
+public class ApplyFacultyCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
 
@@ -31,45 +32,10 @@ public class ApplyFacultyCommand extends Command {
 
     @Override
     public String execute(HttpServletRequest request,
-                          HttpServletResponse response, ActionType actionType)
+//                          HttpServletResponse response, ActionType actionType)
+                          HttpServletResponse response)
             throws IOException, ServletException {
         LOG.debug("Command execution starts");
-
-        String result = null;
-
-        switch (actionType) {
-            case GET:
-                result = doGet(request, response);
-                break;
-            case POST:
-                result = doPost(request, response);
-                break;
-            case AJAX:
-                result = doAjax(request, response);
-                break;
-        }
-
-        LOG.debug("Command execution finished");
-
-        return result;
-    }
-
-    /**
-     * Forwards user to his profile page, based on his role.
-     *
-     * @return path to user profile
-     */
-    protected String doGet(HttpServletRequest request,
-                           HttpServletResponse response) {
-        return null;
-    }
-
-    @Override
-    protected String doPost(HttpServletRequest request, HttpServletResponse response) {
-        return null;
-    }
-
-    protected String doAjax(HttpServletRequest request, HttpServletResponse response) {
         String alreadyApplied = request.getParameter("applied");
         if (alreadyApplied != null) {
             return "{\"error\":\"You are already applied\"}";
@@ -91,16 +57,52 @@ public class ApplyFacultyCommand extends Command {
                 List<Subject> subjectsOfEntrant = markDAO.findSubjectsOfEntrant(entrant);
                 FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
                 List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
-                if(subjectsOfEntrant.equals(facultySubjects)){
+                if (subjectsOfEntrant.equals(facultySubjects)) {
                     FacultyDAO facultyDAO = new FacultyDAO();
                     facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
                     return "{\"error\":\"none\"}";
-                }else{
+                } else {
                     return "{\"error\":\"Not the same subjects\"}";
                 }
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
                 return "{error:\"Problems with applying, update page pls...\"}";
             }
         }
     }
 }
+
+
+//    protected String doAjax(HttpServletRequest request, HttpServletResponse response) {
+//        String alreadyApplied = request.getParameter("applied");
+//        if (alreadyApplied != null) {
+//            return "{\"error\":\"You are already applied\"}";
+//        } else {
+//            HttpSession session = request.getSession(false);
+//            String userEmail = String.valueOf(session.getAttribute("user"));
+//            UserDAO userDAO = new UserDAO();
+//            User user = userDAO.find(userEmail);
+//
+//            EntrantDAO entrantDAO = new EntrantDAO();
+//            Entrant entrant = entrantDAO.find(user);
+//
+//            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+//
+//            int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+//
+//            try {
+//                MarkDAO markDAO = new MarkDAO();
+//                List<Subject> subjectsOfEntrant = markDAO.findSubjectsOfEntrant(entrant);
+//                FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+//                List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
+//                if(subjectsOfEntrant.equals(facultySubjects)){
+//                    FacultyDAO facultyDAO = new FacultyDAO();
+//                    facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
+//                    return "{\"error\":\"none\"}";
+//                }else{
+//                    return "{\"error\":\"Not the same subjects\"}";
+//                }
+//            }catch (Exception ignored){
+//                return "{error:\"Problems with applying, update page pls...\"}";
+//            }
+//        }
+//    }

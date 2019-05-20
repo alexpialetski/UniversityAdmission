@@ -27,28 +27,20 @@ import java.util.List;
  *
  * @author Mark Norkin
  */
-public class UnApplyFacultyCommand implements Command {
+public class GetAllFacultiesCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
 
-    private static final Logger LOG = LogManager.getLogger(UnApplyFacultyCommand.class);
+    private static final Logger LOG = LogManager.getLogger(GetAllFacultiesCommand.class);
 
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
             throws IOException, ServletException {
         LOG.debug("Command execution starts");
-        HttpSession session = request.getSession(false);
-        String userEmail = String.valueOf(session.getAttribute("user"));
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.find(userEmail);
+        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+        List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
-        EntrantDAO entrantDAO = new EntrantDAO();
-        Entrant entrant = entrantDAO.find(user);
-
-        int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        facultyEntrantDAO.delete(new FacultyEntrant(facultyId, entrant.getId()));
-        return "";
+        return new Gson().toJson(facultyInfoModels);
     }
 }

@@ -186,7 +186,7 @@
         $("#diploma_submit").click(diploma_submit_click);
 
         function diploma_submit_click() {
-            let input = $("#diploma input")
+            let input = $("#diploma input");
             let diploma = getValueOfInput(input);
             if (validateMark(diploma) && input[0].checkValidity()) {
                 alert("ajax");
@@ -257,7 +257,7 @@
             $.ajax({
                 url: 'controller',
                 type: 'get',
-                data: {command: "getAllSubjects", type: "AJAX"},
+                data: {command: "getOtherSubjects", type: "AJAX", target: "entrant"},
                 headers: {
                     Accept: "application/json; charset=utf-8",
                     "Content-Type": "application/json; charset=utf-8"
