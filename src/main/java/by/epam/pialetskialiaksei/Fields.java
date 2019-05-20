@@ -21,6 +21,10 @@ public class Fields {
     public static final String ENTRANT_FOREIGN_KEY_ID = "Entrant_idEntrant";
     public static final String ENTRANT_DIPLOMA_MARK = "diploma_mark";
 
+    public static final String MAIL_MAIL_ID = "mailId";
+    public static final String MAIL_KEY = "key";
+
+
     public static final String FACULTY_NAME_RU = "name_ru";
     public static final String FACULTY_NAME_ENG = "name_eng";
     public static final String FACULTY_BUDGET_SEATS = "budget_seats";

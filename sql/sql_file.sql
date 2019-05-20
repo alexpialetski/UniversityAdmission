@@ -175,6 +175,21 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`mark` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+
+--          Mail  Table
+DROP TABLE IF EXISTS `university_admission`.`mail` ;
+
+CREATE TABLE `university_admission`.`mail` (
+  `id` INT NOT NULL,
+  `mailId` VARCHAR(45) NOT NULL,
+  `key` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `mailId_UNIQUE` (`mailId` ASC) VISIBLE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_bin;
+
+
 --          faculties_report_sheet View Not Complited yet
 DROP VIEW IF EXISTS `university_admission`.`faculties_report_sheet` ;
 DROP TABLE IF EXISTS `university_admission`.`faculties_report_sheet`;
@@ -198,6 +213,7 @@ CREATE  OR REPLACE VIEW university_admission.`faculties_report_sheet` AS
             INNER JOIN
         university_admission.user ON university_admission.entrant.User_idUser = university_admission.user.id
     ORDER BY isBlocked ASC , `total_sum` DESC;
+
 
 
 --          entrant_marks_sum View Not Complited yet
