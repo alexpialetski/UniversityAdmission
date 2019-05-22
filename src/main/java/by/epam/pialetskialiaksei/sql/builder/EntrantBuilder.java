@@ -23,7 +23,6 @@ public class EntrantBuilder extends SetBuilder<Entrant> {
             entrant.setSchool(rs.getString(Fields.ENTRANT_SCHOOL));
             entrant.setUserId(rs.getInt(Fields.USER_FOREIGN_KEY_ID));
             entrant.setDiplomaMark(rs.getInt(Fields.ENTRANT_DIPLOMA_MARK));
-            entrant.setBlockedStatus(rs.getBoolean(Fields.ENTRANT_IS_BLOCKED));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to entrant", e);
         }

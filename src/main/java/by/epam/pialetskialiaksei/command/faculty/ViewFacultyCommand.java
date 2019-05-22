@@ -58,12 +58,11 @@ public class ViewFacultyCommand implements Command {
         request.setAttribute("facultyInfo", facultyInfoModel);
         LOG.trace("Set request parameter: 'facultyInfoModel' = "
                 + facultyInfoModel);
-
-        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        List<User> users = facultyEntrantDAO.findUsers(facultyId);
-        request.setAttribute("users", users);
-        LOG.trace("Set request parameter: 'users' = "
-                + users);
+//        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+//        List<User> users = facultyEntrantDAO.findUsers(facultyId);
+//        request.setAttribute("users", users);
+//        LOG.trace("Set request parameter: 'users' = "
+//                + users);
 
 //Entrant entrant = new Entrant();
 ////        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();

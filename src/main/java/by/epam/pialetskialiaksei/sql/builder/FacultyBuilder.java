@@ -2,7 +2,6 @@ package by.epam.pialetskialiaksei.sql.builder;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
-import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,6 +21,9 @@ public class FacultyBuilder extends SetBuilder<Faculty> {
             faculty.setNameEng(rs.getString(Fields.FACULTY_NAME_ENG));
             faculty.setTotalSeats(rs.getByte(Fields.FACULTY_TOTAL_SEATS));
             faculty.setBudgetSeats(rs.getByte(Fields.FACULTY_BUDGET_SEATS));
+            faculty.setInfoEng(rs.getString(Fields.FACULTY_INFO_ENG));
+            faculty.setInfoRu(rs.getString(Fields.FACULTY_INFO_RU));
+            faculty.setPassingScore((byte)rs.getInt(Fields.FACULTY_PASSING_SCORE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to faculty", e);
         }
@@ -37,6 +39,9 @@ public class FacultyBuilder extends SetBuilder<Faculty> {
             faculty.setNameRu(rs.getString(Fields.FACULTY_FOREIGN_NAME_RU));
             faculty.setTotalSeats(rs.getByte(Fields.FACULTY_TOTAL_SEATS));
             faculty.setBudgetSeats(rs.getByte(Fields.FACULTY_BUDGET_SEATS));
+            faculty.setInfoEng(rs.getString(Fields.FACULTY_INFO_ENG));
+            faculty.setInfoRu(rs.getString(Fields.FACULTY_INFO_RU));
+            faculty.setPassingScore((byte)rs.getInt(Fields.FACULTY_PASSING_SCORE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to faculty", e);
         }

@@ -13,7 +13,7 @@
 <script src="js/dialog.js"></script>
 <script src="js/jquery-1.11.2.min.js"></script>
 <script>
-    function sendConfirmation(val){
+    function fun() {
         alert("Send confirm");
         let first_name = $('input[name="first_name"]').val();
         let last_name = $('input[name="last_name"]').val();
@@ -30,9 +30,9 @@
                 "Content-Type": "application/json; charset=utf-8"
             },
             success: function (data) {
-                alert("success");
-                // document.location.reload(true)
-                // subject_cancel_click();
+                alert(data);
+                $("button").click();
+
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert("error");
@@ -40,14 +40,43 @@
                 $('#content').html(errorMsg);
             }
         });
-        // document.getElementById('status').innerHTML = val;
+    }
+
+    function sendConfirmation(val){
+        alert("confirm");
+        // let key = $('#prompt_value1').val();
+        let key = val;
+        let email  = $('input[name="email"]').val();
+        let password = $('input[name="password"]').val();
+        $.ajax({
+            url: 'controller',
+            type: 'get',
+            data: {command: "confirm", type: "AJAX",
+                email: email, password: password, key: key},
+            headers: {
+                Accept: "application/json; charset=utf-8",
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            success: function (data) {
+                if(data === "okay"){
+                    $("form").submit();
+                }else{
+                    alert("someting gone wrong, check your key")
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert("error");
+                var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+                $('#content').html(errorMsg);
+            }
+        });
     }
 </script>
 <body>
 <img src="images/bg-login.jpg" class="bg-image">
 <ul>
-    <li><a href="?command=client_registration&sessionLocale=en"><fmt:message key="language.en" /></a></li>
-    <li><a href="?command=client_registration&sessionLocale=ru"><fmt:message key="language.ru" /></a></li>
+    <li><a href="?command=view_registration&sessionLocale=en"><fmt:message key="language.en" /></a></li>
+    <li><a href="?command=view_registration&sessionLocale=ru"><fmt:message key="language.ru" /></a></li>
 </ul>
 <div id="dialogoverlay"></div>
 <div id="dialogbox">
@@ -58,7 +87,9 @@
     </div>
 </div>
 <h1 id="status">Default Text</h1>
-<button onclick="Prompt.render('Type some text:','sendConfirmation')">Change Text</button>
+
+<button onclick="Prompt.render('Check your email and insert key:','sendConfirmation')">Change Text</button>
+
 <div class="main-container">
     <h1><fmt:message key="header.register" /></h1>
     <form  action="controller" method="POST" class="form-container">
@@ -88,7 +119,8 @@
         <div class="input-form">
             <input type="password" class="input-field" name="confirm_password" placeholder="<fmt:message key="registration.label.confirm_password"/>" required="required">
         </div>
-        <input type="submit" class="btn" style="background-color:#4e9af1" value="<fmt:message key="registration.button.submit"/>">
+        <%--<input type="submit" class="btn" style="background-color:#4e9af1" value="<fmt:message key="registration.button.submit"/>">--%>
+        <input type="button" onclick="fun()" class="btn" style="background-color:#4e9af1" value="<fmt:message key="registration.button.submit"/>">
     </form>
     <p><fmt:message key="registration.label.alredy_registered_msg" />
         <a href="welcome.jsp"><fmt:message key="registration.label.login_here_msg" />!</a>

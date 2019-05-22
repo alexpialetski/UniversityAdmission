@@ -4,7 +4,9 @@ import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.command.faculty.*;
 import by.epam.pialetskialiaksei.command.profile.*;
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
+import by.epam.pialetskialiaksei.command.registration.ConfirmRegistrationCommand;
 import by.epam.pialetskialiaksei.command.registration.SendConfirmationRegistrationCommand;
+import by.epam.pialetskialiaksei.command.registration.ViewRegistrationCommand;
 import by.epam.pialetskialiaksei.command.subject.AddSubjectCommand;
 import by.epam.pialetskialiaksei.command.subject.DeleteSubjectCommand;
 import by.epam.pialetskialiaksei.command.subject.UpdateSubjectsCommand;
@@ -21,8 +23,11 @@ public class CommandManager {
     private static Map<String, Command> commands = new HashMap<String, Command>();
     static {
         commands.put("login", new LoginCommand());
+        commands.put("viewLogin", new ViewLoginCommand());
+        commands.put("viewWelcome", new ViewWelcomeCommand());
         commands.put("viewProfile", new ViewProfileCommand());
         commands.put("client_registration", new ClientRegistrationCommand());
+        commands.put("view_registration", new ViewRegistrationCommand());
         commands.put("editProfile", new EditProfileCommand());
         commands.put("getOtherSubjects", new GetOtherSubjectsCommand());
         commands.put("changeSubjects", new ChangeSubjectsCommand());
@@ -40,6 +45,7 @@ public class CommandManager {
         commands.put("deleteSubject", new DeleteSubjectCommand());
         commands.put("addSubject", new AddSubjectCommand());
         commands.put("sendConfirmation", new SendConfirmationRegistrationCommand());
+        commands.put("confirm", new ConfirmRegistrationCommand());
         commands.put("getFacultyUsers", new GetFacultyUsersCommand());
         commands.put("editFaculty", new EditFacultyCommand());
     }

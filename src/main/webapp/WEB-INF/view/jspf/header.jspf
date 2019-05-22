@@ -1,7 +1,7 @@
 <!-- Header - top area. -->
 
 <div class="header">
-    <a href="#default" class="logo default"><fmt:message key="header.logo"/></a>
+    <a href="controller?command=viewWelcome" class="logo default"><fmt:message key="header.logo"/></a>
     <ul class="header-right">
         <%--<input class="active default" type="submit" value="Home">--%>
         <%--<form class="form" action="controller" method="GET">--%>
@@ -18,15 +18,34 @@
             <li class="dropdown">
                 <a href="javascript:void(0)" class="dropbtn"><fmt:message key="language.choose"/></a>
                 <ul class="dropdown-content">
-                    <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=en"><li><img src="http://i64.tinypic.com/fd60km.png"/><fmt:message key="language.en"/></li></a>
-                    <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=ru"><li><img src="http://i63.tinypic.com/10zmzyb.png"/><fmt:message key="language.ru"/></li></a>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.prevCommand}">
+                            <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=en"><li><img src="http://i64.tinypic.com/fd60km.png"/><fmt:message key="language.en"/></li></a>
+                            <a href="controller?command=${sessionScope.prevCommand}&sessionLocale=ru"><li><img src="http://i63.tinypic.com/10zmzyb.png"/><fmt:message key="language.ru"/></li></a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="welcome1.jsp?sessionLocale=en"><li><img src="http://i64.tinypic.com/fd60km.png"/><fmt:message key="language.en"/></li></a>
+                            <a href="welcome1.jsp?sessionLocale=ru"><li><img src="http://i63.tinypic.com/10zmzyb.png"/><fmt:message key="language.ru"/></li></a>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </li>
         </ul>
+<c:choose>
+    <c:when test="${empty userRole}">
+        <form class="form" action="controller" method="POST">
+            <input type="hidden" name="command" value="viewLogin">
+            <input class="default" type="submit" value="<fmt:message key="header.login"/>">
+        </form>
+    </c:when>
+    <c:otherwise>
         <form class="form" action="controller" method="POST">
             <input type="hidden" name="command" value="logout">
             <input class="default" type="submit" value="<fmt:message key="header.logout"/>">
         </form>
+    </c:otherwise>
+</c:choose>
+
 
             <%--<ul class="languagepicker roundborders large">--%>
                 <%--<a href="#nl"><li><img src="http://i65.tinypic.com/2d0kyno.png"/>Nederlands</li></a>--%>

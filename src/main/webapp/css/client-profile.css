@@ -34,12 +34,12 @@ body {
     padding-top: 2%;
     display: flex;
     flex-direction: column;
-    /*justify-content: center; deleted this*/
+    justify-content: center;
     align-content: center;
     text-align: center;
     width:60%;
     /*Added this*/
-    min-height: 100vh;
+    min-height: 80vh;
     /*Added*/
     box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
     z-index: 1;

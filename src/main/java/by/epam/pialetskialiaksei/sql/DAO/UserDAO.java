@@ -19,28 +19,28 @@ import java.util.List;
 public class UserDAO extends SqlDAO {
 //    private UserBuilder userBuilder = new UserBuilder();
 
-    private static final String FIND_ALL_USERS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name, user.lang\n" +
+    private static final String FIND_ALL_USERS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name\n" +
                                                     "FROM university_admission.user\n" +
                                                     "       inner join role on user.role_id = role.id;";
-    private static final String FIND_USER = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name, user.lang\n" +
+    private static final String FIND_USER = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name\n" +
                                                 "FROM university_admission.user\n" +
                                                 "       inner join role on user.role_id = role.id\n" +
                                                 "WHERE user.id = ?\n" +
                                                 "LIMIT 1;\n";
-    private static final String FIND_USER_BY_EMAIL_AND_PASS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name, user.lang\n" +
+    private static final String FIND_USER_BY_EMAIL_AND_PASS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name\n" +
                                                                 "FROM university_admission.user\n" +
                                                                 "       inner join role on user.role_id = role.id\n" +
                                                                 "WHERE user.email = ?\n" +
                                                                 "  AND user.password = ?\n" +
                                                                 "LIMIT 1;";
-    private static final String FIND_USER_BY_EMAIL = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name, user.lang\n" +
+    private static final String FIND_USER_BY_EMAIL = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name\n" +
                                                         "FROM university_admission.user\n" +
                                                         "            inner join role on user.role_id = role.id\n" +
                                                         "WHERE user.email = ?\n" +
                                                         "LIMIT 1;";
-    private static final String INSERT_USER = "INSERT INTO university_admission.user(user.first_name, user.last_name, user.email, user.password, user.role_id, user.lang)\n" +
-                                                "VALUES (?, ?, ?, ?, ?, ?);";
-    private static final String UPDATE_USER = "UPDATE user SET first_name=?,last_name=?,email=?,password=?,role_id=?, lang=? WHERE user.id= ? LIMIT 1;";
+    private static final String INSERT_USER = "INSERT INTO university_admission.user(user.first_name, user.last_name, user.email, user.password, user.role_id)\n" +
+                                                "VALUES (?, ?, ?, ?, ?);";
+    private static final String UPDATE_USER = "UPDATE user SET first_name=?,last_name=?,email=?,password=?,role_id=? WHERE user.id= ? LIMIT 1;";
     private static final String UPDATE_USER_FIRST_LAST_NAME = "UPDATE user SET first_name=?,last_name=? WHERE user.id= ? LIMIT 1;";
     private static final String DELETE_USER = "DELETE FROM university_admission.user WHERE user.id=? LIMIT 1;";
 
@@ -62,7 +62,6 @@ public class UserDAO extends SqlDAO {
             pstmt.setString(counter++, user.getEmail());
             pstmt.setString(counter++, user.getPassword());
             pstmt.setInt(counter++, Role.valueOf(user.getRole().toUpperCase()).getVal());
-            pstmt.setString(counter++, user.getLang());
 //            pstmt.setBoolean(counter, user.getActiveStatus());
 
             pstmt.execute();
@@ -95,7 +94,6 @@ public class UserDAO extends SqlDAO {
             pstmt.setString(counter++, user.getPassword());
 //            pstmt.setString(counter++, user.getRole());
             pstmt.setInt(counter++, Role.valueOf(user.getRole().toUpperCase()).getVal());
-            pstmt.setString(counter++, user.getLang());
 //            pstmt.setBoolean(counter++, user.getActiveStatus());
             pstmt.setInt(counter++, user.getId());
 
@@ -123,7 +121,7 @@ public class UserDAO extends SqlDAO {
             pstmt.setInt(counter, user.getId());
 
             pstmt.executeUpdate();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not update a user", e);
@@ -142,7 +140,7 @@ public class UserDAO extends SqlDAO {
             pstmt.setInt(1, user.getId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not delete a user", e);

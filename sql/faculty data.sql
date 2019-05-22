@@ -1,3 +1,4 @@
+ALTER TABLE `faculty` AUTO_INCREMENT = 1;
 INSERT INTO university_admission.faculty(name_ru, name_eng,total_seats,budget_seats) VALUES ('Автоматика и приборостроения', 'DEPARTMENT OF AUTOMATICS AND INSTRUMENT', 20,10);
 INSERT INTO university_admission.faculty(name_ru, name_eng,total_seats,budget_seats) VALUES ('Бизнес и финансы', 'DEPARTMENT OF BUSINESS AND FINANCE', 30,20);
 INSERT INTO university_admission.faculty(name_ru, name_eng,total_seats,budget_seats) VALUES ('Инженерно-физический', 'DEPARTMENT FOR ENGINEERING PHYSICS', 40,30);

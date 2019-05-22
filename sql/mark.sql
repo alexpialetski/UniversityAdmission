@@ -1,3 +1,4 @@
+ALTER TABLE `mark` AUTO_INCREMENT = 1;
 INSERT INTO university_admission.mark(Entrant_idEntrant, Subject_idSubject, value) VALUES (1, 1, 33);
 INSERT INTO university_admission.mark(Entrant_idEntrant, Subject_idSubject, value) VALUES (1, 2, 43);
 INSERT INTO university_admission.mark(Entrant_idEntrant, Subject_idSubject, value) VALUES (1, 3, 53);

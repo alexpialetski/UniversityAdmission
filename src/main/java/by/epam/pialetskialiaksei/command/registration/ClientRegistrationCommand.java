@@ -36,12 +36,19 @@ public class ClientRegistrationCommand implements Command {
                           HttpServletResponse response)
             throws IOException, ServletException {
         LOG.debug("Start executing Command");
+//        String method = request.getParameter("method");
+//        if(method!=null && method.equals("view")){
+//            request.getSession().setAttribute("prevCommand", "client_registration&method=none");
+//            return Path.FORWARD_CLIENT_REGISTRATION_PAGE;
+//        }
+////        request.getSession().setAttribute("prevCommand", "client_registration&method=view");
+
         String email = request.getParameter(Fields.USER_EMAIL);
         String password = request.getParameter(Fields.USER_PASSWORD);
         String firstName = request.getParameter(Fields.USER_FIRST_NAME);
         String lastName = request.getParameter(Fields.USER_LAST_NAME);
 
-        String lang = request.getParameter(Fields.USER_LANG);
+//        String lang = request.getParameter(Fields.USER_LANG);
 
         String town = request.getParameter(Fields.ENTRANT_CITY);
         String district = request.getParameter(Fields.ENTRANT_DISTRICT);
@@ -50,7 +57,7 @@ public class ClientRegistrationCommand implements Command {
         String result = null;
 
         boolean valid = ProfileInputValidator.validateUserParameters(firstName,
-                lastName, email, password, lang);
+                lastName, email, password, "ru");
 
         LOG.trace(valid);
         valid = ProfileInputValidator.validateEntrantParameters(town, district,
@@ -60,14 +67,14 @@ public class ClientRegistrationCommand implements Command {
             request.setAttribute("errorMessage", "Please fill all fields!");
             LOG.error("errorMessage: Not all fields are filled");
             result = Path.REDIRECT_CLIENT_REGISTRATION_PAGE;
-        } else if (valid) {
+        } else {
             User user = new User(email, password, firstName, lastName,
-                    Role.CLIENT, lang);
+                    Role.CLIENT);
             UserDAO userDAO = new UserDAO();
             userDAO.create(user);
             LOG.trace("User record created: " + user);
 
-            Entrant entrant = new Entrant(town, district, school, user, true);
+            Entrant entrant = new Entrant(town, district, school, user);
             EntrantDAO entrantDAO = new EntrantDAO();
             entrantDAO.create(entrant);
             LOG.trace("Entrant record created: " + entrant);

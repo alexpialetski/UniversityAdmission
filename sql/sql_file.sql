@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`user` (
   `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
   `password` VARCHAR(32) NOT NULL,
-  `lang` ENUM('ru', 'en') NOT NULL DEFAULT 'ru',
+--   `lang` ENUM('ru', 'en') NOT NULL DEFAULT 'ru',
   `role_id` TINYINT(4) NOT NULL,
   PRIMARY KEY (`id`, `role_id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`entrant` (
   `district` VARCHAR(45) NOT NULL,
   `school` VARCHAR(45) NOT NULL,
   `User_idUser` INT(11) NOT NULL,
-  `isBlocked` TINYINT(1) NOT NULL DEFAULT '0',
+--   `isBlocked` TINYINT(1) NOT NULL DEFAULT '0',
   `diplomaMark` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
@@ -70,17 +70,37 @@ DEFAULT CHARACTER SET = utf8;
 --          Faculty Table
 DROP TABLE IF EXISTS `university_admission`.`Faculty` ;
 
+-- CREATE TABLE IF NOT EXISTS `university_admission`.`faculty` (
+--   `id` INT(11) NOT NULL AUTO_INCREMENT,
+--   `name_ru` VARCHAR(100) NOT NULL,
+--   `name_eng` VARCHAR(100) NOT NULL,
+--   `total_seats` TINYINT(3) UNSIGNED NOT NULL,
+--   `budget_seats` TINYINT(3) UNSIGNED NOT NULL,
+--   PRIMARY KEY (`id`),
+--   UNIQUE INDEX `name_UNIQUE` (`name_ru` ASC) VISIBLE,
+--   UNIQUE INDEX `name_eng_UNIQUE` (`name_eng` ASC) VISIBLE)
+-- ENGINE = InnoDB
+-- DEFAULT CHARACTER SET = utf8;
+
+DROP TABLE IF EXISTS `university_admission`.`Faculty` ;
+
 CREATE TABLE IF NOT EXISTS `university_admission`.`faculty` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `name_ru` VARCHAR(100) NOT NULL,
   `name_eng` VARCHAR(100) NOT NULL,
   `total_seats` TINYINT(3) UNSIGNED NOT NULL,
   `budget_seats` TINYINT(3) UNSIGNED NOT NULL,
+  `infoEng` VARCHAR(1000) NULL DEFAULT 'NO INFORMATION',
+  `infoRu` VARCHAR(1000) NULL DEFAULT 'НЕТ ИНФОРМАЦИИ',
+--   `image` VARCHAR(45) NULL DEFAULT 'faculty-image.png',
+  `passingScore` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `name_UNIQUE` (`name_ru` ASC) VISIBLE,
   UNIQUE INDEX `name_eng_UNIQUE` (`name_eng` ASC) VISIBLE)
 ENGINE = InnoDB
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
+
 
 --          Subject  Table
 DROP TABLE IF EXISTS `university_admission`.`Subject` ;
@@ -111,11 +131,15 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`Faculty_Entrants` (
     REFERENCES `university_admission`.`Entrant` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE ,
   CONSTRAINT `fk_Entrant_has_Faculty_Faculty1`
     FOREIGN KEY (`Faculty_idFaculty`)
     REFERENCES `university_admission`.`Faculty` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -135,11 +159,15 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`Faculty_Subjects` (
     REFERENCES `university_admission`.`Faculty` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE ,
   CONSTRAINT `fk_Faculty_has_Subject_Subject1`
     FOREIGN KEY (`Subject_idSubject`)
     REFERENCES `university_admission`.`Subject` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -162,11 +190,15 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`mark` (
     REFERENCES `university_admission`.`entrant` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE ,
   CONSTRAINT `fk_Entrant_has_Subject_Subject1`
     FOREIGN KEY (`Subject_idSubject`)
     REFERENCES `university_admission`.`subject` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+--     ON DELETE CASCADE
+--     ON UPDATE CASCADE)
 --   CONSTRAINT `fk_mark_exam_type1`
 --     FOREIGN KEY (`exam_type_id`)
 --     REFERENCES `university_admission`.`exam_type` (`id`)
@@ -190,50 +222,43 @@ DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_bin;
 
 
---          faculties_report_sheet View Not Complited yet
+--          faculties_report_sheet View
 DROP VIEW IF EXISTS `university_admission`.`faculties_report_sheet` ;
-DROP TABLE IF EXISTS `university_admission`.`faculties_report_sheet`;
+-- DROP TABLE IF EXISTS `university_admission`.`faculties_report_sheet`;
 USE `university_admission`;
 CREATE  OR REPLACE VIEW university_admission.`faculties_report_sheet` AS
     SELECT
-        `facultyId`,
-        university_admission.user.first_name,
-        university_admission.user.last_name,
-        university_admission.user.email,
-        university_admission.entrant.isBlocked,
-        `preliminary_sum`,
-        `diploma_sum`,
-        `preliminary_sum` + `diploma_sum` AS `total_sum`
+       `facultyId`,
+       university_admission.user.first_name,
+       university_admission.user.last_name,
+       university_admission.user.email,
+       `preliminary_sum`,
+       entrant_marks_sum.diplomaMark,
+       `preliminary_sum` + entrant_marks_sum.diplomaMark AS `total_sum`
     FROM
-        university_admission.`entrant_marks_sum`
-            INNER JOIN
-        university_admission.faculty ON `entrant_marks_sum`.`entrantId` = university_admission.faculty.id
-            INNER JOIN
-        university_admission.entrant ON `entrantId` = university_admission.entrant.id
-            INNER JOIN
-        university_admission.user ON university_admission.entrant.User_idUser = university_admission.user.id
-    ORDER BY isBlocked ASC , `total_sum` DESC;
+           university_admission.`entrant_marks_sum`
+                  INNER JOIN
+           university_admission.faculty ON `entrant_marks_sum`.`entrantId` = university_admission.faculty.id
+                  INNER JOIN
+           university_admission.entrant ON `entrantId` = university_admission.entrant.id
+                  INNER JOIN
+           university_admission.user ON university_admission.entrant.User_idUser = university_admission.user.id
+    ORDER BY `total_sum`, university_admission.faculty.id DESC;
 
 
 
---          entrant_marks_sum View Not Complited yet
+--          entrant_marks_sum View
 DROP VIEW IF EXISTS `university_admission`.`entrant_marks_sum` ;
-DROP TABLE IF EXISTS `university_admission`.`entrant_marks_sum`;
-USE `university_admission`;
+-- DROP TABLE IF EXISTS `university_admission`.`entrant_marks_sum`;
+-- USE `university_admission`;
 CREATE  OR REPLACE VIEW `entrant_marks_sum` AS
-    SELECT
-        university_admission.faculty_entrants.Faculty_idFaculty AS `facultyId`,
-        university_admission.mark.Entrant_idEntrant AS `entrantId`,
-        SUM(CASE `exam_type`
-            WHEN 'preliminary' THEN university_admission.mark.value
-            ELSE 0
-        END) AS `preliminary_sum`,
-        SUM(CASE `exam_type`
-            WHEN 'diploma' THEN university_admission.mark.value
-            ELSE 0
-        END) AS `diploma_sum`
-    FROM
-        university_admission.faculty_entrants
-            INNER JOIN
-        university_admission.mark ON university_admission.faculty_entrants.Entrant_idEntrant = university_admission.mark.Entrant_idEntrant
-    GROUP BY faculty_entrants.Faculty_idFaculty,entrantId;
+    SELECT university_admission.faculty_entrants.Faculty_idFaculty AS `facultyId`,
+       university_admission.mark.Entrant_idEntrant             AS `entrantId`,
+       SUM(university_admission.mark.value)                    AS `preliminary_sum`,
+       entrant.diplomaMark
+    FROM university_admission.faculty_entrants
+           INNER JOIN university_admission.mark
+                      ON university_admission.faculty_entrants.Entrant_idEntrant =
+                         university_admission.mark.Entrant_idEntrant
+           INNER JOIN entrant on faculty_entrants.Entrant_idEntrant = entrant.id
+    GROUP BY faculty_entrants.Faculty_idFaculty, entrantId;

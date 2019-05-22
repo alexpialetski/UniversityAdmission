@@ -37,7 +37,7 @@
         </c:if>
     </form>
     <p><fmt:message key="welcome_jsp.label.not_registered_msg" />
-        <a href="controller?command=client_registration"><fmt:message key="welcome_jsp.label.register_here_msg" />!</a>
+        <a href="controller?command=view_registration"><fmt:message key="welcome_jsp.label.register_here_msg" />!</a>
     </p>
 </div>
 </body>

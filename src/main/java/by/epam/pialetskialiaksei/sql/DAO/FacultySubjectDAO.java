@@ -29,14 +29,14 @@ public class FacultySubjectDAO extends SqlDAO {
 
     //    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects;";
     private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
-                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,\n" +
+                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu, faculty.passingScore,\n" +
                                                             "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
                                                             "FROM university_admission.faculty_subjects\n" +
                                                             "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
                                                             "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
                                                             "ORDER BY Faculty_idFaculty;";
     private static final String FIND_FACULTY_INFO_BY_ID = "SELECT faculty_subjects.id,\n" +
-                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,\n" +
+                                                            "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,faculty.infoEng, faculty.infoRu, faculty.image,\n" +
                                                             "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
                                                             "FROM university_admission.faculty_subjects\n" +
                                                             "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
@@ -50,8 +50,8 @@ public class FacultySubjectDAO extends SqlDAO {
                                                             "       INNER JOIN subject\n" +
                                                             "                  on faculty_subjects.Subject_idSubject = subject.id\n" +
                                                             "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
-                                                            "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?\n" +
-                                                            "LIMIT 3;";
+                                                            "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?;";
+//                                                            "LIMIT 3;";
 
     private static final String FIND_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.id = ? LIMIT 3;";
     private static final String INSERT_FACULTY_SUBJECT = "INSERT INTO university_admission.faculty_subjects (university_admission.faculty_subjects.Faculty_idFaculty, university_admission.faculty_subjects.Subject_idSubject) VALUES (?,?);";

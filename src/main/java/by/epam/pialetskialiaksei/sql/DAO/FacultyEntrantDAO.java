@@ -28,7 +28,7 @@ public class FacultyEntrantDAO extends SqlDAO {
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
-    private static final String FIND_FACULTY_USER_BY_FACULTY_ID = "SELECT user.id as User_idUser,user.first_name,user.last_name,user.email,user.password,user.lang,role.role_name\n" +
+    private static final String FIND_FACULTY_USER_BY_FACULTY_ID = "SELECT user.id as User_idUser,user.first_name,user.last_name,user.email,user.password, role.role_name\n" +
                                                                     "FROM university_admission.faculty_entrants\n" +
                                                                     "       inner join university_admission.entrant e\n" +
                                                                     "                  on faculty_entrants.Entrant_idEntrant = e.id\n" +

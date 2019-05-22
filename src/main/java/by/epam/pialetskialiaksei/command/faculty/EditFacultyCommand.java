@@ -28,8 +28,10 @@ public class EditFacultyCommand implements Command {
         int totalSeats = Integer.parseInt(request.getParameter("totalSeats"));
         int budgetSeats = Integer.parseInt(request.getParameter("budgetSeats"));
         int facultyId  = Integer.parseInt(request.getParameter("facultyId"));
+        String infoRu = request.getParameter("infoRu");
+        String infoEng = request.getParameter("infoEng");
 
-        Faculty faculty = new Faculty(nameRu, nameEng, (byte) budgetSeats, (byte) totalSeats);
+        Faculty faculty = new Faculty(nameRu, nameEng, infoRu, infoEng, (byte) budgetSeats, (byte) totalSeats);
         faculty.setId(facultyId);
 
         FacultyDAO facultyDAO = new FacultyDAO();

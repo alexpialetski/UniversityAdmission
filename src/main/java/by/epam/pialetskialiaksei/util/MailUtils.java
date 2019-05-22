@@ -57,11 +57,13 @@ public class MailUtils {
 
             token = new RandomString().nextString();
 
-            if (user.getLang() == null || user.getLang().equals("eng")) {
-                setContentToConfirmationEmailEng(msg, user, token);
-            } else {
-                setContentToConfirmationEmailRu(msg, user, token);
-            }
+//            if (user.getLang() == null || user.getLang().equals("ru")) {
+//            if (user.getLang() == null || user.getLang().equals("eng")) {
+//                setContentToConfirmationEmailEng(msg, user, token);
+//            } else if(user.getLang().equals("ru")){
+//                setContentToConfirmationEmailRu(msg, user, token);
+//            }
+            setContentToConfirmationEmailEng(msg, user, token);
 
             msg.setSentDate(new Date());
 
@@ -91,13 +93,13 @@ public class MailUtils {
                 + user.getPassword() + "\n\n";
 
         MimeBodyPart greetingAndData = new MimeBodyPart(emailAndPass,
-                (hello + data).getBytes(StandardCharsets.UTF_8));
+                (hello + data).getBytes(StandardCharsets.UTF_16));
 
         InternetHeaders headers = new InternetHeaders();
         headers.addHeader("Content-type", "text/html; charset=UTF-8");
         String confirmKey = "Ваш ключ: " + token;
         MimeBodyPart link = new MimeBodyPart(headers,
-                confirmKey.getBytes(StandardCharsets.UTF_8));
+                confirmKey.getBytes(StandardCharsets.UTF_16));
 
         multipart.addBodyPart(greetingAndData);
         multipart.addBodyPart(link);

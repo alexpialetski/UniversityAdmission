@@ -1,3 +1,4 @@
+ALTER TABLE `faculty_subjects` AUTO_INCREMENT = 1;
 INSERT INTO university_admission.faculty_subjects(Faculty_idFaculty, Subject_idSubject) VALUES (1,1);
 INSERT INTO university_admission.faculty_subjects(Faculty_idFaculty, Subject_idSubject) VALUES (1,2);
 INSERT INTO university_admission.faculty_subjects(Faculty_idFaculty, Subject_idSubject) VALUES (1,3);

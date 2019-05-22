@@ -21,11 +21,12 @@ import javax.sql.DataSource;
 public class FacultyDAO extends SqlDAO {
 //    private FacultyBuilder facultyBuilder = new FacultyBuilder();
 
-    private static final String FIND_ALL_FACULTIES = "SELECT * FROM university_admission.faculty;";
-    private static final String FIND_FACULTY_BY_ID = "SELECT * FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
-    private static final String FIND_FACULTY_BY_NAME = "SELECT * FROM university_admission.faculty WHERE faculty.name_ru = ? OR faculty.name_eng = ? LIMIT 1;";
-    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats) VALUES (?,?,?,?);";
-    private static final String UPDATE_FACULTY = "UPDATE faculty SET faculty.name_ru=?, faculty.name_eng=?, faculty.total_seats=?,faculty.budget_seats=? WHERE faculty.id=? LIMIT 1;";
+    private static final String FIND_ALL_FACULTIES = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty;";
+    private static final String FIND_FACULTY_BY_ID = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
+    private static final String FIND_FACULTY_BY_NAME = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty WHERE faculty.name_ru = ? OR faculty.name_eng = ? LIMIT 1;";
+//    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats, faculty.infoEng, faculty.infoRu) VALUES (?,?,?,?,?,?);";
+    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats, faculty.passingScore) VALUES (?,?,?,?,?);";
+    private static final String UPDATE_FACULTY = "UPDATE faculty SET faculty.name_ru=?, faculty.name_eng=?, faculty.total_seats=?, faculty.budget_seats=?,  faculty.infoRu = ?, faculty.infoEng = ? WHERE faculty.id=? LIMIT 1;";
     private static final String DELETE_FACULTY = "DELETE FROM university_admission.faculty WHERE faculty.id=? LIMIT 1;";
 
     private final static Logger LOG = LogManager
@@ -44,7 +45,9 @@ public class FacultyDAO extends SqlDAO {
             pstmt.setString(counter++, entity.getNameRu());
             pstmt.setString(counter++, entity.getNameEng());
             pstmt.setByte(counter++, entity.getTotalSeats());
-            pstmt.setByte(counter, entity.getBudgetSeats());
+            pstmt.setByte(counter++, entity.getBudgetSeats());
+//            pstmt.setString(counter++, entity.getInfoRu());
+//            pstmt.setString(counter++, entity.getInfoEng());
 
             pstmt.execute();
             connection.commit();
@@ -73,6 +76,8 @@ public class FacultyDAO extends SqlDAO {
             pstmt.setString(counter++, entity.getNameEng());
             pstmt.setByte(counter++, entity.getTotalSeats());
             pstmt.setByte(counter++, entity.getBudgetSeats());
+            pstmt.setString(counter++, entity.getInfoRu());
+            pstmt.setString(counter++, entity.getInfoEng());
 
             pstmt.setInt(counter, entity.getId());
 
@@ -117,9 +122,8 @@ public class FacultyDAO extends SqlDAO {
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
 //            connection.commit();
-            if (!rs.next()) {
+            if (rs.next()) {
                 faculty = null;
-            } else {
 //                faculty = unmarshal(rs);
 //                faculty = facultyBuilder.build(rs);
                 faculty = (Faculty) createBuilder().build(rs);
@@ -158,7 +162,7 @@ public class FacultyDAO extends SqlDAO {
             rollback(connection);
             LOG.error("Can not find a faculty", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }

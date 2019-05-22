@@ -1,3 +1,4 @@
+ALTER TABLE `user` AUTO_INCREMENT = 1;
 INSERT INTO `user` (`id`, `first_name`,`last_name`,`email`,`password`,`role_id`) VALUES (1, "Sharon","Wiggins","arcu@sodalesnisi.edu",7068,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Noah","Frost","mollis.nec@malesuadavel.edu",6433,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Lillian","Wilder","dolor.Fusce.mi@liberoatauctor.co.uk",6152,1);

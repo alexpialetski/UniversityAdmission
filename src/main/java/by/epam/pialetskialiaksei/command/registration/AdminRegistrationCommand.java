@@ -37,10 +37,10 @@ public class AdminRegistrationCommand implements Command {
         String password = request.getParameter(Fields.USER_PASSWORD);
         String firstName = request.getParameter(Fields.USER_FIRST_NAME);
         String lastName = request.getParameter(Fields.USER_LAST_NAME);
-        String lang = request.getParameter(Fields.USER_LANG);
+//        String lang = request.getParameter(Fields.USER_LANG);
 
         boolean valid = ProfileInputValidator.validateUserParameters(firstName,
-                lastName, email, password, lang);
+                lastName, email, password, "ru");
 
         String result = null;
 
@@ -50,7 +50,7 @@ public class AdminRegistrationCommand implements Command {
             result = Path.REDIRECT_ADMIN_REGISTRATION_PAGE;
         } else if (valid) {
             User user = new User(email, password, firstName, lastName,
-                    Role.ADMIN, lang);
+                    Role.ADMIN);
 
             UserDAO userDAO = new UserDAO();
             userDAO.create(user);

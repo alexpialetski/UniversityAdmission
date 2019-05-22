@@ -10,21 +10,19 @@ public class User extends Entity {
     private String firstName;
     private String lastName;
     private String role;
-    private String lang;
-//    private boolean activeStatus;
 
     public User() {
     }
 
     public User(String email, String password, String firstName,
-                String lastName, Role role, String lang) {
+                String lastName, Role role) {
         super();
         this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role.getName();
-        this.lang = lang;
+//        this.lang = lang;
     }
 
     public String getEmail() {
@@ -67,30 +65,15 @@ public class User extends Entity {
         this.role = role;
     }
 
-    public String getLang() {
-        return lang;
-    }
-
-    public void setLang(String lang) {
-        this.lang = lang;
-    }
-
-//    public boolean getActiveStatus() {
-//        return activeStatus;
-//    }
-
-//    public void setActiveStatus(boolean activeStatus) {
-//        this.activeStatus = activeStatus;
-//    }
-
     @Override
     public String toString() {
-        return "User [email=" + email + ", password=" + password
-                + ", firstName=" + firstName + ", lastName=" + lastName
-                + ", role=" + role + ", lang=" + lang + "]";
-//                + ", role=" + role + ", lang=" + lang + ", activeStatus="
-//                + activeStatus + "]";
+        return "User{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", role='" + role + '\'' +
+                "} " + super.toString();
     }
-
 }
 

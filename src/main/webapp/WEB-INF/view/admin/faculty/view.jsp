@@ -58,7 +58,8 @@
                 <input type="text" class="input-field" name="budgetSeats"
                        placeholder="<fmt:message key="registration.label.city"/>"
                        value="<c:out value="${requestScope.facultyInfo.faculty.budgetSeats}"></c:out>" required="required" disabled>
-                <textarea name="text" disabled><fmt:message key="faculty.label.temp"/></textarea>
+                <textarea name="infoRu" disabled><c:out value="${requestScope.facultyInfo.faculty.infoRu}"></c:out></textarea>
+                <textarea name="infoEng" disabled><c:out value="${requestScope.facultyInfo.faculty.infoEng}"></c:out></textarea>
                 <button type="submit" id="faculty_submit" class="btn" style="display: none"><fmt:message
                         key="registration.button.submit"/></button>
                 <button type="button" id="faculty_change" class="btn"><fmt:message
@@ -188,7 +189,7 @@
                     "                            <h4>" +
                     <c:choose>
                         <c:when test="${sessionScope.lang eq 'ru'}">subjectsJson[i].nameRu + </c:when>
-                        <c:otherwise> + subjectsJson[i].nameEng + </c:otherwise>
+                        <c:otherwise> subjectsJson[i].nameEng + </c:otherwise>
                     </c:choose>
                     "                            </h4>" +
                     "                        </div>");
@@ -234,6 +235,7 @@
                     } else {
                         $("#facultyUsers").append("<fmt:message key="faculty.view_jsp.label.no_faculty_entrants_msg"/>");
                     }
+                    $("#viewUsers").hide();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert("error" + xhr);

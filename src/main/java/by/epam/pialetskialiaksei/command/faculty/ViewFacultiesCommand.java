@@ -44,6 +44,7 @@ public class ViewFacultiesCommand implements Command {
         if (facultyEntrant != null) {
             request.setAttribute("applied", facultyEntrant.getFacultyId());
         }
+//        request.setAttribute("image", "faculty-image.png");
 
         String role = String.valueOf(session.getAttribute("userRole"));
         if ("client".equals(role)) {

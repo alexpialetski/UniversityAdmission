@@ -1,3 +1,4 @@
+ALTER TABLE `subject` AUTO_INCREMENT = 1;
 INSERT INTO `subject` (name_ru, name_eng) VALUES ("Математика", "Math");
 INSERT INTO `subject` (name_ru, name_eng) VALUES ("Литература", "Literature");
 INSERT INTO `subject` (name_ru, name_eng) VALUES ("Биология", "Biology");

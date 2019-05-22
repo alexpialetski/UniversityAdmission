@@ -4,9 +4,12 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Entrant;
+import by.epam.pialetskialiaksei.entity.Mail;
 import by.epam.pialetskialiaksei.entity.Role;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
+import by.epam.pialetskialiaksei.sql.DAO.MailDAO;
+import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import by.epam.pialetskialiaksei.util.ActionType;
 import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
@@ -36,47 +39,23 @@ public class ConfirmRegistrationCommand implements Command {
 			HttpServletResponse response)
 			throws IOException, ServletException {
         LOG.debug("Start executing Command");
+
         String email = request.getParameter(Fields.USER_EMAIL);
         String password = request.getParameter(Fields.USER_PASSWORD);
-        String firstName = request.getParameter(Fields.USER_FIRST_NAME);
-        String lastName = request.getParameter(Fields.USER_LAST_NAME);
+        String userKey = request.getParameter("key");
 
-        String lang = request.getParameter(Fields.USER_LANG);
-
-        String town = request.getParameter(Fields.ENTRANT_CITY);
-        String district = request.getParameter(Fields.ENTRANT_DISTRICT);
-        String school = request.getParameter(Fields.ENTRANT_SCHOOL);
+        MailDAO mailDAO = new MailDAO();
+        Mail mail = new Mail();
+        mail.setMailId(email+password);
+        Mail dbMail = mailDAO.find(mail);
 
         String result = null;
-
-        boolean valid = ProfileInputValidator.validateUserParameters(firstName,
-                lastName, email, password, lang);
-
-        LOG.trace(valid);
-        valid = ProfileInputValidator.validateEntrantParameters(town, district,
-                school);
-
-        if (!valid) {
-            request.setAttribute("errorMessage", "Please fill all fields!");
-            LOG.error("errorMessage: Not all fields are filled");
-            result = Path.REDIRECT_CLIENT_REGISTRATION_PAGE;
-        } else if (valid) {
-            User user = new User(email, password, firstName, lastName,
-                    Role.CLIENT, lang);
-            UserDAO userDAO = new UserDAO();
-            userDAO.create(user);
-            LOG.trace("User record created: " + user);
-
-            Entrant entrant = new Entrant(town, district, school, user, true);
-            EntrantDAO entrantDAO = new EntrantDAO();
-            entrantDAO.create(entrant);
-            LOG.trace("Entrant record created: " + entrant);
-
-//			MailUtils.sendConfirmationEmail(user);
-//			request.setAttribute("successfulMessage",
-//					"Your account was created. Check your email and confirm your registration.");
-            result = Path.WELCOME_PAGE;
+        if(dbMail!=null && userKey.equals(dbMail.getKey())){
+            mailDAO.delete(mail);
+            return "okay";
+        }else {
+            mailDAO.delete(mail);
+            return "false";
         }
-        return result;
 	}
 }

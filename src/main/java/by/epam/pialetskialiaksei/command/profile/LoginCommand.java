@@ -67,8 +67,8 @@ public class LoginCommand implements Command {
             LOG.trace("Set the session attribute: 'userRole' = "
                     + user.getRole());
 
-            session.setAttribute("lang", user.getLang());
-            LOG.trace("Set the session attribute 'lang' = " + user.getLang());
+//            session.setAttribute("lang", user.getLang());
+//            LOG.trace("Set the session attribute 'lang' = " + user.getLang());
 
             LOG.info("User: " + user + " logged as " + user.getRole());
 

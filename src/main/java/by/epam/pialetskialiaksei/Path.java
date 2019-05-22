@@ -2,12 +2,14 @@ package by.epam.pialetskialiaksei;
 
 public final class Path {
         // pages of Mechanical Engineering
-        public static final String WELCOME_PAGE = "welcome.jsp";
+        public static final String LOGIN_PAGE = "welcome.jsp";
+        public static final String WELCOME_PAGE = "welcome1.jsp";
 
         public static final String ERROR_PAGE = "/WEB-INF/view/errorPage.jsp";
 
         public static final String FORWARD_CLIENT_REGISTRATION_PAGE = "/WEB-INF/view/client/registration_client.jsp";
-        public static final String REDIRECT_CLIENT_REGISTRATION_PAGE = "controller?command=client_registration";
+//        public static final String REDIRECT_CLIENT_REGISTRATION_PAGE = "controller?command=client_registration";
+        public static final String REDIRECT_CLIENT_REGISTRATION_PAGE = "controller?command=view_registration";
 
         public static final String FORWARD_ADMIN_REGISTRATION_PAGE = "/WEB-INF/view/admin/addAdmin.jsp";
         public static final String REDIRECT_ADMIN_REGISTRATION_PAGE = "controller?command=admin_registration";

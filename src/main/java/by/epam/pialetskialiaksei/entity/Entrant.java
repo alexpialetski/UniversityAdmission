@@ -16,7 +16,7 @@ public class Entrant extends Entity {
 	private String school;
 	private int userId;
 	private int diplomaMark;
-	private boolean blockedStatus;
+//	private boolean blockedStatus;
 
 	public int getDiplomaMark() {
 		return diplomaMark;
@@ -26,16 +26,15 @@ public class Entrant extends Entity {
 		this.diplomaMark = diplomaMark;
 	}
 
-	public Entrant(String city, String district, String school, User user, boolean blockedStatus) {
-		this(city, district, school, user.getId(), blockedStatus);
+	public Entrant(String city, String district, String school, User user) {
+		this(city, district, school, user.getId());
 	}
 
-	public Entrant(String city, String district, String school, int userId, boolean blockedStatus) {
+	public Entrant(String city, String district, String school, int userId) {
 		this.city = city;
 		this.district = district;
 		this.school = school;
 		this.userId = userId;
-		this.blockedStatus = blockedStatus;
 	}
 
 	public Entrant() {
@@ -73,13 +72,6 @@ public class Entrant extends Entity {
 		this.school = school;
 	}
 
-	public boolean getBlockedStatus() {
-		return blockedStatus;
-	}
-
-	public void setBlockedStatus(boolean blockedStatus) {
-		this.blockedStatus = blockedStatus;
-	}
 	@Override
 	public String toString() {
 		return "Entrant{" +
@@ -88,7 +80,6 @@ public class Entrant extends Entity {
 				", school='" + school + '\'' +
 				", userId=" + userId +
 				", diplomaMark=" + diplomaMark +
-				", blockedStatus=" + blockedStatus +
 				"} " + super.toString();
 	}
 }

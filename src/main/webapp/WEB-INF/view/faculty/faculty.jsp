@@ -73,7 +73,8 @@
                     // $(element).append("<div class=\"info\">\n" +
                     $(info).append(
                         "                <div class=\"photo-greeting\" style=\"border: solid 2pt rgb(0, 4, 255);\">" +
-                        "                    <img src=\"images/faculty-image.png\" class=\"photo\">" +
+                        // "                    <img src=\"images/faculty/faculty-image.png\" class=\"photo\">" +
+                        // "                    <img src=\"images/faculty/"+facultiesGson[i].faculty.image+"\" class=\"photo\">" +
                         "                    <div class=\"greeting\" style=\" text-align: center;\">" +
                         "                        <h1>" + <c:if test="${sessionScope.lang eq 'ru'}">
                         facultiesGson[i].faculty.nameRu +
@@ -88,7 +89,12 @@
                         "                    </div>" +
                         "                </div>" +
                         "                <div id=\"faculty-label\">" +
-                        "                    <fmt:message key="faculty.label.temp"/>" +
+                                            <c:if test="${sessionScope.lang eq 'ru'}">
+                    facultiesGson[i].faculty.infoRu +
+                    </c:if>
+                    <c:if test="${sessionScope.lang eq 'en'}">
+                    facultiesGson[i].faculty.infoEng +
+                    </c:if>
                         "                </div>");
                     let subjects = document.createElement("div");
                     $(subjects).attr("id", "entrant_subjects");

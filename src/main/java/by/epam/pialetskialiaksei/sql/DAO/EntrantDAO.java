@@ -22,30 +22,29 @@ import static org.apache.logging.log4j.core.util.Closer.close;
 public class EntrantDAO extends SqlDAO {
 //    private EntrantBuilder entrantBuilder = new EntrantBuilder();
 
-    private static final String FIND_ALL_ENTRANTS = "SELECT id, city, district, school, User_idUser, diploma_mark, isBlocked\n" +
+    private static final String FIND_ALL_ENTRANTS = "SELECT id, city, district, school, User_idUser, diplomaMark\n" +
                                                     "FROM university_admission.entrant;";
-    private static final String FIND_ENTRANT = "SELECT id, city, district, school, User_idUser, diploma_mark, isBlocked\n" +
+    private static final String FIND_ENTRANT = "SELECT id, city, district, school, User_idUser, diplomaMark\n" +
                                                 "FROM university_admission.entrant\n" +
                                                 "WHERE entrant.id = ?\n" +
                                                 "LIMIT 1;";
-    private static final String FIND_ENTRANT_BY_USER_ID = "SELECT id, city, district, school, User_idUser, diploma_mark, isBlocked\n" +
+    private static final String FIND_ENTRANT_BY_USER_ID = "SELECT id, city, district, school, User_idUser, diplomaMark\n" +
                                                             "FROM university_admission.entrant\n" +
                                                             "WHERE entrant.User_idUser = ?\n" +
                                                             "LIMIT 1;";
     private static final String INSERT_ENTRANT = "INSERT INTO university_admission.entrant(city, district, school, User_idUser,\n" +
-            "                                         isBlocked, diploma_mark)\n" +
-                                                        "VALUES (?, ?, ?, ?, ?, ?);";
+            "                                         diplomaMark)\n" +
+                                                        "VALUES (?, ?, ?, ?, ?);";
     private static final String UPDATE_ENTRANT = "UPDATE entrant\n" +
                                                     "SET city=?,\n" +
                                                     "    district=?,\n" +
                                                     "    school=?,\n" +
                                                     "    User_idUser=?,\n" +
-                                                    "    diploma_mark=?\n" +
-//                                                    "    isBlocked=?\n" +
+                                                    "    diplomaMark=?\n" +
                                                     "WHERE id = ?\n" +
                                                     "LIMIT 1;";
     private static final String DELETE_ENTRANT = "DELETE FROM university_admission.entrant WHERE entrant.id=? LIMIT 1;";
-    private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT entrant.id, entrant.city, entrant.district, entrant.school, entrant.User_idUser, entrant.diploma_mark entrant.isBlocked\n" +
+    private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT entrant.id, entrant.city, entrant.district, entrant.school, entrant.User_idUser, entrant.diplomaMark\n" +
                                                             "FROM university_admission.entrant\n" +
                                                             "       INNER JOIN university_admission.faculty_entrants\n" +
                                                             "                  ON university_admission.faculty_entrants.Entrant_idEntrant = university_admission.entrant.id\n" +
@@ -60,6 +59,7 @@ public class EntrantDAO extends SqlDAO {
         ResultSet rs = null;
         try {
             connection = getConnection();
+
             pstmt = connection.prepareStatement(INSERT_ENTRANT,
                     PreparedStatement.RETURN_GENERATED_KEYS);
             int counter = 1;
@@ -67,8 +67,7 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setString(counter++, entity.getDistrict());
             pstmt.setString(counter++, entity.getSchool());
             pstmt.setInt(counter++, entity.getUserId());
-            pstmt.setInt(counter++, 0);
-            pstmt.setBoolean(counter, entity.getBlockedStatus());
+            pstmt.setInt(counter, 0);
             pstmt.execute();
 //            connection.commit();
             rs = pstmt.getGeneratedKeys();
@@ -121,7 +120,7 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not delete an entrant", e);
@@ -145,8 +144,6 @@ public class EntrantDAO extends SqlDAO {
             if (!rs.next()) {
                 entrant = null;
             } else {
-//                entrant = unmarshal(rs);
-//                entrant = entrantBuilder.build(rs);
                 entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
@@ -171,9 +168,7 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setInt(1, user.getId());
             rs = pstmt.executeQuery();
 //            connection.commit();
-            if (!rs.next()) {
-                entrant = null;
-            } else {
+            if(rs.next()){
 //                entrant = unmarshal(rs);
 //                entrant = entrantBuilder.build(rs);
                 entrant = (Entrant) createBuilder().build(rs);
@@ -200,8 +195,6 @@ public class EntrantDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             while (rs.next()) {
-//                users.add(unmarshal(rs));
-//                users.add(entrantBuilder.build(rs));
                 users.add((Entrant) createBuilder().build(rs));
 
             }
@@ -228,8 +221,6 @@ public class EntrantDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             while (rs.next()) {
-//                facultyEntrants.add(unmarshal(rs));
-//                facultyEntrants.add(entrantBuilder.build(rs));
                 facultyEntrants.add((Entrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {

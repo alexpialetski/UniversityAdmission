@@ -29,7 +29,7 @@
 <div id="container">
     <div class="content">
         <div class="photo-greeting" style="border: solid 2pt rgb(0, 4, 255);">
-            <img src="images/photo-human.png" class="photo">
+            <img src="images/profile/photo-human.png" class="photo">
             <div class="greeting" style=" text-align: center;">
                 <h1><fmt:message key="profile.view_jsp.label.greeting"/></h1><br>
                 <h1>
