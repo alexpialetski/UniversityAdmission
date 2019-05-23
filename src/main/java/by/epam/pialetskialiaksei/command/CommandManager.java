@@ -3,10 +3,7 @@ package by.epam.pialetskialiaksei.command;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.command.faculty.*;
 import by.epam.pialetskialiaksei.command.profile.*;
-import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
-import by.epam.pialetskialiaksei.command.registration.ConfirmRegistrationCommand;
-import by.epam.pialetskialiaksei.command.registration.SendConfirmationRegistrationCommand;
-import by.epam.pialetskialiaksei.command.registration.ViewRegistrationCommand;
+import by.epam.pialetskialiaksei.command.registration.*;
 import by.epam.pialetskialiaksei.command.subject.AddSubjectCommand;
 import by.epam.pialetskialiaksei.command.subject.DeleteSubjectCommand;
 import by.epam.pialetskialiaksei.command.subject.UpdateSubjectsCommand;
@@ -27,6 +24,7 @@ public class CommandManager {
         commands.put("viewWelcome", new ViewWelcomeCommand());
         commands.put("viewProfile", new ViewProfileCommand());
         commands.put("client_registration", new ClientRegistrationCommand());
+        commands.put("admin_registration", new AdminRegistrationCommand());
         commands.put("view_registration", new ViewRegistrationCommand());
         commands.put("editProfile", new EditProfileCommand());
         commands.put("getOtherSubjects", new GetOtherSubjectsCommand());
@@ -48,6 +46,8 @@ public class CommandManager {
         commands.put("confirm", new ConfirmRegistrationCommand());
         commands.put("getFacultyUsers", new GetFacultyUsersCommand());
         commands.put("editFaculty", new EditFacultyCommand());
+        commands.put("makeResult", new MakeResultCommand());
+        commands.put("deleteResults", new DeleteResultsCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

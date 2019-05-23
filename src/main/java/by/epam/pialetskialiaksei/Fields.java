@@ -36,6 +36,9 @@ public class Fields {
     public static final String FACULTY_FOREIGN_NAME_RU = "Faculty_name_ru";
     public static final String FACULTY_FOREIGN_NAME_ENG = "Faculty_name_eng";
 
+    public static final String FORM_OF_EDUCATION_FORM_RU = "form_ru";
+    public static final String FORM_OF_EDUCATION_FORM_ENG = "form_eng";
+
     public static final String SUBJECT_NAME_RU = "name_ru";
     public static final String SUBJECT_NAME_ENG = "name_eng";
     public static final String SUBJECT_FOREIGN_KEY_ID = "Subject_idSubject";
@@ -51,8 +54,8 @@ public class Fields {
     public static final String REPORT_SHEET_USER_FIRST_NAME = "first_name";
     public static final String REPORT_SHEET_USER_LAST_NAME = "last_name";
     public static final String REPORT_SHEET_USER_EMAIL = "email";
-    public static final String REPORT_SHEET_ENTRANT_IS_BLOCKED = "isBlocked";
+//    public static final String REPORT_SHEET_ENTRANT_IS_BLOCKED = "isBlocked";
     public static final String REPORT_SHEET_ENTRANT_PRELIMINARY_SUM = "preliminary_sum";
-    public static final String REPORT_SHEET_ENTRANT_DIPLOMA_SUM = "diploma_sum";
+    public static final String REPORT_SHEET_ENTRANT_DIPLOMA_MARK = "diplomaMark";
     public static final String REPORT_SHEET_ENTRANT_TOTAL_SUM = "total_sum";
 }

@@ -89,12 +89,12 @@
                         "                    </div>" +
                         "                </div>" +
                         "                <div id=\"faculty-label\">" +
-                                            <c:if test="${sessionScope.lang eq 'ru'}">
-                    facultiesGson[i].faculty.infoRu +
-                    </c:if>
-                    <c:if test="${sessionScope.lang eq 'en'}">
-                    facultiesGson[i].faculty.infoEng +
-                    </c:if>
+                        <c:if test="${sessionScope.lang eq 'ru'}">
+                        facultiesGson[i].faculty.infoRu +
+                        </c:if>
+                        <c:if test="${sessionScope.lang eq 'en'}">
+                        facultiesGson[i].faculty.infoEng +
+                        </c:if>
                         "                </div>");
                     let subjects = document.createElement("div");
                     $(subjects).attr("id", "entrant_subjects");
@@ -117,6 +117,9 @@
                     $(info).append(subjects);//
                     // $(element).append( subjects);
                     // $(element).append(
+                    <%--<c:if test="${requestScope.results eq false}">--%>
+                    <c:choose>
+                    <c:when test="${requestScope.results eq false}">
                     <c:if test="${userRole eq 'client'}">
                     <c:choose>
                     <c:when test="${not empty applied}">
@@ -146,7 +149,7 @@
                     $(info).append(button_apply);
                     </c:otherwise>
                     </c:choose>
-
+                    </c:if>
                     <c:choose>
                     <c:when test="${not empty applied}">
                     if (facultyId === ${applied}) {
@@ -160,16 +163,21 @@
                     $(element).append(info);
                     </c:otherwise>
                     </c:choose>
-                    </c:if>
+                    </c:when>
+                    <c:otherwise>$(element).append(info);
+                    </c:otherwise>
+                    </c:choose>
+                    <%--</c:if>--%>
 
-                    <c:if test="${userRole eq 'admin' or userRole eq 'client'}">
+                    <c:if test="${userRole eq 'admin'}">
                     $(info).append("<form type='GET' action='controller'>" +
                         "<input type='submit' class='btn' value='Change'>" +
                         "<input type='hidden' name='command' value='viewFaculty'>" +
                         "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>  " +
                         "</form>");
-                    // $(info).append("<a href='controller?command=viewFaculty&facultyId'>");
+                    $(element).append(info);
                     </c:if>
+                    // $(info).append("<a href='controller?command=viewFaculty&facultyId'>");
                 }
 
 

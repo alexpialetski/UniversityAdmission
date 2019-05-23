@@ -9,12 +9,12 @@ public class Faculty extends Entity {
     private String infoEng;
     private byte budgetSeats;
     private byte totalSeats;
-    private byte passingScore;
+    private int passingScore;
 
     public Faculty() {
     }
 
-    public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, byte passingScore, byte budgetSeats, byte totalSeats) {
+    public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, int passingScore, byte budgetSeats, byte totalSeats) {
         this.nameRu = nameRu;
         this.nameEng = nameEng;
         this.infoRu = infoRu;
@@ -24,7 +24,7 @@ public class Faculty extends Entity {
         this.totalSeats = totalSeats;
     }
     public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, byte budgetSeats, byte totalSeats) {
-        this(nameRu, nameEng, infoRu, infoEng, (byte)0, budgetSeats, totalSeats);
+        this(nameRu, nameEng, infoRu, infoEng, 0, budgetSeats, totalSeats);
     }
 
     public String getNameRu() {
@@ -75,11 +75,11 @@ public class Faculty extends Entity {
         this.totalSeats = totalSeats;
     }
 
-    public byte getPassingScore() {
+    public int getPassingScore() {
         return passingScore;
     }
 
-    public void setPassingScore(byte passingScore) {
+    public void setPassingScore(int passingScore) {
         this.passingScore = passingScore;
     }
 

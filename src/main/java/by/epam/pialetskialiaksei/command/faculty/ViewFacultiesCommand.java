@@ -36,22 +36,29 @@ public class ViewFacultiesCommand implements Command {
         UserDAO userDAO = new UserDAO();
         User user = userDAO.find(userEmail);
 
-        EntrantDAO entrantDAO = new EntrantDAO();
-        Entrant entrant = entrantDAO.find(user);
+        String role = String.valueOf(session.getAttribute("userRole"));
 
-        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
-        if (facultyEntrant != null) {
-            request.setAttribute("applied", facultyEntrant.getFacultyId());
+        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+        boolean results = reportSheetDAO.areResultExists();
+        request.setAttribute("results", results);
+
+        if(role.equals("client")) {
+            EntrantDAO entrantDAO = new EntrantDAO();
+            Entrant entrant = entrantDAO.find(user);
+
+            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+            FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
+            if (facultyEntrant != null) {
+                request.setAttribute("applied", facultyEntrant.getFacultyId());
+            }
         }
 //        request.setAttribute("image", "faculty-image.png");
 
-        String role = String.valueOf(session.getAttribute("userRole"));
-        if ("client".equals(role)) {
-            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
-        } else if ("admin".equals(role)) {
-            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
-        }
-        return result;
+//        if ("client".equals(role)) {
+//            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+//        } else if ("admin".equals(role)) {
+//            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+//        }
+        return Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
     }
 }

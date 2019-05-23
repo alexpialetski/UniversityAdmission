@@ -29,7 +29,44 @@
 <div id="container">
     <div class="content">
         <div class="photo-greeting" style="border: solid 2pt rgb(0, 4, 255);">
-            <img src="images/profile/photo-human.png" class="photo">
+            <c:choose>
+                <c:when test="${results eq true}">
+                    <c:choose>
+                        <c:when test="${empty requestScope.formOfEducation}">
+                            <c:if test="${not empty requestScope.faculty}">
+                                <div style="display: flex; width: 35%;flex-wrap: wrap;justify-content: center;align-content: start;margin-left: 3%;">
+                                    <img src="images/not-passed.jpg" class="photo">
+                                    <h4>You are not passed on ${requestScope.formOfEducation.formEng} on ${requestScope.faculty.nameEng} faculty</h4>
+                                </div>
+                            </c:if>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="display: flex; width: 35%;flex-wrap: wrap;justify-content: center;align-content: start;margin-left: 3%;">
+                                <img src="images/passed.jpg" class="photo">
+                                <h4>You are passed on ${requestScope.formOfEducation.formEng} on ${requestScope.faculty.nameEng} faculty</h4>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </c:when>
+                <c:otherwise>
+                    <c:choose>
+                        <c:when test="${not empty requestScope.faculty}">
+                            <div style="display: flex; width: 35%;flex-wrap: wrap;justify-content: center;align-content: start;margin-left: 3%;">
+                                <img src="images/applied.png" class="photo">
+                                <h4>You are applied on ${requestScope.faculty.nameEng} faculty</h4>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div style="display: flex; width: 35%;flex-wrap: wrap;justify-content: center;align-content: start;margin-left: 3%;">
+                                <img src="images/not-applied.png" class="photo">
+                                <span>You are not applied yet!</span>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+                </c:otherwise>
+            </c:choose>
+
+            <%--<img src="images/profile/photo-human.png" class="photo">--%>
             <div class="greeting" style=" text-align: center;">
                 <h1><fmt:message key="profile.view_jsp.label.greeting"/></h1><br>
                 <h1>
@@ -474,9 +511,9 @@
         let obj = [];
         for (let i = 0; i < subjects.length; i++) {
             let mark = {};
-            if(lengthOfMarks > 0) {
+            if (lengthOfMarks > 0) {
                 mark.id = mark_id[i].mark.id;
-            }else{
+            } else {
                 mark.id = -1;
             }
             mark.subjectId = parseInt(subjects[i].getAttribute('id'));

@@ -47,14 +47,17 @@ body {
 
 .photo-greeting{
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    /*flex-direction: row;*/
+    /*justify-content: space-around;*/
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
 }
 .photo-greeting .photo{
 
-    height:280px;
-    width:auto;
+    /*height:280px;*/
+    height:auto;
+    width:50%;
     border: solid 2pt black;
 }
 .greeting{

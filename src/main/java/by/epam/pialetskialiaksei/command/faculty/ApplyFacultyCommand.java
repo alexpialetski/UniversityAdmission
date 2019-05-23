@@ -57,8 +57,8 @@ public class ApplyFacultyCommand implements Command {
                 List<Subject> subjectsOfEntrant = markDAO.findSubjectsOfEntrant(entrant);
                 FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
                 List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
-                if (subjectsOfEntrant.equals(facultySubjects)) {
-                    FacultyDAO facultyDAO = new FacultyDAO();
+                if ((subjectsOfEntrant.size() == facultySubjects.size())&&facultySubjects.containsAll(subjectsOfEntrant)&&subjectsOfEntrant.containsAll(facultySubjects)){
+//                    FacultyDAO facultyDAO = new FacultyDAO();
                     facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
                     return "{\"error\":\"none\"}";
                 } else {

@@ -22,7 +22,7 @@ public final class Path {
         public static final String REDIRECT_TO_VIEW_ALL_FACULTIES = "controller?command=viewAllFaculties";
         public static final String REDIRECT_TO_VIEW_ALL_SUBJECTS = "controller?command=viewAllSubjects";
 
-        public static final String FORWARD_ADMIN_PROFILE = "/WEB-INF/view/admin/profile/view.jsp";
+        public static final String FORWARD_ADMIN_PROFILE = "/WEB-INF/view/admin/profile/view_my.jsp";
         public static final String FORWARD_ADMIN_PROFILE_EDIT = "/WEB-INF/view/admin/profile/edit.jsp";
 
         public static final String FORWARD_CLIENT_PROFILE = "/WEB-INF/view/client/profile/view_my.jsp";

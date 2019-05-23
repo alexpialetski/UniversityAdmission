@@ -1,14 +1,10 @@
 package by.epam.pialetskialiaksei.sql.DAO;
 
 import by.epam.pialetskialiaksei.Fields;
-import by.epam.pialetskialiaksei.entity.Entrant;
-import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.Mail;
-import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
-import by.epam.pialetskialiaksei.sql.builder.EntrantBuilder;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
-import by.epam.pialetskialiaksei.sql.builder.manager.MailBuilder;
+import by.epam.pialetskialiaksei.sql.builder.MailBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +12,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MailDAO extends SqlDAO {
 

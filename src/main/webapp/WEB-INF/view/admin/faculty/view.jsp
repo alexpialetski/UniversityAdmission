@@ -218,17 +218,21 @@
                         let table = document.createElement("table");
                         table.id = "t01";
                         $(table).append("<tr>\n" +
-                            "                <th>userId</th>\n" +
                             "                <th>First name</th>\n" +
                             "                <th>Last name</th>\n" +
                             "                <th>Email</th>\n" +
+                            "                <th>Preliminary sum</th>\n" +
+                            "                <th>Diploma mark</th>\n" +
+                            "                <th>Total sum</th>\n" +
                             "            </tr>");
                         for (let i = 0; i < users.length; i++) {
                             $(table).append("<tr>\n" +
-                                "                    <td>" + users[i].id + "</td>\n" +
                                 "                    <td>" + users[i].firstName + "</td>\n" +
                                 "                    <td>" + users[i].lastName + "</td>\n" +
                                 "                    <td>" + users[i].email + "</td>\n" +
+                                "                    <td>" + users[i].preliminarySum + "</td>\n" +
+                                "                    <td>" + users[i].diplomaMark + "</td>\n" +
+                                "                    <td>" + users[i].totalSum + "</td>\n" +
                                 "                </tr>");
                         }
                         $("#facultyUsers").append(table);

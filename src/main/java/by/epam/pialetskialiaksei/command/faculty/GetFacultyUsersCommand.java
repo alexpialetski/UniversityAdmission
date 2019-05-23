@@ -2,6 +2,7 @@ package by.epam.pialetskialiaksei.command.faculty;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
+import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.entity.User;
@@ -9,6 +10,7 @@ import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
+import by.epam.pialetskialiaksei.sql.DAO.ReportSheetDAO;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,9 +36,13 @@ public class GetFacultyUsersCommand implements Command {
         LOG.trace("Get the request parameter: 'facultyId' = "
                 + facultyId);
 
-        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        List<User> users = facultyEntrantDAO.findUsers(facultyId);
+        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+        List<EntrantReportSheet> entrants = reportSheetDAO.getReport(facultyId);
+//        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+//        List<User> users = facultyEntrantDAO.findUsers(facultyId);
 
-        return new Gson().toJson(users);
+        return new Gson().toJson(entrants);
     }
+
+
 }

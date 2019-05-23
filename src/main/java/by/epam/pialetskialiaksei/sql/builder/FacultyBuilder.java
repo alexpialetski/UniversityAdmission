@@ -23,7 +23,7 @@ public class FacultyBuilder extends SetBuilder<Faculty> {
             faculty.setBudgetSeats(rs.getByte(Fields.FACULTY_BUDGET_SEATS));
             faculty.setInfoEng(rs.getString(Fields.FACULTY_INFO_ENG));
             faculty.setInfoRu(rs.getString(Fields.FACULTY_INFO_RU));
-            faculty.setPassingScore((byte)rs.getInt(Fields.FACULTY_PASSING_SCORE));
+            faculty.setPassingScore(rs.getInt(Fields.FACULTY_PASSING_SCORE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to faculty", e);
         }

@@ -178,7 +178,7 @@ public class FacultyDAO extends SqlDAO {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_ALL_FACULTIES);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             while (rs.next()) {
 //                faculties.add(unmarshal(rs));
 //                faculties.add(facultyBuilder.build(rs));

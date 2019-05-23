@@ -10,10 +10,12 @@ import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import by.epam.pialetskialiaksei.util.ActionType;
 import by.epam.pialetskialiaksei.util.MailUtils;
+import by.epam.pialetskialiaksei.util.validation.MailSender;
 import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -55,7 +57,12 @@ public class SendConfirmationRegistrationCommand implements Command {
 		} else {
 			User user = new User(email, password, firstName, lastName,
 					Role.CLIENT);
-			MailUtils.sendConfirmationEmail(user);
+//			MailUtils.sendConfirmationEmail(user);
+			try {
+				MailSender.sendConfirmationEmail(user);
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return "";

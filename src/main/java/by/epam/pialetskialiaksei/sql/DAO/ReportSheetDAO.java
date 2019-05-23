@@ -2,7 +2,12 @@ package by.epam.pialetskialiaksei.sql.DAO;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
+import by.epam.pialetskialiaksei.entity.Faculty;
+import by.epam.pialetskialiaksei.entity.FormOfEducation;
+import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
+import by.epam.pialetskialiaksei.sql.builder.FormOfEducationBuilder;
+import by.epam.pialetskialiaksei.sql.builder.ReporstSheetBuilder;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +24,15 @@ public class ReportSheetDAO extends SqlDAO {
             .getLogger(ReportSheetDAO.class);
 
     private static final String GET_REPORT_SHEET = "SELECT * FROM faculties_report_sheet WHERE facultyId=?;";
+    private static final String GET_SCORE = "CALL getScore(?, ?);";
+    private static final String GET_BUDGET_ENTRANTS = "CALL getBudgetEntrants(?, ?);";
+    private static final String GET_NOT_BUDGET_ENTRANTS = "CALL getNotBudgetEntrants(?, ?, ?);";
+    private static final String GET_FORM_OF_EDUCATION = "SELECT formofeducation.id, formofeducation.form_ru, formofeducation.form_eng\n" +
+                                                            "from result\n" +
+                                                            "       inner join formofeducation on result.form_id = formofeducation.id\n" +
+                                                            "where email = ?;";
+    private static final String RESULTS_EXISTS = "SELECT EXISTS(SELECT 1 FROM result) as exist;";
+    private static final String DELETE_RESULTS = "DELETE FROM result;";
 
     public List<EntrantReportSheet> getReport(int facultyId) {
         List<EntrantReportSheet> entrantsResults = new ArrayList<>();
@@ -31,46 +45,146 @@ public class ReportSheetDAO extends SqlDAO {
             pstmt = connection.prepareStatement(GET_REPORT_SHEET);
             pstmt.setInt(1, facultyId);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             while (rs.next()) {
-                entrantsResults.add(unmarshal(rs));
+                entrantsResults.add((EntrantReportSheet) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             rollback(connection);
             LOG.error("Can not get report sheet", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
         return entrantsResults;
     }
 
-    private static EntrantReportSheet unmarshal(ResultSet rs) {
-        EntrantReportSheet reportSheet = new EntrantReportSheet();
+    public int getScore(int facultyId, int numberOfSeats) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
         try {
-            reportSheet.setFacultyId(rs.getInt(Fields.REPORT_SHEET_FACULTY_ID));
-            reportSheet.setFirstName(rs
-                    .getString(Fields.REPORT_SHEET_USER_FIRST_NAME));
-            reportSheet.setLastName(rs
-                    .getString(Fields.REPORT_SHEET_USER_LAST_NAME));
-            reportSheet.setEmail(rs.getString(Fields.REPORT_SHEET_USER_EMAIL));
-            reportSheet.setBlockedStatus(rs
-                    .getBoolean(Fields.REPORT_SHEET_ENTRANT_IS_BLOCKED));
-            reportSheet.setPreliminarySum(rs
-                    .getShort(Fields.REPORT_SHEET_ENTRANT_PRELIMINARY_SUM));
-            reportSheet.setDiplomaSum(rs
-                    .getShort(Fields.REPORT_SHEET_ENTRANT_DIPLOMA_SUM));
-            reportSheet.setTotalSum(rs
-                    .getShort(Fields.REPORT_SHEET_ENTRANT_TOTAL_SUM));
+            connection = getConnection();
+            pstmt = connection.prepareStatement(GET_SCORE);
+            pstmt.setInt(1, facultyId);
+            pstmt.setInt(2, numberOfSeats);
+            rs = pstmt.executeQuery();
+//            connection.commit();
+            if (rs.next()) {
+                return rs.getInt(Fields.REPORT_SHEET_ENTRANT_TOTAL_SUM);
+            }
         } catch (SQLException e) {
-            LOG.error("Can not unmarshal ResultSet to report sheet", e);
+            rollback(connection);
+            LOG.error("Can not get report sheet", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
         }
-        return reportSheet;
+        return 0;
     }
+
+    public void makeResult(List<Faculty> faculties) {
+        List<EntrantReportSheet> entrantsResults = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement pstmtForBudget = null;
+        PreparedStatement pstmtForNotBudget = null;
+
+        try {
+            connection = getConnection();
+            for (Faculty faculty : faculties) {
+                pstmtForBudget = connection.prepareStatement(GET_BUDGET_ENTRANTS);
+                pstmtForBudget.setInt(1, faculty.getId());
+                pstmtForBudget.setInt(2, faculty.getBudgetSeats());
+
+                pstmtForNotBudget = connection.prepareStatement(GET_NOT_BUDGET_ENTRANTS);
+                pstmtForNotBudget.setInt(1, faculty.getId());
+                pstmtForNotBudget.setInt(2, faculty.getTotalSeats());
+                pstmtForNotBudget.setInt(3, faculty.getBudgetSeats());
+
+                pstmtForBudget.executeQuery();
+                pstmtForNotBudget.executeQuery();
+            }
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not get report sheet", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmtForBudget);
+            close(pstmtForNotBudget);
+        }
+    }
+
+    public boolean areResultExists() {
+        boolean exists = false;
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(RESULTS_EXISTS);
+            rs = pstmt.executeQuery();
+            rs.next();
+            exists = (rs.getInt("exist") == 1);
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not get report sheet", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
+        }
+        return exists;
+    }
+
+    public void deleteResults(){
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(DELETE_RESULTS);
+//            pstmt.executeQuery();
+            pstmt.execute();
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not get report sheet", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+        }
+    }
+
+    public FormOfEducation getFormOfEducation(User user) {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        FormOfEducation formOfEducation = null;
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(GET_FORM_OF_EDUCATION);
+            pstmt.setString(1, user.getEmail());
+            rs = pstmt.executeQuery();
+//            connection.commit();
+            if (rs.next()) {
+                FormOfEducationBuilder formOfEducationBuilder = new FormOfEducationBuilder();
+                formOfEducation =  formOfEducationBuilder.build(rs);
+            }
+        } catch (SQLException e) {
+            rollback(connection);
+            LOG.error("Can not get report sheet", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
+        }
+        return formOfEducation;
+    }
+
 
     @Override
     protected SetBuilder createBuilder() {
-        return null;
+        return new ReporstSheetBuilder();
     }
 }

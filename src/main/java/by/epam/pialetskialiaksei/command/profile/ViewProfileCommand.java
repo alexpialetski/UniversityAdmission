@@ -10,13 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.entity.ClientSubject;
-import by.epam.pialetskialiaksei.entity.Entrant;
-import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.model.ClientSubjectsModel;
-import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
-import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
-import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
+import by.epam.pialetskialiaksei.sql.DAO.*;
 import by.epam.pialetskialiaksei.util.ActionType;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
@@ -45,6 +41,12 @@ public class ViewProfileCommand implements Command {
 
         UserDAO userDAO = new UserDAO();
         User user = userDAO.find(userEmail);
+
+        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+        boolean results = reportSheetDAO.areResultExists();
+        request.setAttribute("results", results);
+        LOG.trace("Set the request attribute: 'results' = "
+                + results);
 
         request.setAttribute("first_name", user.getFirstName());
         LOG.trace("Set the request attribute: 'first_name' = "
@@ -87,6 +89,19 @@ public class ViewProfileCommand implements Command {
             LOG.trace("Set the request attribute: 'marks' = "
                     + marks);
 
+            if(results){
+                FormOfEducation formOfEducation = reportSheetDAO.getFormOfEducation(user);
+                if(formOfEducation!=null){
+                    request.setAttribute("formOfEducation", formOfEducation);
+                }
+            }
+
+            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+            Faculty faculty = facultyEntrantDAO.find(entrant.getId());
+            if(faculty != null){
+                request.setAttribute("faculty", faculty);
+            }
+
             result = Path.FORWARD_CLIENT_PROFILE;
         } else if ("admin".equals(role)) {
 //            result = Path.FORWARD_ADMIN_PROFILE;
@@ -94,5 +109,4 @@ public class ViewProfileCommand implements Command {
         }
         return result;
     }
-
 }

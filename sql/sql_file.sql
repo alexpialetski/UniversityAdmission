@@ -262,3 +262,86 @@ CREATE  OR REPLACE VIEW `entrant_marks_sum` AS
                          university_admission.mark.Entrant_idEntrant
            INNER JOIN entrant on faculty_entrants.Entrant_idEntrant = entrant.id
     GROUP BY faculty_entrants.Faculty_idFaculty, entrantId;
+
+
+--          getBudgetEntrants
+DROP PROCEDURE IF EXISTS `getBudgetEntrants`;
+CREATE PROCEDURE `getBudgetEntrants`(faculty_id INT, numberOfSeats INT)
+BEGIN
+  DECLARE numberOfRecords INT DEFAULT 0;
+  SELECT COUNT(*) INTO numberOfRecords FROM `faculties_report_sheet` where faculties_report_sheet.facultyId = faculty_id;
+  if numberOfRecords > numberOfSeats then
+    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
+                                            total_sum, form_id)
+    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 1 AS form_id
+    FROM faculties_report_sheet
+    WHERE faculties_report_sheet.facultyId = faculty_id
+    ORDER BY faculties_report_sheet.total_sum DESC LIMIT numberOfSeats;
+  end if;
+  if numberOfRecords <= numberOfSeats then
+    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
+                                            total_sum, form_id)
+    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 1 AS form_id
+    FROM faculties_report_sheet
+    WHERE faculties_report_sheet.facultyId = faculty_id
+    ORDER BY faculties_report_sheet.total_sum DESC;
+  end if;
+END
+
+
+--          getNotBudgetEntrants
+DROP PROCEDURE IF EXISTS `getNotBudgetEntrants`;
+CREATE PROCEDURE `getNotBudgetEntrants`(faculty_id INT, numberOfSeats INT, numberOfBudgetSeats INT)
+BEGIN
+  DECLARE numberOfRecords INT DEFAULT 0;
+  DECLARE variable INT DEFAULT 0;
+  SELECT COUNT(*) INTO numberOfRecords FROM `faculties_report_sheet` where faculties_report_sheet.facultyId = faculty_id;
+  if numberOfRecords > numberOfBudgetSeats then
+    set variable = numberOfSeats - numberOfBudgetSeats;
+    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
+                                            total_sum, form_id)
+    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 2 AS form_id
+    FROM faculties_report_sheet
+    WHERE faculties_report_sheet.facultyId = faculty_id
+    ORDER BY faculties_report_sheet.total_sum DESC LIMIT variable offset numberOfBudgetSeats;
+  end if;
+END
+
+
+--          getScore
+DROP PROCEDURE IF EXISTS `getScore`;
+CREATE PROCEDURE `getScore`(faculty_id INT, numberOfSeats INT)
+BEGIN
+  DECLARE numberOfRecords INT DEFAULT 0;
+  DECLARE variable INT DEFAULT 0;
+  SELECT COUNT(*) INTO numberOfRecords FROM `faculties_report_sheet` where faculties_report_sheet.facultyId = faculty_id;
+  if numberOfRecords >= numberOfSeats then
+    set variable = numberOfSeats - 1;
+    SELECT total_sum from faculties_report_sheet where faculties_report_sheet.facultyId = faculty_id order by faculties_report_sheet.total_sum desc limit 1 offset variable;
+  end if;
+END
+
+CREATE TABLE IF NOT EXISTS `university_admission`.`result` (
+  `faculty_id` INT(11) NOT NULL,
+  `first_name` VARCHAR(45) NOT NULL,
+  `last_name` VARCHAR(45) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `preliminary_sum` INT(11) NOT NULL,
+  `diplomaMark` INT(11) NULL DEFAULT NULL,
+  `total_sum` INT(11) NULL DEFAULT NULL,
+  `form_id` INT NOT NULL,
+  PRIMARY KEY (`form_id`),
+  CONSTRAINT `fk_result_formOfEducation1`
+    FOREIGN KEY (`form_id`)
+    REFERENCES `mydb`.`formOfEducation` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+
+CREATE TABLE IF NOT EXISTS `university_admission`.`formOfEducation` (
+  `id` INT NOT NULL,
+  `formRu` VARCHAR(45) NOT NULL,
+  `formEng` VARCHAR(45) NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
