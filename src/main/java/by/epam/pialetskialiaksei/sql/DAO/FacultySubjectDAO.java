@@ -5,6 +5,7 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.FacultySubject;
 import by.epam.pialetskialiaksei.entity.Subject;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultyBuilder;
@@ -23,10 +24,6 @@ import java.util.List;
 
 
 public class FacultySubjectDAO extends SqlDAO {
-//    private FacultySubjectBuilder facultySubjectBuilder = new FacultySubjectBuilder();
-//    private FacultyBuilder facultyBuilder = new FacultyBuilder();
-//    private SubjectBuilder subjectBuilder = new SubjectBuilder();
-
     //    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects;";
     private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
                                                             "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu, faculty.passingScore,\n" +
@@ -62,7 +59,7 @@ public class FacultySubjectDAO extends SqlDAO {
     private final static Logger LOG = LogManager
             .getLogger(FacultySubjectDAO.class);
 
-    public void create(FacultySubject entity) {
+    public void create(FacultySubject entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -75,14 +72,15 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getSubjectId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create a faculty subject", e);
+            throw new DaoException("Can not create a faculty subject", e);
+//            rollback(connection);
+//            LOG.error("Can not create a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -90,7 +88,7 @@ public class FacultySubjectDAO extends SqlDAO {
         }
     }
 
-    public void delete(FacultySubject entity) {
+    public void delete(FacultySubject entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -103,15 +101,16 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt.execute();
             connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete a faculty subject", e);
+            throw new DaoException("Can not delete a faculty subject", e);
+//            rollback(connection);
+//            LOG.error("Can not delete a faculty subject", e);
         } finally {
             close(connection);
             close(pstmt);
         }
     }
 
-    public void deleteAllSubjects(Faculty entity) {
+    public void deleteAllSubjects(Faculty entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -120,17 +119,18 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete all clientSubjects of a given Faculty", e);
+            throw new DaoException("Can not delete all clientSubjects of a given Faculty", e);
+//            rollback(connection);
+//            LOG.error("Can not delete all clientSubjects of a given Faculty", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public List<Subject> findById(int entityPK) {
+    public List<Subject> findById(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -147,8 +147,9 @@ public class FacultySubjectDAO extends SqlDAO {
                 subjects.add(subjectBuilder.buildForeign(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a faculty subject", e);
+            throw new DaoException("Can not find a faculty subject", e);
+//            rollback(connection);
+//            LOG.error("Can not find a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -157,7 +158,7 @@ public class FacultySubjectDAO extends SqlDAO {
         return subjects;
     }
 
-    public List<FacultyInfoModel> findAll() {
+    public List<FacultyInfoModel> findAll() throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -184,8 +185,9 @@ public class FacultySubjectDAO extends SqlDAO {
                 ++i;
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all faculty clientSubjects", e);
+            throw new DaoException("Can not find all faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -194,7 +196,7 @@ public class FacultySubjectDAO extends SqlDAO {
         return facultyInfoModels;
     }
 
-    public List<FacultySubject> find(int facultyId) {
+    public List<FacultySubject> find(int facultyId) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -212,8 +214,9 @@ public class FacultySubjectDAO extends SqlDAO {
                 facultySubjects.add((FacultySubject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a faculty subject", e);
+            throw new DaoException("Can not find a faculty subject", e);
+//            rollback(connection);
+//            LOG.error("Can not find a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -222,7 +225,7 @@ public class FacultySubjectDAO extends SqlDAO {
         return facultySubjects;
     }
 
-    public void updateById(int newSubjectId, int facultyId, int oldSubjectId) {
+    public void updateById(int newSubjectId, int facultyId, int oldSubjectId) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -235,8 +238,9 @@ public class FacultySubjectDAO extends SqlDAO {
                 pstmt.executeUpdate();
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a mark", e);
+            throw new DaoException("Can not update a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not update a mark", e);
         } finally {
 //            close(connection);
             releaseConnection(connection);
@@ -248,13 +252,4 @@ public class FacultySubjectDAO extends SqlDAO {
     protected SetBuilder createBuilder() {
         return new FacultySubjectBuilder();
     }
-
-    /**
-     * Unmarshals specified Faculty Subjects database record to java Faculty
-     * Subjects entity instance.
-     *
-     * @param rs
-     *            - ResultSet record of Faculty Subject
-     * @return entity instance of this record
-     */
 }

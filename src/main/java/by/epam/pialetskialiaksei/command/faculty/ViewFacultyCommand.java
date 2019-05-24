@@ -3,6 +3,8 @@ package by.epam.pialetskialiaksei.command.faculty;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.*;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.*;
 import com.google.gson.Gson;
@@ -30,34 +32,35 @@ public class ViewFacultyCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        String result = null;
+        try {
+            String result = null;
 
-        HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession(false);
 
-        int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-        LOG.trace("Get the request parameter: 'facultyId' = "
-                + facultyId);
-        session.setAttribute("prevCommand", "viewFaculty&facultyId=" + facultyId);
+            int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+            LOG.trace("Get the request parameter: 'facultyId' = "
+                    + facultyId);
+            session.setAttribute("prevCommand", "viewFaculty&facultyId=" + facultyId);
 
-        FacultyDAO facultyDAO = new FacultyDAO();
-        Faculty faculty = facultyDAO.find(facultyId);
-        request.setAttribute("faculty", faculty);
-        LOG.trace("Set request parameter: 'faculty' = "
-                + faculty);
+            FacultyDAO facultyDAO = new FacultyDAO();
+            Faculty faculty = facultyDAO.find(facultyId);
+            request.setAttribute("faculty", faculty);
+            LOG.trace("Set request parameter: 'faculty' = "
+                    + faculty);
 
-        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-        List<Subject> subjects = facultySubjectDAO.findById(facultyId);
-        String temp = new Gson().toJson(subjects);
-        request.setAttribute("subjects", temp);
+            FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+            List<Subject> subjects = facultySubjectDAO.findById(facultyId);
+            String temp = new Gson().toJson(subjects);
+            request.setAttribute("subjects", temp);
 //        LOG.trace("Set request parameter: 'subjects' = "
 //                + subjects);
 
-        FacultyInfoModel facultyInfoModel = new FacultyInfoModel(faculty, subjects);
-        request.setAttribute("facultyInfo", facultyInfoModel);
-        LOG.trace("Set request parameter: 'facultyInfoModel' = "
-                + facultyInfoModel);
+            FacultyInfoModel facultyInfoModel = new FacultyInfoModel(faculty, subjects);
+            request.setAttribute("facultyInfo", facultyInfoModel);
+            LOG.trace("Set request parameter: 'facultyInfoModel' = "
+                    + facultyInfoModel);
 //        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
 //        List<User> users = facultyEntrantDAO.findUsers(facultyId);
 //        request.setAttribute("users", users);
@@ -71,13 +74,16 @@ public class ViewFacultyCommand implements Command {
 //            request.setAttribute("applied", facultyEntrant.getFacultyId());
 //        }
 
-        String role = String.valueOf(session.getAttribute("userRole"));
-        if ("client".equals(role)) {
+            String role = String.valueOf(session.getAttribute("userRole"));
+            if ("client".equals(role)) {
 //            result = Path.FORWARD_FACULTY_VIEW_CLIENT;
-            result = Path.FORWARD_FACULTY_VIEW_ADMIN;
-        } else if ("admin".equals(role)) {
-            result = Path.FORWARD_FACULTY_VIEW_ADMIN;
+                result = Path.FORWARD_FACULTY_VIEW_ADMIN;
+            } else if ("admin".equals(role)) {
+                result = Path.FORWARD_FACULTY_VIEW_ADMIN;
+            }
+            return result;
+        } catch (DaoException e) {
+            throw new CommandException(e);
         }
-        return result;
     }
 }

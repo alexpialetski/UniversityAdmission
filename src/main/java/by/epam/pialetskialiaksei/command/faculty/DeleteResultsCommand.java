@@ -3,6 +3,8 @@ package by.epam.pialetskialiaksei.command.faculty;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Faculty;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyDAO;
 import by.epam.pialetskialiaksei.sql.DAO.ReportSheetDAO;
 import org.apache.logging.log4j.LogManager;
@@ -28,10 +30,14 @@ public class DeleteResultsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
-        reportSheetDAO.deleteResults();
-        return Path.REDIRECT_TO_PROFILE;
+        try {
+            ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+            reportSheetDAO.deleteResults();
+            return Path.REDIRECT_TO_PROFILE;
+        } catch (DaoException e) {
+            throw new CommandException(e);
+        }
     }
 }

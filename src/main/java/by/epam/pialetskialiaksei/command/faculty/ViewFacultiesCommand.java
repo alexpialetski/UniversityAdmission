@@ -3,6 +3,8 @@ package by.epam.pialetskialiaksei.command.faculty;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.*;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,31 +29,32 @@ public class ViewFacultiesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        String result = null;
+        try {
+            String result = null;
 
-        HttpSession session = request.getSession(false);
-        String userEmail = String.valueOf(session.getAttribute("user"));
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.find(userEmail);
+            HttpSession session = request.getSession(false);
+            String userEmail = String.valueOf(session.getAttribute("user"));
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.find(userEmail);
 
-        String role = String.valueOf(session.getAttribute("userRole"));
+            String role = String.valueOf(session.getAttribute("userRole"));
 
-        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
-        boolean results = reportSheetDAO.areResultExists();
-        request.setAttribute("results", results);
+            ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+            boolean results = reportSheetDAO.areResultExists();
+            request.setAttribute("results", results);
 
-        if(role.equals("client")) {
-            EntrantDAO entrantDAO = new EntrantDAO();
-            Entrant entrant = entrantDAO.find(user);
+            if (role.equals("client")) {
+                EntrantDAO entrantDAO = new EntrantDAO();
+                Entrant entrant = entrantDAO.find(user);
 
-            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-            FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
-            if (facultyEntrant != null) {
-                request.setAttribute("applied", facultyEntrant.getFacultyId());
+                FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+                FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
+                if (facultyEntrant != null) {
+                    request.setAttribute("applied", facultyEntrant.getFacultyId());
+                }
             }
-        }
 //        request.setAttribute("image", "faculty-image.png");
 
 //        if ("client".equals(role)) {
@@ -59,6 +62,9 @@ public class ViewFacultiesCommand implements Command {
 //        } else if ("admin".equals(role)) {
 //            result = Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
 //        }
-        return Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+            return Path.FORWARD_FACULTY_VIEW_ALL_CLIENT;
+        } catch (DaoException e) {
+            throw new CommandException(e);
+        }
     }
 }

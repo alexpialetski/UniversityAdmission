@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -18,25 +17,26 @@ public class BasicConnectionPool implements ConnectionPool {
     private String password;
     private List<Connection> connectionPool;
     private List<Connection> usedConnections = new ArrayList<>();
-    private static final int INITIAL_POOL_SIZE = 5;
-    private static final int MAX_POOL_SIZE = 5;
-    private static final Semaphore SEMAPHORE = new Semaphore(MAX_POOL_SIZE);
+    private int maxPoolSize;
+    private Semaphore SEMAPHORE;
     private static final Lock LOCK = new ReentrantLock();
     private static final Logger LOGGER = LogManager.getLogger(BasicConnectionPool.class);
 
-    private BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool) {
+    private BasicConnectionPool(String url, String user, String password, List<Connection> connectionPool, int maxPoolSize) {
         this.url = url;
         this.user = user;
         this.password = password;
+        this.maxPoolSize = maxPoolSize;
         this.connectionPool = connectionPool;
+        SEMAPHORE = new Semaphore(maxPoolSize);
     }
 
-    static BasicConnectionPool create(String url, String user, String password) throws SQLException {
-        List<Connection> pool = new ArrayList<>(INITIAL_POOL_SIZE);
-        for (int i = 0; i < INITIAL_POOL_SIZE; i++) {
+    static BasicConnectionPool create(String url, String user, String password, int initialPoolSize, int maxPoolSize) throws SQLException {
+        List<Connection> pool = new ArrayList<>(initialPoolSize);
+        for (int i = 0; i < initialPoolSize; i++) {
             pool.add(createConnection(url, user, password));
         }
-        return new BasicConnectionPool(url, user, password, pool);
+        return new BasicConnectionPool(url, user, password, pool, maxPoolSize);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BasicConnectionPool implements ConnectionPool {
 
         LOCK.lock();
 
-        if (connectionPool.isEmpty() && usedConnections.size() < MAX_POOL_SIZE) {
+        if (connectionPool.isEmpty() && usedConnections.size() < maxPoolSize) {
             try {
                 connectionPool.add(createConnection(url, user, password));
             } catch (SQLException e) {
@@ -111,32 +111,4 @@ public class BasicConnectionPool implements ConnectionPool {
         }
         connectionPool.clear();
     }
-
-    public static void main(String[] args) {
-        ConnectionPool connectionPool = null;
-        try {
-            connectionPool = BasicConnectionPool.create("jdbc:mysql://localhost:3306/university_admission?autoReconnect=true&useSSL=false",
-                    "root",
-                    "root");
-            Connection con = connectionPool.getConnection();
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("select * from entrant");
-            ResultSetMetaData rsmd = rs.getMetaData();
-            while (rs.next()) {
-                for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    System.out.println(rsmd.getColumnName(i + 1) + " --- " + rs.getString(i + 1));
-                }
-                System.out.println("\n\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connectionPool.shutdown();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 }

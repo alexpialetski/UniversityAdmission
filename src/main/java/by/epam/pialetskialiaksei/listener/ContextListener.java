@@ -29,12 +29,6 @@ public class ContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 		LOG.info("Servlet context initialization starts");
 		ConnectionPoolManager.getInstance();
-//		ServletContext servletContext = event.getServletContext();
-//		initLog4J(servletContext);
-//		initI18N(servletContext);
-//		initCommandManager();
-//
-//		log("Servlet context initialization finished");
 	}
 
 	/*

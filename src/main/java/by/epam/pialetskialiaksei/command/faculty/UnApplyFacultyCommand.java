@@ -5,6 +5,8 @@ import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.FacultyEntrant;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
@@ -36,19 +38,23 @@ public class UnApplyFacultyCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        HttpSession session = request.getSession(false);
-        String userEmail = String.valueOf(session.getAttribute("user"));
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.find(userEmail);
+        try {
+            HttpSession session = request.getSession(false);
+            String userEmail = String.valueOf(session.getAttribute("user"));
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.find(userEmail);
 
-        EntrantDAO entrantDAO = new EntrantDAO();
-        Entrant entrant = entrantDAO.find(user);
+            EntrantDAO entrantDAO = new EntrantDAO();
+            Entrant entrant = entrantDAO.find(user);
 
-        int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-        facultyEntrantDAO.delete(new FacultyEntrant(facultyId, entrant.getId()));
-        return "";
+            int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+            facultyEntrantDAO.delete(new FacultyEntrant(facultyId, entrant.getId()));
+            return "";
+        }catch (DaoException e){
+            throw new CommandException("Exception in UnApplyFacultyCommand", e);
+        }
     }
 }

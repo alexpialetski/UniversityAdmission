@@ -7,6 +7,8 @@ import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Mail;
 import by.epam.pialetskialiaksei.entity.Role;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.MailDAO;
 import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
@@ -25,37 +27,39 @@ import java.io.IOException;
  * Invoked when client registers in system.
  *
  * @author Mark Norkin
- *
  */
 public class ConfirmRegistrationCommand implements Command {
 
-	private static final long serialVersionUID = -3071536593627692473L;
+    private static final long serialVersionUID = -3071536593627692473L;
 
-	private static final Logger LOG = LogManager.getLogger(ConfirmRegistrationCommand.class);
+    private static final Logger LOG = LogManager.getLogger(ConfirmRegistrationCommand.class);
 
 
-	@Override
-	public String execute(HttpServletRequest request,
-			HttpServletResponse response)
-			throws IOException, ServletException {
+    @Override
+    public String execute(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws IOException, ServletException, CommandException {
         LOG.debug("Start executing Command");
+        try {
+            String email = request.getParameter(Fields.USER_EMAIL);
+            String password = request.getParameter(Fields.USER_PASSWORD);
+            String userKey = request.getParameter("key");
 
-        String email = request.getParameter(Fields.USER_EMAIL);
-        String password = request.getParameter(Fields.USER_PASSWORD);
-        String userKey = request.getParameter("key");
+            MailDAO mailDAO = new MailDAO();
+            Mail mail = new Mail();
+            mail.setMailId(email + password);
+            Mail dbMail = mailDAO.find(mail);
 
-        MailDAO mailDAO = new MailDAO();
-        Mail mail = new Mail();
-        mail.setMailId(email+password);
-        Mail dbMail = mailDAO.find(mail);
-
-        String result = null;
-        if(dbMail!=null && userKey.equals(dbMail.getKey())){
-            mailDAO.delete(mail);
-            return "okay";
-        }else {
-            mailDAO.delete(mail);
-            return "false";
+            String result = null;
+            if (dbMail != null && userKey.equals(dbMail.getKey())) {
+                mailDAO.delete(mail);
+                return "okay";
+            } else {
+                mailDAO.delete(mail);
+                return "false";
+            }
+        } catch (DaoException e) {
+            throw new CommandException(e);
         }
-	}
+    }
 }

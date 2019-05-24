@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import by.epam.pialetskialiaksei.util.ActionType;
 import org.apache.logging.log4j.LogManager;
@@ -29,27 +31,28 @@ public class LoginCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
 
         LOG.debug("Start executing Command");
-        String result = null;
+        try {
+            String result = null;
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.find(email, password);
-        LOG.trace("User found: " + user);
-        if (user == null) {
-            request.setAttribute("message",
-                    "Cannot find user with such login/password");
-            LOG.error("message: Cannot find user with such login/password");
-            result = null;
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.find(email, password);
+            LOG.trace("User found: " + user);
+            if (user == null) {
+                request.setAttribute("message",
+                        "Cannot find user with such login/password");
+                LOG.error("message: Cannot find user with such login/password");
+                result = null;
 //		} else if (!user.getActiveStatus()) {
 //			request.setAttribute("errorMessage", "You are not registered!");
 //			LOG.error("errorMessage: User is not registered or did not complete his registration.");
 //			result = null;
-        } else {
+            } else {
 //			HttpSession oldSession = request.getSession(false);
 //			HttpSession session = request.getSession(true);
 //			if(oldSession != null){
@@ -58,23 +61,25 @@ public class LoginCommand implements Command {
 //			}else{
 //				session.setAttribute("lang", "ru");
 //			}
-            HttpSession session = request.getSession(true);
+                HttpSession session = request.getSession(true);
 
-            session.setAttribute("user", user.getEmail());
-            LOG.trace("Set the session attribute 'user' = " + user.getEmail());
+                session.setAttribute("user", user.getEmail());
+                LOG.trace("Set the session attribute 'user' = " + user.getEmail());
 
-            session.setAttribute("userRole", user.getRole());
-            LOG.trace("Set the session attribute: 'userRole' = "
-                    + user.getRole());
+                session.setAttribute("userRole", user.getRole());
+                LOG.trace("Set the session attribute: 'userRole' = "
+                        + user.getRole());
 
 //            session.setAttribute("lang", user.getLang());
 //            LOG.trace("Set the session attribute 'lang' = " + user.getLang());
 
-            LOG.info("User: " + user + " logged as " + user.getRole());
+                LOG.info("User: " + user + " logged as " + user.getRole());
 
-            result = Path.REDIRECT_TO_PROFILE;
+                result = Path.REDIRECT_TO_PROFILE;
+            }
+            return result;
+        } catch (DaoException e) {
+            throw new CommandException(e);
         }
-        return result;
-
     }
 }

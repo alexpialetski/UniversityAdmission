@@ -5,6 +5,7 @@ import by.epam.pialetskialiaksei.entity.ClientSubject;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Mark;
 import by.epam.pialetskialiaksei.entity.Subject;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultySubjectBuilder;
 import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
@@ -53,7 +54,7 @@ public class MarkDAO extends SqlDAO {
     private final static Logger LOG = LogManager
             .getLogger(MarkDAO.class);
 
-    public void create(Mark entity) {
+    public void create(Mark entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -75,8 +76,9 @@ public class MarkDAO extends SqlDAO {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create a mark", e);
+            throw new DaoException("Can not create a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not create a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -84,7 +86,7 @@ public class MarkDAO extends SqlDAO {
         }
     }
 
-    public void create(Mark[] entity) {
+    public void create(Mark[] entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -100,15 +102,16 @@ public class MarkDAO extends SqlDAO {
                 pstmt.execute();
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create a mark", e);
+            throw new DaoException("Can not create a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not create a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void update(Mark entity) {
+    public void update(Mark entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -122,10 +125,11 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a mark", e);
+            throw new DaoException("Can not update a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not update a mark", e);
         } finally {
 //            close(connection);
             releaseConnection(connection);
@@ -133,7 +137,7 @@ public class MarkDAO extends SqlDAO {
         }
     }
 
-    public void update(Mark[] entity) {
+    public void update(Mark[] entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -150,16 +154,16 @@ public class MarkDAO extends SqlDAO {
             }
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a mark", e);
+            throw new DaoException("Can not update a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not update a mark", e);
         } finally {
-//            close(connection);
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void delete(Mark entity) {
+    public void delete(Mark entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -168,17 +172,18 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete a mark", e);
+            throw new DaoException("Can not delete a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not delete a mark", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public Mark find(int entityPK) {
+    public Mark find(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -195,17 +200,18 @@ public class MarkDAO extends SqlDAO {
                 mark = (Mark) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a mark", e);
+            throw new DaoException("Can not find a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not find a mark", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
         return mark;
     }
 
-    public List<Mark> findAll() {
+    public List<Mark> findAll() throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -221,17 +227,18 @@ public class MarkDAO extends SqlDAO {
                 users.add((Mark) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all marks", e);
+            throw new DaoException("Can not find all marks", e);
+//            rollback(connection);
+//            LOG.error("Can not find all marks", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
             close(rs);
         }
         return users;
     }
 
-    public List<ClientSubject> findMarks(Entrant entrant){
+    public List<ClientSubject> findMarks(Entrant entrant) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -253,8 +260,9 @@ public class MarkDAO extends SqlDAO {
                 clientSubjects.add(clientSubject);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all not faculty clientSubjects", e);
+            throw new DaoException("Can not find all not faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -263,7 +271,7 @@ public class MarkDAO extends SqlDAO {
         return clientSubjects;
     }
 
-    public List<Subject> findSubjectsOfEntrant(Entrant entrant){
+    public List<Subject> findSubjectsOfEntrant(Entrant entrant) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -281,8 +289,9 @@ public class MarkDAO extends SqlDAO {
                 subjects.add(subject);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all not faculty clientSubjects", e);
+            throw new DaoException("Can not find all not faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -295,38 +304,4 @@ public class MarkDAO extends SqlDAO {
     protected SetBuilder createBuilder() {
         return new MarkBuilder();
     }
-
-//    public Mark findDiplomaMark(Entrant entrant){
-//        Connection connection = null;
-//        PreparedStatement pstmt = null;
-//        ResultSet rs = null;
-//        Mark mark = null;
-//        try {
-//            connection = getConnection();
-//            pstmt = connection.prepareStatement(FIND_DIPLOMA_MARK);
-//            pstmt.setInt(1, entrant.getId());
-//            rs = pstmt.executeQuery();
-////            connection.commit();
-//            if (!rs.next()) {
-//                mark = null;
-//            } else {
-//                mark = unmarshal(rs);
-//            }
-//        } catch (SQLException e) {
-//            rollback(connection);
-//            LOG.error("Can not find a mark", e);
-//        } finally {
-//            releaseConnection(connection);
-//            close(pstmt);
-//            close(rs);
-//        }
-//        return mark;
-//    }
-
-    /**
-     * Unmarshals database Mark record to Mark java instance.
-     *
-     * @param rs - ResultSet record in Mark table
-     * @return Mark instance of this record
-     */
 }

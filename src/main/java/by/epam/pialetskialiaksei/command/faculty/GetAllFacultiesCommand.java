@@ -5,6 +5,8 @@ import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.FacultyEntrant;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
@@ -36,11 +38,17 @@ public class GetAllFacultiesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-        List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
+        try {
+            FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+            List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
-        return new Gson().toJson(facultyInfoModels);
+            return new Gson().toJson(facultyInfoModels);
+
+        } catch (
+                DaoException e) {
+            throw new CommandException("Exception in ApplyFacultyCommand", e);
+        }
     }
 }

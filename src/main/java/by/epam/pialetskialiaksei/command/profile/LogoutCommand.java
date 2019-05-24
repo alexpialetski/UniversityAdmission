@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.util.ActionType;
 
 import org.apache.logging.log4j.LogManager;
@@ -28,9 +30,8 @@ public class LogoutCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Start executing Command");
-
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();

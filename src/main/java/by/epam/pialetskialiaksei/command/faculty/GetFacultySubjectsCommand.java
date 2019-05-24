@@ -5,6 +5,8 @@ import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
@@ -24,16 +26,20 @@ public class GetFacultySubjectsCommand implements Command {
     private static final Logger LOG = LogManager.getLogger(EditFacultyCommand.class);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        String result = null;
+        try {
+            String result = null;
 
-        int facultyId = Integer.parseInt(request.getParameter("facultyId"));
-        LOG.trace("Get the request parameter: 'facultyId' = "
-                + facultyId);
+            int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+            LOG.trace("Get the request parameter: 'facultyId' = "
+                    + facultyId);
 
-        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-        List<Subject> subjects = facultySubjectDAO.findById(facultyId);
-        return new Gson().toJson(subjects);
-}
+            FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
+            List<Subject> subjects = facultySubjectDAO.findById(facultyId);
+            return new Gson().toJson(subjects);
+        } catch (DaoException e) {
+            throw new CommandException("Exception in ApplyFacultyCommand", e);
+        }
+    }
 }

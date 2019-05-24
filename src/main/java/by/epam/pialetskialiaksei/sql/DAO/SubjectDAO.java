@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.*;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
 import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
@@ -50,7 +51,7 @@ public class SubjectDAO extends SqlDAO {
             .getLogger(SubjectDAO.class);
 
 
-    public void create(Subject entity) {
+    public void create(Subject entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -69,8 +70,9 @@ public class SubjectDAO extends SqlDAO {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create a subject", e);
+            throw new DaoException("Can not create a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not create a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -79,7 +81,7 @@ public class SubjectDAO extends SqlDAO {
 
     }
 
-    public void update(Subject entity) {
+    public void update(Subject entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -93,15 +95,16 @@ public class SubjectDAO extends SqlDAO {
             pstmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a subject", e);
+            throw new DaoException("Can not update a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not update a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void update(Subject[] entity) {
+    public void update(Subject[] entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -115,15 +118,16 @@ public class SubjectDAO extends SqlDAO {
             }
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a subject", e);
+            throw new DaoException("Can not update a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not update a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void delete(Subject entity) {
+    public void delete(Subject entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -134,15 +138,16 @@ public class SubjectDAO extends SqlDAO {
             pstmt.execute();
             connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete a subject", e);
+            throw new DaoException("Can not delete a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not delete a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void delete(int[] entity) {
+    public void delete(int[] entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -154,15 +159,16 @@ public class SubjectDAO extends SqlDAO {
             }
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete a subject", e);
+            throw new DaoException("Can not delete a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not delete a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public Subject find(int entityPK) {
+    public Subject find(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -181,8 +187,9 @@ public class SubjectDAO extends SqlDAO {
                 subject = (Subject) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a subject", e);
+            throw new DaoException("Can not find a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not find a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -191,7 +198,7 @@ public class SubjectDAO extends SqlDAO {
         return subject;
     }
 
-    public Subject find(String subjectName) {
+    public Subject find(String subjectName) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -212,8 +219,9 @@ public class SubjectDAO extends SqlDAO {
                 subject = (Subject) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a subject", e);
+            throw new DaoException("Can not find a subject", e);
+//            rollback(connection);
+//            LOG.error("Can not find a subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -222,7 +230,7 @@ public class SubjectDAO extends SqlDAO {
         return subject;
     }
 
-    public List<Subject> findAll() {
+    public List<Subject> findAll() throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -238,8 +246,9 @@ public class SubjectDAO extends SqlDAO {
                 subjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all clientSubjects", e);
+            throw new DaoException("Can not find all clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -248,7 +257,7 @@ public class SubjectDAO extends SqlDAO {
         return subjects;
     }
 
-    public List<Subject> findAllFacultySubjects(Faculty faculty) {
+    public List<Subject> findAllFacultySubjects(Faculty faculty) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -265,8 +274,9 @@ public class SubjectDAO extends SqlDAO {
                 facultySubjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all faculty clientSubjects", e);
+            throw new DaoException("Can not find all faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -275,7 +285,7 @@ public class SubjectDAO extends SqlDAO {
         return facultySubjects;
     }
 
-    public List<Subject> findAllNotFacultySubjects(Faculty faculty) {
+    public List<Subject> findAllNotFacultySubjects(Faculty faculty) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -292,8 +302,9 @@ public class SubjectDAO extends SqlDAO {
                 facultySubjects.add((Subject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all not faculty clientSubjects", e);
+            throw new DaoException("Can not find all not faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -302,7 +313,7 @@ public class SubjectDAO extends SqlDAO {
         return facultySubjects;
     }
 
-    public List<ClientSubject> findMarks(Entrant entrant) {
+    public List<ClientSubject> findMarks(Entrant entrant) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -323,8 +334,9 @@ public class SubjectDAO extends SqlDAO {
                 facultySubjects.add(new ClientSubject(subject, mark));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all not faculty clientSubjects", e);
+            throw new DaoException("Can not find all not faculty clientSubjects", e);
+//            rollback(connection);
+//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

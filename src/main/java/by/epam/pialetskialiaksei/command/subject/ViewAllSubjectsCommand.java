@@ -6,6 +6,8 @@ import by.epam.pialetskialiaksei.entity.ClientSubject;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.ClientSubjectsModel;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
@@ -39,34 +41,38 @@ public class ViewAllSubjectsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        String result = null;
+        try {
+            String result = null;
 
-        HttpSession session = request.getSession(false);
+            HttpSession session = request.getSession(false);
 
-        String role = (String) session.getAttribute("userRole");
+            String role = (String) session.getAttribute("userRole");
 
 // TODO: 18.05.2019 delete client.equals
-        if ("admin".equals(role) || "client".equals(role)) {
-            SubjectDAO subjectDAO = new SubjectDAO();
-            List<Subject> allSubjects = subjectDAO.findAll();
+            if ("admin".equals(role) || "client".equals(role)) {
+                SubjectDAO subjectDAO = new SubjectDAO();
+                List<Subject> allSubjects = subjectDAO.findAll();
 
-            LOG.trace("Set the request attribute: 'allSubjects' = "
-                    + allSubjects);
-            request.setAttribute("allSubjects", allSubjects);
-            Gson gson = new Gson();
+                LOG.trace("Set the request attribute: 'allSubjects' = "
+                        + allSubjects);
+                request.setAttribute("allSubjects", allSubjects);
+                Gson gson = new Gson();
 
-            String subjectsJson = gson.toJson(allSubjects);
-            LOG.trace("Set the request attribute: 'subjectsGson' = "
-                    + subjectsJson);
-            request.setAttribute("subjectsGson", subjectsJson);
+                String subjectsJson = gson.toJson(allSubjects);
+                LOG.trace("Set the request attribute: 'subjectsGson' = "
+                        + subjectsJson);
+                request.setAttribute("subjectsGson", subjectsJson);
 
-            result = Path.FORWARD_SUBJECT_VIEW_ALL_ADMIN;
-        }
+                result = Path.FORWARD_SUBJECT_VIEW_ALL_ADMIN;
+            }
 //		} else if ("client".equals(role)) {
 //			result = Path.REDIRECT_TO_PROFILE;
 //		}
-        return result;
+            return result;
+        } catch (DaoException e) {
+            throw new CommandException(e);
+        }
     }
 }

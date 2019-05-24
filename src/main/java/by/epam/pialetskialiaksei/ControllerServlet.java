@@ -2,6 +2,7 @@ package by.epam.pialetskialiaksei;
 
 import by.epam.pialetskialiaksei.command.CommandManager;
 import by.epam.pialetskialiaksei.command.api.Command;
+import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.util.ActionType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,45 +49,42 @@ public class ControllerServlet extends HttpServlet {
 
         LOGGER.debug("Start processing in Controller");
 
-        // extract command name from the request
         String commandName = request.getParameter("command");
         LOGGER.trace("Request parameter: 'command' = " + commandName);
 
-        // obtain command object by its name
         Command command = CommandManager.get(commandName);
         LOGGER.trace("Obtained 'command' = " + command);
 
-        // execute command and get forward address
-        String path = null;
+        String path;
         try {
-            if(actionType!= ActionType.AJAX) {
+            if (actionType != ActionType.AJAX) {
                 request.getSession().setAttribute("prevCommand", commandName);
             }
             path = command.execute(request, response);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
-        if (path == null) {
-            LOGGER.trace("Path is null");
-            LOGGER.debug("Controller proccessing finished");
-            RequestDispatcher disp = request.getRequestDispatcher(Path.WELCOME_PAGE);
-            disp.forward(request, response);
-        } else {
-            if (actionType == ActionType.GET) {
-                LOGGER.trace("Forward to address = " + path);
+            if (path == null) {
+                LOGGER.trace("Path is null");
                 LOGGER.debug("Controller proccessing finished");
-                RequestDispatcher disp = request.getRequestDispatcher(path);
+                RequestDispatcher disp = request.getRequestDispatcher(Path.WELCOME_PAGE);
                 disp.forward(request, response);
-            } else if (actionType == ActionType.AJAX) {
-                LOGGER.trace("AJAX with json= " + path);
-                LOGGER.debug("Controller proccessing finished");
-                PrintWriter writer = response.getWriter();
-                writer.print(path);
-            } else if (actionType == ActionType.POST) {
-                LOGGER.trace("Redirect to address = " + path);
-                LOGGER.debug("Controller proccessing finished");
-                response.sendRedirect(path);
+            } else {
+                if (actionType == ActionType.GET) {
+                    LOGGER.trace("Forward to address = " + path);
+                    LOGGER.debug("Controller proccessing finished");
+                    RequestDispatcher disp = request.getRequestDispatcher(path);
+                    disp.forward(request, response);
+                } else if (actionType == ActionType.AJAX) {
+                    LOGGER.trace("AJAX with json= " + path);
+                    LOGGER.debug("Controller proccessing finished");
+                    PrintWriter writer = response.getWriter();
+                    writer.print(path);
+                } else if (actionType == ActionType.POST) {
+                    LOGGER.trace("Redirect to address = " + path);
+                    LOGGER.debug("Controller proccessing finished");
+                    response.sendRedirect(path);
+                }
             }
+        }catch(CommandException | Exception e){
+            throw new ServletException(e);
         }
     }
 

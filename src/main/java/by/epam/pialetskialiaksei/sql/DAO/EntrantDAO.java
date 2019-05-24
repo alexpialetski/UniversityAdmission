@@ -4,6 +4,8 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.EntrantBuilder;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
@@ -53,7 +55,7 @@ public class EntrantDAO extends SqlDAO {
     private final static Logger LOG = LogManager
             .getLogger(EntrantDAO.class);
 
-    public void create(Entrant entity) {
+    public void create(Entrant entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -75,8 +77,9 @@ public class EntrantDAO extends SqlDAO {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create an entrant", e);
+//            rollback(connection);
+//            LOG.error("Can not create an entrant", e);
+            throw new DaoException(e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -84,7 +87,7 @@ public class EntrantDAO extends SqlDAO {
         }
     }
 
-    public void update(Entrant entity) {
+    public void update(Entrant entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -103,15 +106,16 @@ public class EntrantDAO extends SqlDAO {
             pstmt.executeUpdate();
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update an entrant", e);
+            throw new DaoException("Can not update an entrant", e);
+//            rollback(connection);
+//            LOG.error("Can not update an entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void delete(Entrant entity) {
+    public void delete(Entrant entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -122,15 +126,16 @@ public class EntrantDAO extends SqlDAO {
             pstmt.execute();
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete an entrant", e);
+            throw new DaoException("Can not delete an entrant", e);
+//            rollback(connection);
+//            LOG.error("Can not delete an entrant", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public Entrant find(int entityPK) {
+    public Entrant find(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -147,8 +152,7 @@ public class EntrantDAO extends SqlDAO {
                 entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find an entrant", e);
+            throw new DaoException("Can not find an entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -157,7 +161,7 @@ public class EntrantDAO extends SqlDAO {
         return entrant;
     }
 
-    public Entrant find(User user) {
+    public Entrant find(User user) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -174,8 +178,7 @@ public class EntrantDAO extends SqlDAO {
                 entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find an entrant", e);
+            throw new DaoException("Can not find an entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -184,7 +187,7 @@ public class EntrantDAO extends SqlDAO {
         return entrant;
     }
 
-    public List<Entrant> findAll() {
+    public List<Entrant> findAll() throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -199,8 +202,7 @@ public class EntrantDAO extends SqlDAO {
 
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all entrants", e);
+            throw new DaoException("Can not find all entrants", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -209,7 +211,7 @@ public class EntrantDAO extends SqlDAO {
         return users;
     }
 
-    public List<Entrant> findAllFacultyEntrants(Faculty faculty) {
+    public List<Entrant> findAllFacultyEntrants(Faculty faculty) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -224,8 +226,9 @@ public class EntrantDAO extends SqlDAO {
                 facultyEntrants.add((Entrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find faculty entrants", e);
+            throw new DaoException("Can not find faculty entrants", e);
+//            rollback(connection);
+//            LOG.error("Can not find faculty entrants", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

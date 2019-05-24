@@ -2,6 +2,7 @@ package by.epam.pialetskialiaksei.sql.DAO;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Mail;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import by.epam.pialetskialiaksei.sql.builder.MailBuilder;
@@ -23,7 +24,7 @@ public class MailDAO extends SqlDAO {
     private final static Logger LOG = LogManager
             .getLogger(MailDAO.class);
 
-    public void create(Mail entity) {
+    public void create(Mail entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -41,8 +42,9 @@ public class MailDAO extends SqlDAO {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create an entrant", e);
+            throw new DaoException("Can not create an email key", e);
+//            rollback(connection);
+//            LOG.error("Can not create an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -50,7 +52,7 @@ public class MailDAO extends SqlDAO {
         }
     }
 
-    public void update(Mail entity) {
+    public void update(Mail entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -65,15 +67,16 @@ public class MailDAO extends SqlDAO {
             pstmt.executeUpdate();
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update an entrant", e);
+            throw new DaoException("Can not update an email key", e);
+//            rollback(connection);
+//            LOG.error("Can not update an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public void delete(Mail entity) {
+    public void delete(Mail entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -84,15 +87,16 @@ public class MailDAO extends SqlDAO {
             pstmt.execute();
 //            connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete an entrant", e);
+            throw new DaoException("Can not delete an email key", e);
+//            rollback(connection);
+//            LOG.error("Can not delete an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    public Mail find(Mail entitie) {
+    public Mail find(Mail entitie) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -111,8 +115,9 @@ public class MailDAO extends SqlDAO {
                 mail = (Mail) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find an mail", e);
+            throw new DaoException("Can not find an mail", e);
+//            rollback(connection);
+//            LOG.error("Can not find an mail", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -126,14 +131,6 @@ public class MailDAO extends SqlDAO {
     protected SetBuilder createBuilder() {
         return new MailBuilder();
     }
-
-    /**
-     * Unmarshals Entrant record in database to Java Entrant instance.
-     *
-     * @param rs - ResultSet record
-     * @return Entrant instance of this record
-     */
-
 }
 
 

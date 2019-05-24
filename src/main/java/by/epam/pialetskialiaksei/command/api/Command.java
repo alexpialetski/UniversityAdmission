@@ -1,5 +1,6 @@
 package by.epam.pialetskialiaksei.command.api;
 
+import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.util.ActionType;
 
 import javax.servlet.ServletException;
@@ -13,7 +14,7 @@ public interface Command{
 
     String execute(HttpServletRequest request,
                                    HttpServletResponse response)
-            throws IOException, ServletException;
+            throws IOException, ServletException, CommandException;
 
 }
 

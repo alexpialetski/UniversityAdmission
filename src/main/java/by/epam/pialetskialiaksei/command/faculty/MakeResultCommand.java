@@ -3,6 +3,8 @@ package by.epam.pialetskialiaksei.command.faculty;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Faculty;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
 import by.epam.pialetskialiaksei.sql.DAO.FacultyDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
@@ -31,16 +33,20 @@ public class MakeResultCommand implements Command {
     @Override
     public String execute(HttpServletRequest request,
                           HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
-        FacultyDAO facultyDAO = new FacultyDAO();
-        List<Faculty> faculties = facultyDAO.findAll();
+        try {
+            FacultyDAO facultyDAO = new FacultyDAO();
+            List<Faculty> faculties = facultyDAO.findAll();
 
-        ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
-        reportSheetDAO.makeResult(faculties);
+            ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+            reportSheetDAO.makeResult(faculties);
 //        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
 //        List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
-        return Path.REDIRECT_TO_PROFILE;
+            return Path.REDIRECT_TO_PROFILE;
+        } catch (DaoException e) {
+            throw new CommandException("Exception in ApplyFacultyCommand", e);
+        }
     }
 }

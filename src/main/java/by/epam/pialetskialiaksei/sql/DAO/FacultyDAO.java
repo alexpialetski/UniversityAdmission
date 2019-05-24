@@ -2,6 +2,7 @@ package by.epam.pialetskialiaksei.sql.DAO;
 
 import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
+import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.FacultyBuilder;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
@@ -65,7 +66,7 @@ public class FacultyDAO extends SqlDAO {
         }
     }
 
-    public void update(Faculty entity) {
+    public void update(Faculty entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -84,8 +85,9 @@ public class FacultyDAO extends SqlDAO {
             pstmt.executeUpdate();
             connection.commit();
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not update a faculty", e);
+            throw new DaoException("Can not update a faculty", e);
+//            rollback(connection);
+//            LOG.error("Can not update a faculty", e);
         } finally {
             close(connection);
             close(pstmt);
@@ -111,7 +113,7 @@ public class FacultyDAO extends SqlDAO {
         }
     }
 
-    public Faculty find(int entityPK) {
+    public Faculty find(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -129,8 +131,9 @@ public class FacultyDAO extends SqlDAO {
                 faculty = (Faculty) createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a faculty", e);
+            throw new DaoException("Can not find a faculty", e);
+//            rollback(connection);
+//            LOG.error("Can not find a faculty", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -139,7 +142,7 @@ public class FacultyDAO extends SqlDAO {
         return faculty;
     }
 
-    public Faculty find(String facultyName) {
+    public Faculty find(String facultyName) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -159,8 +162,9 @@ public class FacultyDAO extends SqlDAO {
                 faculty = (Faculty)createBuilder().build(rs);
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find a faculty", e);
+            throw new DaoException("Can not find a faculty", e);
+//            rollback(connection);
+//            LOG.error("Can not find a faculty", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -169,7 +173,7 @@ public class FacultyDAO extends SqlDAO {
         return faculty;
     }
 
-    public List<Faculty> findAll() {
+    public List<Faculty> findAll() throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -185,8 +189,9 @@ public class FacultyDAO extends SqlDAO {
                 faculties.add((Faculty) createBuilder().build(rs));
             }
         } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not find all faculties", e);
+            throw new DaoException("Can not find all faculties", e);
+//            rollback(connection);
+//            LOG.error("Can not find all faculties", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -199,11 +204,4 @@ public class FacultyDAO extends SqlDAO {
     protected SetBuilder createBuilder() {
         return new FacultyBuilder();
     }
-
-    /**
-     * Unmarshals database Faculty record to java Faculty instance.
-     *
-     * @param rs - ResultSet record
-     * @return Faculty instance of this record
-     */
 }

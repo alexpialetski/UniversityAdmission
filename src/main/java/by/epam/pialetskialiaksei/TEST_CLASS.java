@@ -35,16 +35,16 @@ public class TEST_CLASS {
 //        Gson gson = new Gson();
 //        System.out.println(gson.toJson(subjectsModel));
 //    }
-    public static void main(String[] args) {
-        User user = new UserDAO().find("arcu@sodalesnisi.edu","7068");
-        EntrantDAO entrantDAO = new EntrantDAO();
-        Entrant entrant = entrantDAO.find(user);
-
-        MarkDAO subjectDAO = new MarkDAO();
-        List<ClientSubject> all_subjects = new ArrayList<>(subjectDAO.findMarks(entrant));
-
-        ClientSubjectsModel subjectsModel = new ClientSubjectsModel(all_subjects);
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(subjectsModel));
-    }
+//    public static void main(String[] args) {
+//        User user = new UserDAO().find("arcu@sodalesnisi.edu","7068");
+//        EntrantDAO entrantDAO = new EntrantDAO();
+//        Entrant entrant = entrantDAO.find(user);
+//
+//        MarkDAO subjectDAO = new MarkDAO();
+//        List<ClientSubject> all_subjects = new ArrayList<>(subjectDAO.findMarks(entrant));
+//
+//        ClientSubjectsModel subjectsModel = new ClientSubjectsModel(all_subjects);
+//        Gson gson = new Gson();
+//        System.out.println(gson.toJson(subjectsModel));
+//    }
 }
