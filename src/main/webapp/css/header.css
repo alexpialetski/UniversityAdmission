@@ -25,7 +25,8 @@
 }
 
 .header .default:hover {
-    background-color: #ddd;
+    /*background-color: #ddd;*/
+    background-color: #00ff006e;
     color: black;
 }
 

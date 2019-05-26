@@ -196,7 +196,7 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_MARK);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             if (rs.next()) {
 //                mark = unmarshal(rs);
 //                mark = markBuilder.build(rs);
@@ -214,7 +214,7 @@ public class MarkDAO extends SqlDAO {
         return mark;
     }
 
-    public Mark findEntrantSubject(int entityPK) throws DaoException {
+    public Mark findEntrantMark(int entityPK) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -224,7 +224,7 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ENTRANT_SUBJECT);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-            connection.commit();
+//            connection.commit();
             if (rs.next()) {
 //                mark = unmarshal(rs);
 //                mark = markBuilder.build(rs);

@@ -87,7 +87,8 @@ public class ViewProfileCommand implements Command {
                 ClientSubjectsModel jsonMarks = new ClientSubjectsModel(marks);
                 Gson gson = new Gson();
 //            request.setAttribute("jsonMarks", gson.toJson(jsonMarks).toString());
-                request.setAttribute("jsonMarks", gson.toJson(jsonMarks));
+                ClientSubject[] buf = marks.toArray(new ClientSubject[marks.size()]);
+                request.setAttribute("jsonMarks", gson.toJson(buf));
                 request.setAttribute("marks", marks);
                 LOG.trace("Set the request attribute: 'marks' = "
                         + marks);

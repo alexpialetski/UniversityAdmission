@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/scrollButton.js"></script>
@@ -22,7 +23,7 @@
         display: inline-block;
     }
 
-    .pag a {
+    .pag span {
         color: black;
         float: left;
         padding: 8px 16px;
@@ -30,12 +31,12 @@
         transition: background-color .3s;
     }
 
-    .pag a.active {
+    .pag span.active {
         background-color: #4CAF50;
         color: white;
     }
 
-    .pag a:hover:not(.active) {
+    .pag span:hover:not(.active) {
         background-color: #ddd;
     }
 </style>
@@ -109,7 +110,7 @@
                         "                        </h3>" +
                         "                    </div>" +
                         "                </div>" +
-                        "                <div id=\"faculty-label\">" +
+                        "                <div class=\"facultyInformation\">" +
                         <c:if test="${sessionScope.lang eq 'ru'}">
                         facultiesGson[i].faculty.infoRu +
                         </c:if>
@@ -198,7 +199,9 @@
                         "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>" +
                         "</form>");
                     // $(element).append(info);
-                    faculties.push(info);
+                        <c:if test="${requestScope.results eq false}">
+                            faculties.push(info);
+                        </c:if>
                     </c:if>
                 }
                 loadPagination();
@@ -277,69 +280,92 @@
         }
     });
 
-    function addPaginationButtons(pagination){
+    function addPaginationButtons(pagination, activeNum) {
         let count = 0;
-        // if (faculties.length % 3 === 0) {
-        //     count = faculties.length / 3;
-        // } else {
-        //     count = Math.floor(faculties.length / 3) + 1;
-        // }
-        (faculties.length%3===0) ? count = faculties.length / 3 : count = Math.floor(faculties.length / 3) + 1;
+        let flexObjects = countFlex(faculties);
+        (flexObjects % 3 === 0) ? count = flexObjects / 3 : count = Math.floor(flexObjects / 3) + 1;
         let pagBar = document.createElement("div");
         pagBar.classList.add("pag");
-        for(let i=0; i<count; i++){
+        for (let i = 0; i < count; i++) {
             let button = document.createElement("span");
-            button.addEventListener(reloadPagination());
+            button.innerText = (i + 1).toString();
+            if (i === activeNum) {
+                button.classList.add("active");
+            }
+            button.addEventListener("click", clickPaginationButton);
             $(pagBar).append(button);
         }
+        $(pagination).append(pagBar);
     }
 
     function loadPagination() {
         let pagination = document.getElementById("pagination");
         pagination.innerHTML = "";
-        addPaginationButtons(pagination);
-        for (let i = 0; i < 3; i++) {
+        addPaginationButtons(pagination, 0);
+        fillPagination(0, 3);
+        addPaginationButtons(pagination, 0);
+    }
+
+    function fillPagination(left, toDisplay) {
+        for (let i = 0; i < faculties.length; i++) {
             if (faculties[i].style.display === "flex") {
-                $(pagination).append(faculties[i]);
+                if (left === 0 && toDisplay !== 0) {
+                    $(pagination).append(faculties[i]);
+                    --toDisplay;
+                } else {
+                    --left;
+                }
             }
         }
     }
 
-    function reloadPagination() {
+    function countFlex(obj) {
+        let counter = 0;
+        for (let i = 0; i < obj.length; i++) {
+            if (faculties[i].style.display === "flex") {
+                ++counter;
+            }
+        }
+        return counter;
+    }
+
+    function clickPaginationButton() {
+        let pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
         let button = event.target;
-        alert(button.innerHTML);
+        let num = button.innerHTML;
+        addPaginationButtons(pagination, parseInt(num-1));
+        let left = (num - 1) * 3;
+        let toDisplay = 3;
+        if ((faculties.length - left) < 3) {
+            toDisplay = faculties.length - left;
+        }
+        fillPagination(left, toDisplay);
+        addPaginationButtons(pagination, parseInt(num-1));
     }
 
     function searchFor(value) {
-        // let elements = document.getElementsByClassName("info");
         let hasOne = false;
-        // for (let i = 0; i < elements.length; i++) {
         for (let i = 0; i < faculties.length; i++) {
-            // let greeting = (elements[i]).getElementsByClassName("greeting")[0];
-            // let name = greeting.getElementsByTagName("h2")[0].innerHTML;
             let name = (faculties[i]).getElementsByClassName("greeting")[0].getElementsByTagName("h2")[0].innerHTML;
             if ((name.toUpperCase()).search((value.toUpperCase())) === -1) {
-                // elements[i].style.display = "none";
                 faculties[i].style.display = "none";
             } else {
-                // elements[i].style.display = "flex";
                 faculties[i].style.display = "flex";
                 hasOne = true;
             }
         }
+        let pagination = $("#pagination");
         if (!hasOne) {
-            // let facultyLabel = document.getElementById("facultyLabel");
-            // let message = document.createElement("h1");
-            // $(message).css("color", "red");
-            // $(message).css("margin-top", "50vh");
-            // $(message).attr("id", "message");
-            // $(message).innerHTML = "No results";
-            // $(message).insertAfter(facultyLabel);
+            $(pagination).hide();
             $("#message").css("display", "inline-block");
         } else {
+            if((pagination).is(":hidden")){
+                $(pagination).show();
+            }
+            loadPagination();
             $("#message").css("display", "none");
         }
-        loadPagination();
     }
 </script>
 </html>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="${pageContext.request.contextPath}/js/jquery-1.11.2.min.js"></script>
     <script src="<c:url value="/js/scrollButton.js"/>"></script>
@@ -161,23 +162,23 @@
                     <input type="number" class="no-spinners" placeholder="<c:out value="${diploma}"></c:out>" disabled>
                 </div>
             </c:if>
-            <%--<c:if test="${empty requestScope.diploma}">--%>
-            <%--<span><b><fmt:message key="profile.view_jsp.label.no_diploma_message"/></b></span>--%>
-            <%--</c:if>--%>
-            <input type="button" id="diploma_cancel" class="btn" style="display: none"
-                   value="<fmt:message key="button.cancel"/>">
-            <input type="button" id="diploma_submit" class="btn" style="display: none"
-                   value="<fmt:message key="button.submit"/>">
-            <input type="button" id="diploma_change" class="btn"
-                   value="<fmt:message key="button.change"/>">
-            <h4 id="errorDiploma" style="display: none"></h4>
+            <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
+                <input type="button" id="diploma_cancel" class="btn" style="display: none"
+                       value="<fmt:message key="button.cancel"/>">
+                <input type="button" id="diploma_submit" class="btn" style="display: none"
+                       value="<fmt:message key="button.submit"/>">
+                <input type="button" id="diploma_change" class="btn"
+                       value="<fmt:message key="button.change"/>">
+                <h4 id="errorDiploma" style="display: none"></h4>
+            </c:if>
         </div>
 
         <div class="info">
             <h2><fmt:message key="profile.view_jsp.label.subjects"/></h2>
+            <ctg:totalScore marks="${requestScope.jsonMarks}" lang="${sessionScope.lang}" diploma="${requestScope.diploma}"/>
             <c:if test="${not empty requestScope.marks}">
                 <div id="entrant_subjects">
-                    <c:forEach var="mark_subject" items="${marks}">
+                    <c:forEach var="mark_subject" items="${requestScope.marks}">
                         <div class="subject-field" id=${mark_subject.subject.id}>
                             <input type="hidden" class="id" id=${mark_subject.subject.id}>
                             <h4>
@@ -195,20 +196,23 @@
                 </div>
                 <div id="all_subjects"></div>
             </c:if>
-            <c:if test="${empty marks}">
+            <c:if test="${empty requestScope.marks}">
                 <div id="entrant_subjects"></div>
                 <div id="all_subjects"></div>
                 <div class="noSubjects">
                     <h1><b><fmt:message key="profile.text.no_subjects_message"/></b></h1>
                 </div>
             </c:if>
-            <input type="button" id="subject_cancel" class="btn" style="display: none"
-                   value="<fmt:message key="button.cancel"/>">
-            <input type="button" id="subject_submit" class="btn" style="display: none"
-                   value="<fmt:message key="button.submit"/>">
-            <input type="button" id="subject_change" class="btn"
-                   value="<fmt:message key="button.change"/>">
-            <h1 id="error"></h1>
+            <%--<c:if test="${requestScope.applied eq false or requestScope.results eq false}}">--%>
+            <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
+                <input type="button" id="subject_cancel" class="btn" style="display: none"
+                       value="<fmt:message key="button.cancel"/>">
+                <input type="button" id="subject_submit" class="btn" style="display: none"
+                       value="<fmt:message key="button.submit"/>">
+                <input type="button" id="subject_change" class="btn"
+                       value="<fmt:message key="button.change"/>">
+                <h1 id="error"></h1>
+            </c:if>
         </div>
     </div>
 </div>
@@ -472,9 +476,8 @@
                 $("#subject_change").show();
             } else {
                 alert("nothing found");
-                let subjects =
-                ${jsonMarks}.
-                clientSubjects;
+                <%--let subjects =${jsonMarks}.clientSubjects;--%>
+                let subjects =${jsonMarks};
                 $("div #entrant_subjects").empty();
                 $("div #all_subjects").empty();
                 for (var i = 0; i < subjects.length; i++) {
@@ -512,9 +515,8 @@
             } else if (!validateMarks(childs)) {
                 $("#error").text("Marks have to be between 0 and 100");
             } else {
-                let s =
-                ${jsonMarks}.
-                clientSubjects;
+                <%--let s =${jsonMarks}.clientSubjects;--%>
+                let s =${jsonMarks};
                 if (compareArrays(childs, s)) {
                     alert("old");
                     subject_cancel_click();
@@ -563,9 +565,8 @@
     }
 
     function makeJsonOfSubjects(subjects) {
-        let mark_id =
-        ${jsonMarks}.
-        clientSubjects
+        <%--let mark_id =${jsonMarks}.clientSubjects--%>
+        let mark_id =${jsonMarks};
         let lengthOfMarks = mark_id.length;
         let obj = [];
         for (let i = 0; i < subjects.length; i++) {

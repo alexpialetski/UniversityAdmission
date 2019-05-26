@@ -2,11 +2,13 @@ package by.epam.pialetskialiaksei.command.profile;
 
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Entrant;
+import by.epam.pialetskialiaksei.entity.FacultyEntrant;
 import by.epam.pialetskialiaksei.entity.Mark;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
+import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import com.google.gson.Gson;
@@ -36,6 +38,12 @@ public class ChangeEntrantSubjectsCommand implements Command {
 
             EntrantDAO entrantDAO = new EntrantDAO();
             Entrant entrant = entrantDAO.find(user);
+
+            FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
+            FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
+            if (facultyEntrant != null) {
+                return "";
+            }
 
             String jsonString = request.getParameter("subjects");
             jsonString = jsonString.replaceAll("\\?", entrant.getId() + "");

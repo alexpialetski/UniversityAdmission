@@ -1,15 +1,12 @@
 package by.epam.pialetskialiaksei.command.subject;
 
-import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.command.profile.LoginCommand;
 import by.epam.pialetskialiaksei.entity.Mark;
-import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.MarkDAO;
 import by.epam.pialetskialiaksei.sql.DAO.SubjectDAO;
-import by.epam.pialetskialiaksei.util.ActionType;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +34,7 @@ public class DeleteSubjectCommand implements Command {
             MarkDAO markDAO = new MarkDAO();
             boolean canDelete = true;
             for(int subjectId: subjectsId){
-                Mark mark = markDAO.findEntrantSubject(subjectId);
+                Mark mark = markDAO.findEntrantMark(subjectId);
                 if(mark == null){
                     canDelete = false;
                     break;

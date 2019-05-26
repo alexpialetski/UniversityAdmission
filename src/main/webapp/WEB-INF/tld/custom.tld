@@ -15,6 +15,26 @@
         </attribute>
     </tag>
     <tag>
+        <name>totalScore</name>
+        <tag-class>by.epam.pialetskialiaksei.tag.TotalScoreTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>marks</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>lang</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>diploma</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
         <name>navbar</name>
         <tag-class>by.epam.pialetskialiaksei.tag.NavbarTag</tag-class>
         <body-content>empty</body-content>
