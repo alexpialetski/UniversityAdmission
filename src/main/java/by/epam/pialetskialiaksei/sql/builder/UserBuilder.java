@@ -44,4 +44,17 @@ public class UserBuilder extends SetBuilder<User> {
         }
         return user;
     }
+
+    public User buildShort(ResultSet rs){
+        User user = new User();
+        try {
+            user.setId(rs.getInt(Fields.USER_FOREIGN_KEY_ID));
+            user.setFirstName(rs.getString(Fields.USER_FIRST_NAME));
+            user.setLastName(rs.getString(Fields.USER_LAST_NAME));
+            user.setEmail(rs.getString(Fields.USER_EMAIL));
+        } catch (SQLException e) {
+            LOG.error("Can not unmarshal result set to user", e);
+        }
+        return user;
+    }
 }

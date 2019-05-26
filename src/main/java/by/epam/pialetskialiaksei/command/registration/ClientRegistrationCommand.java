@@ -73,10 +73,7 @@ public class ClientRegistrationCommand implements Command {
                 entrantDAO.create(entrant);
                 LOG.trace("Entrant record created: " + entrant);
 
-//			MailUtils.sendConfirmationEmail(user);
-//			request.setAttribute("successfulMessage",
-//					"Your account was created. Check your email and confirm your registration.");
-                result = Path.WELCOME_PAGE;
+                result = Path.LOGIN_PAGE;
             }
             return result;
         } catch (DaoException e) {

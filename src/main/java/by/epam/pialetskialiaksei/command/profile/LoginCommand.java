@@ -63,7 +63,8 @@ public class LoginCommand implements Command {
 //			}
                 HttpSession session = request.getSession(true);
 
-                session.setAttribute("user", user.getEmail());
+//                session.setAttribute("user", user.getEmail());
+                session.setAttribute("email", user.getEmail());
                 LOG.trace("Set the session attribute 'user' = " + user.getEmail());
 
                 session.setAttribute("userRole", user.getRole());

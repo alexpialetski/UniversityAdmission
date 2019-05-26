@@ -83,13 +83,13 @@ public class FacultyDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-            connection.commit();
+//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a faculty", e);
 //            rollback(connection);
 //            LOG.error("Can not update a faculty", e);
         } finally {
-            close(connection);
+            releaseConnection(connection);
             close(pstmt);
         }
     }

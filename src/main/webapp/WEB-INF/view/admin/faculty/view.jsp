@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/scrollButton.js"></script>
@@ -21,7 +22,7 @@
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
 
-<%@ include file="/WEB-INF/view/jspf/navbar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
 <%--<ctg:navbar/>--%>
 <div id="container">
     <div class="content">
@@ -38,10 +39,9 @@
                 <%--<fmt:message key="faculty.label.temp"/>--%>
             <%--</div>--%>
         <%--</div>--%>
-        <div class="info" style="border: solid 2pt rgb(255, 0, 200);">
+        <div class="info">
             <div><h2><fmt:message key="profile.view_jsp.label.profile"/></h2></div>
-            <form id="faculty" class="form-input" method="POST" action="controller"
-                  style="border: solid 5pt rgb(100, 100, 100);">
+            <form id="faculty" class="form-input" method="POST" action="controller">
                 <input type="hidden" name="command" value="editFaculty">
                 <%--<input type="hidden" name="type" value="post">--%>
                 <input type="hidden" name="facultyId" value="<c:out value="${requestScope.facultyInfo.faculty.id}"></c:out>">
@@ -67,7 +67,7 @@
             </form>
         </div>
 
-        <div class="info" style="border: solid 2pt rgb(255, 0, 200);">
+        <div class="info">
             <p><fmt:message
                     key="faculty.view_jsp.label.preliminary_subjects"/></p>
             <div id="seats">
@@ -92,11 +92,11 @@
             <h4 id="errorSeats" style="display: none"></h4>
         </div>
 
-        <div class="info" style="border: solid 2pt rgb(255, 0, 200);">
+        <div class="info">
             <h2><fmt:message key="profile.view_jsp.label.subjects"/></h2>
             <%--<c:if test="${not empty facultyInfo.subjects}">--%>
                 <%--<input id="entrant_subjectss" type="hidden" value=${marks}>--%>
-                <div id="faculty_subjects" style="border: solid 2pt rgb(0, 255, 21);">
+                <div id="faculty_subjects">
                     <%--<c:forEach var="subject" items="${facultyInfo.subjects}">--%>
                         <%--<div class="subject-field"--%>
                              <%--id=${subject.id} style="display:flex;justify-content:space-between;">--%>
@@ -350,7 +350,7 @@
                 let button_delete = document.createElement("input");
                 $(button_delete)
                     .attr("type", "button")
-                    .css("border", "solid 2pt rgb(100, 100, 100)")
+                    // .css("border", "solid 2pt rgb(100, 100, 100)")
                     .attr("class", "subject_delete_button")
                     .attr("id", $(entrant_subjects[i].getElementsByClassName("id")).attr("id"));
                 button_delete.addEventListener("click", subject_delete_button_click);
@@ -374,7 +374,7 @@
 
                     $(element).css("display", "flex");
                     $(element).css("flex-direction", "column");
-                    $(element).css("border", "solid 2pt rgb(100, 100, 100)");
+                    // $(element).css("border", "solid 2pt rgb(100, 100, 100)");
 
                     let clientSubjects = subjectsGson.subjects;
                     for (var i = 0; i < clientSubjects.length; i++) {

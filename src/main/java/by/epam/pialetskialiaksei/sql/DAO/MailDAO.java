@@ -30,17 +30,29 @@ public class MailDAO extends SqlDAO {
         ResultSet rs = null;
         try {
             connection = getConnection();
-            pstmt = connection.prepareStatement(CREATE_MAIL_RECORD,
-                    PreparedStatement.RETURN_GENERATED_KEYS);
-            int counter = 1;
-            pstmt.setString(counter++, entity.getMailId());
-            pstmt.setString(counter++, entity.getKey());
-            pstmt.execute();
-//            connection.commit();
-            rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                entity.setId(rs.getInt(Fields.GENERATED_KEY));
+            pstmt = connection.prepareStatement(FIND_MAIL_RECORD);
+            pstmt.setString(1, entity.getMailId());
+            rs = pstmt.executeQuery();
+            if(rs==null || !rs.next()){
+                pstmt = connection.prepareStatement(CREATE_MAIL_RECORD);
+                int counter = 1;
+                pstmt.setString(counter++, entity.getMailId());
+                pstmt.setString(counter++, entity.getKey());
+                pstmt.execute();
+            }else{
+                pstmt = connection.prepareStatement(UPDATE_MAIL_RECORD);
+                pstmt.setString(1, entity.getKey());
+                pstmt.setString(2, entity.getMailId());
+                pstmt.executeUpdate();
+                close(rs);
             }
+//            pstmt = connection.prepareStatement(CREATE_MAIL_RECORD);
+
+//            connection.commit();
+//            rs = pstmt.getGeneratedKeys();
+//            if (rs.next()) {
+//                entity.setId(rs.getInt(Fields.GENERATED_KEY));
+//            }
         } catch (SQLException e) {
             throw new DaoException("Can not create an email key", e);
 //            rollback(connection);
@@ -48,7 +60,7 @@ public class MailDAO extends SqlDAO {
         } finally {
             releaseConnection(connection);
             close(pstmt);
-            close(rs);
+//            close(rs);
         }
     }
 
@@ -107,11 +119,7 @@ public class MailDAO extends SqlDAO {
             pstmt.setString(1, entitie.getMailId());
             rs = pstmt.executeQuery();
 //            connection.commit();
-            if (!rs.next()) {
-                mail = null;
-            } else {
-//                mail = unmarshal(rs);
-//                mail = entrantBuilder.build(rs);
+            if (rs.next()) {
                 mail = (Mail) createBuilder().build(rs);
             }
         } catch (SQLException e) {

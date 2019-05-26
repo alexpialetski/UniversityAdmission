@@ -25,4 +25,16 @@ public class FormOfEducationBuilder extends SetBuilder<FormOfEducation> {
         }
         return formOfEducation;
     }
+
+    public FormOfEducation buildForeign(ResultSet rs) {
+        FormOfEducation formOfEducation = new FormOfEducation();
+        try {
+            formOfEducation.setId(rs.getInt(Fields.FORM_OF_EDUCATION_ID_FOREIGN));
+            formOfEducation.setFormEng(rs.getString(Fields.FORM_OF_EDUCATION_FORM_ENG));
+            formOfEducation.setFormRu(rs.getString(Fields.FORM_OF_EDUCATION_FORM_RU));
+        } catch (SQLException e) {
+            LOG.error("Can not unmarshal ResultSet to report sheet", e);
+        }
+        return formOfEducation;
+    }
 }

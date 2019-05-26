@@ -57,8 +57,6 @@
 	margin: 0;
 }
 
-/* Footer Center */
-
 .footer-distributed .footer-center{
 	width: 35%;
 }
@@ -100,9 +98,6 @@
 	text-decoration: none;;
 }
 
-
-/* Footer Right */
-
 .footer-distributed .footer-right{
 	width: 20%;
 }
@@ -143,8 +138,6 @@
 	margin-right: 3px;
 	margin-bottom: 5px;
 }
-
-/* If you don't want the footer to be responsive, remove these media queries */
 
 @media (max-width: 880px) {
 

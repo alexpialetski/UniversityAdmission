@@ -83,8 +83,19 @@ public class ControllerServlet extends HttpServlet {
                     response.sendRedirect(path);
                 }
             }
-        }catch(CommandException | Exception e){
-            throw new ServletException(e);
+        }catch(CommandException e){
+            LOGGER.error("Exception is:", e);
+            request.setAttribute("errorMessage", "Something going wrong, go to start - page");
+            response.sendRedirect(Path.ERROR_PAGE);
+//            e.printStackTrace();
+//            request.setAttribute("errorMessage", e.getMessage());
+//            request.getRequestDispatcher(Path.ERROR_PAGE).forward(request, response);
+        }catch (Exception e){
+            LOGGER.error("Exception is:", e);
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Something going wrong, go to start - page");
+//            request.getRequestDispatcher(Path.ERROR_PAGE).forward(request, response);
+            response.sendRedirect(Path.ERROR_PAGE);
         }
     }
 

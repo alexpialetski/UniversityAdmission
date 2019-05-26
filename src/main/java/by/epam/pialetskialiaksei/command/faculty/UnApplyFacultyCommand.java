@@ -42,7 +42,7 @@ public class UnApplyFacultyCommand implements Command {
         LOG.debug("Command execution starts");
         try {
             HttpSession session = request.getSession(false);
-            String userEmail = String.valueOf(session.getAttribute("user"));
+            String userEmail = String.valueOf(session.getAttribute("email"));
             UserDAO userDAO = new UserDAO();
             User user = userDAO.find(userEmail);
 

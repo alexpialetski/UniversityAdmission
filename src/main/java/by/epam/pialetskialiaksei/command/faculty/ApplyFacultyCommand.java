@@ -44,7 +44,7 @@ public class ApplyFacultyCommand implements Command {
                 return "{\"error\":\"You are already applied\"}";
             } else {
                 HttpSession session = request.getSession(false);
-                String userEmail = String.valueOf(session.getAttribute("user"));
+                String userEmail = String.valueOf(session.getAttribute("email"));
                 UserDAO userDAO = new UserDAO();
                 User user = userDAO.find(userEmail);
 

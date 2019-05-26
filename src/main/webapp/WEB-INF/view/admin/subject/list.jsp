@@ -12,92 +12,47 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="js/jquery-1.11.2.min.js"></script>
     <script src="js/scrollButton.js"></script>
     <script src="js/sideBar.js"></script>
-    <style>
-        table {
-            width: 100%;
-        }
-
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-        }
-
-        table#t01 tr:nth-child(even) {
-            background-color: #eee;
-        }
-
-        table#t01 tr:nth-child(odd) {
-            background-color: #fff;
-        }
-
-        table#t01 th {
-            background-color: black;
-            color: white;
-        }
-    </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
-
-<%@ include file="/WEB-INF/view/jspf/navbar.jspf" %>
-<%--<ctg:navbar/>--%>
+<%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
 <div id="container">
     <div class="content">
-        <div class="header">
-            <fmt:message key="subject.list_jsp.label.subjects_list"/>
-        </div>
-        <div class="info">
+        <h2><fmt:message key="subjects.text.subjects"/></h2>
+        <div class="info"></div>
 
-        </div>
         <input type="button" id="subject_change" class="btn"
-               value="<fmt:message key="profile.view_jsp.button.change"/>">
+               value="<fmt:message key="button.change"/>">
         <input type="button" id="subject_submit" class="btn" style="display: none"
-               value="<fmt:message key="profile.view_jsp.button.submit"/>">
+               value="<fmt:message key="button.submit"/>">
         <input type="button" id="subject_cancel" class="btn" style="display: none"
-               value="<fmt:message key="profile.view_jsp.button.cancel"/>">
+               value="<fmt:message key="button.cancel"/>">
 
         <div class="info">
             <div id="addSubject">
-                <%--<form id="subject" class="form-input" method="POST" action="controller"--%>
-                <%--style="border: solid 5pt rgb(100, 100, 100); display: none">--%>
-                <%--<input type="hidden" name="command" value="addSubject">--%>
-                <%--<input type="text" class="input-field" name="nameEng"--%>
-                <%--placeholder="Subject name"--%>
-                <%--required="required">--%>
-                <%--<input type="text" class="input-field" name="nameRu"--%>
-                <%--placeholder="Subject nameru"--%>
-                <%--required="required">--%>
-                <%--<input type="submit" class="btn">--%>
-                <%--</form>--%>
             </div>
             <div class="info">
                 <input type="button" id="subject_add" class="btn"
-                       value="<fmt:message key="subject.list_jsp.button.add"/>">
+                       value="<fmt:message key="button.add"/>">
                 <input type="button" id="subject_add_submit" class="btn"
-                       value="<fmt:message key="profile.view_jsp.button.submit"/>" style="display: none">
+                       value="<fmt:message key="button.submit"/>" style="display: none">
                 <input type="button" id="subject_add_cancel" class="btn"
-                       value="<fmt:message key="profile.view_jsp.button.cancel"/>" style="display: none">
+                       value="<fmt:message key="button.cancel"/>" style="display: none">
             </div>
         </div>
         <div class="info">
             <input type="button" id="subject_delete" class="btn"
-                   value="<fmt:message key="subject.list_jsp.button.delete"/>">
+                   value="<fmt:message key="button.delete"/>">
             <input type="button" id="subject_delete_submit" class="btn"
-                   value="<fmt:message key="profile.view_jsp.button.delete.submit"/>" style="display: none">
+                   value="<fmt:message key="button.delete.submit"/>" style="display: none">
             <input type="button" id="subject_delete_cancel" class="btn"
-                   value="<fmt:message key="profile.view_jsp.button.delete.cancel"/>" style="display: none">
-            <%--<a href="controller?command=addSubject"><fmt:message--%>
-            <%--key="subject.list_jsp.button.add"/></a>--%>
+                   value="<fmt:message key="button.delete.cancel"/>" style="display: none">
         </div>
     </div>
     <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
@@ -109,15 +64,14 @@
         updateSubjects();
 
         function updateSubjects() {
-            // let parent = document.querySelector('.info:first');
             let parent = $(".info:first");
             let table = document.createElement('table');
             table.id = 't01';
             $(table).append("<tr>" +
-                "        <th>Subject id</th>\n" +
-                "        <th>Subject ru</th>\n" +
-                "        <th>Subject eng</th>\n" +
-                "        <th class=\"hidden\" style=\"display:none\">Delete</th> " +
+                "        <th><fmt:message key="subjects.text.subject_id"/></th>\n" +
+                "        <th><fmt:message key="subjects.text.subject_ru"/></th>\n" +
+                "        <th><fmt:message key="subjects.text.subject_eng"/></th>\n" +
+                "        <th class=\"hidden\" style=\"display:none\"><fmt:message key="subjects.text.delete"/></th> " +
                 "    </tr>");
             let subjectsJson = ${subjectsGson};
             for (let i = 0; i < subjectsJson.length; ++i) {
@@ -140,7 +94,6 @@
         $("#subject_change").click(subject_change_click);
 
         function subject_change_click() {
-            alert("Dont subject_change_click!!");
             $("#subject_submit").show();
             $("#subject_cancel").show();
             $("#subject_change").hide();
@@ -150,8 +103,6 @@
         $("#subject_cancel").click(subject_cancel_click);
 
         function subject_cancel_click() {
-            alert("Dont subject_cancel_click!!");
-            // let parent = document.querySelector('.info:first');
             $('.info:first').empty();
             updateSubjects();
             $("#subject_submit").hide();
@@ -162,13 +113,9 @@
         $("#subject_submit").click(subject_submit_click);
 
         function subject_submit_click() {
-            <%--let s = ${subjectsGson};--%>
-
-            // let childs = document.getElementsByTagName('td input');
             let childs = $('td input');
             let jsonString = makeJsonOfSubjects(childs);
 
-            // alert("new");
             $.ajax({
                 url: 'controller',
                 type: 'get',
@@ -178,12 +125,12 @@
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-                    alert("success");
+                    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
                     document.location.reload(true)
-                    // subject_cancel_click();
                 },
+
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert("error");
+                    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
                     var errorMsg = 'Ajax request failed: ' + xhr.responseText;
                     $('#content').html(errorMsg);
                 }
@@ -199,13 +146,12 @@
             let parent = document.getElementById("addSubject");
             $("#subject").show();
             $(parent).prepend('<form class="form-input" method="POST" action="controller">' +
-                '<h4>Fill all fields, pls</h4>' +
+                '<h4><fmt:message key="subjects.text.fill_fields"/></h4>' +
                 '<input type=\"hidden\" name=\"command\" value=\"addSubject\">' +
                 '<input class=\"input-field\" type=\"text\" name=\"nameEng\" \n' +
-                '                    placeholder=\"Subject name\" required=\"required\">' +
+                '                    placeholder=\"<fmt:message key="subjects.text.subject_eng"/>\" required=\"required\">' +
                 '<input class=\"input-field\" type=\"text\" name=\"nameRu\"\n' +
-                '                    placeholder=\"Имя предмета\" required=\"required\">' +
-                // '<input type=\"submit\" class=\"btn\" value="Click">' +
+                '                    placeholder=\"<fmt:message key="subjects.text.subject_ru"/>\" required=\"required\">' +
                 '</form>');
         }
 
@@ -260,12 +206,11 @@
                         "Content-Type": "application/json; charset=utf-8"
                     },
                     success: function (data) {
-                        alert("success");
+                        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
                         document.location.reload(true)
-                        // subject_cancel_click();
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        alert("error");
+                        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
                         var errorMsg = 'Ajax request failed: ' + xhr.responseText;
                         $('#content').html(errorMsg);
                     }
@@ -291,45 +236,22 @@
 
         }
 
-
-        function appendColumn() {
-            var tbl = document.getElementById('my-table'), // table reference
-                i;
-            tbl.rows.item()
-            // open loop for each row and append cell
-            for (i = 0; i < tbl.rows.length; i++) {
-                createCell(tbl.rows[i].insertCell(tbl.rows[i].cells.length), i, 'col');
-            }
-        }
-
-        function createCell(cell, text, style) {
-            var div = document.createElement('div'), // create DIV element
-                txt = document.createTextNode(text); // create text node
-            div.appendChild(txt);                    // append text node to the DIV
-            div.setAttribute('class', style);        // set DIV class attribute
-            div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
-            cell.appendChild(div);                   // append DIV to the table cell
-        }
-
         function makeJsonOfSubjects(subjects) {
             let counter = 1;
             let obj = [];
 
             let subject = {};
             for (let i = 0; i < subjects.length; i++) {
-                // let subjectInput = subjectsRows[i].innerHTML;
-                // let value = getValueOfInput(subjects[i].innerHTML);
                 let value = getValueOfInput(subjects[i]);
                 if (counter === 1) {
                     subject.id = value;
                 } else if (counter === 2) {
                     subject.nameRu = value;
-                } else if (counter === 3){
+                } else if (counter === 3) {
                     subject.nameEng = value;
                     obj.push(subject);
                     subject = {};
-                    // counter = 0
-                }else{
+                } else {
                     counter = 0;
                 }
                 ++counter;
@@ -344,25 +266,6 @@
                 return $(element).val();
             }
         }
-
-        function compareArrays(array1, array2) {
-            if (!(array1.length === array2.length)) {
-                return false;
-            }
-            for (let i = 0; i < array1.length; i++) {
-                let mark1 = parseInt(getValueOfInput(array1[i].getElementsByClassName('mark')));
-                let mark2 = array2[i].mark.mark;
-                let subjectid1 = parseInt(array1[i].getAttribute('id'));
-                let subjectid2 = array2[i].subject.id;
-                let b1 = mark1 !== mark2;
-                let b2 = subjectid1 !== subjectid2;
-                if (mark1 !== mark2 || subjectid1 !== subjectid2) {
-                    return false
-                }
-            }
-            return true;
-        }
-
     });
 </script>
 

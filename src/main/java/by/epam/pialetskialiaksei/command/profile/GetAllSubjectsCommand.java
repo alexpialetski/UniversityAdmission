@@ -34,7 +34,7 @@ public class GetAllSubjectsCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, CommandException {
         try {
             HttpSession session = request.getSession(false);
-            String userEmail = String.valueOf(session.getAttribute("user"));
+            String userEmail = String.valueOf(session.getAttribute("email"));
 
             UserDAO userDAO = new UserDAO();
             User user = userDAO.find(userEmail);

@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ViewRegistrationCommand implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.setAttribute("errorMessage", "Heyyooo");
         return Path.FORWARD_CLIENT_REGISTRATION_PAGE;
     }
 }

@@ -44,7 +44,6 @@ public class ConnectionPoolManager {
             password = properties.getProperty("password");
             maxPoolCapacity = Integer.parseInt(properties.getProperty("maxPoolCapacity"));
             initialPoolCapacity = Integer.parseInt(properties.getProperty("initialPoolCapacity"));
-//           connectionPool = BasicConnectionPool.create(URL, USER, PASSWORD);
             connectionPool = BasicConnectionPool.create(url, user, password, initialPoolCapacity, maxPoolCapacity);
         } catch (SQLException e) {
             throw new ConnectionPoolException("Driver manager failed to connect to DataBase", e);

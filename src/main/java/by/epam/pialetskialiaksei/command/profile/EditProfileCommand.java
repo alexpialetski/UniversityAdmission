@@ -31,7 +31,8 @@ public class EditProfileCommand implements Command {
 
             String firstName = request.getParameter("first-name");
             String lastName = request.getParameter("last-name");
-            String email = request.getParameter("email");
+//            String email = request.getParameter("email");
+            String email = (String) session.getAttribute("email");
 
             UserDAO userDAO = new UserDAO();
             User user = userDAO.find(email);

@@ -2,6 +2,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class EntrantReportSheet{
 
+	private int userId;
 	private int facultyId;
 	private String firstName;
 	private String lastName;
@@ -13,7 +14,8 @@ public class EntrantReportSheet{
 	public EntrantReportSheet() {
 	}
 
-	public EntrantReportSheet(int facultyId, String firstName, String lastName, String email, short preliminarySum, short diplomaMark, short totalSum) {
+	public EntrantReportSheet(int userId, int facultyId, String firstName, String lastName, String email, short preliminarySum, short diplomaMark, short totalSum) {
+		this.userId = userId;
 		this.facultyId = facultyId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -21,6 +23,14 @@ public class EntrantReportSheet{
 		this.preliminarySum = preliminarySum;
 		this.diplomaMark = diplomaMark;
 		this.totalSum = totalSum;
+	}
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
 	public int getFacultyId() {
@@ -82,7 +92,8 @@ public class EntrantReportSheet{
 	@Override
 	public String toString() {
 		return "EntrantReportSheet{" +
-				"facultyId=" + facultyId +
+				"userId=" + userId +
+				", facultyId=" + facultyId +
 				", firstName='" + firstName + '\'' +
 				", lastName='" + lastName + '\'' +
 				", email='" + email + '\'' +

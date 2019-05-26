@@ -2,6 +2,10 @@ package by.epam.pialetskialiaksei.util.validation;
 
 import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
 import by.epam.pialetskialiaksei.entity.User;
+import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.ConnectionPoolException;
+import by.epam.pialetskialiaksei.sql.connection.BasicConnectionPool;
+import by.epam.pialetskialiaksei.sql.connection.api.ConnectionPool;
 import by.epam.pialetskialiaksei.util.RandomString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +13,12 @@ import org.apache.logging.log4j.Logger;
 import javax.jws.soap.SOAPBinding;
 import javax.mail.*;
 import javax.mail.internet.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;
@@ -22,7 +30,7 @@ public class MailSender {
 
     private static final Session SESSION = init();
 
-    public static void main(String[] args) throws UnsupportedEncodingException, MessagingException {
+    public static void main(String[] args) throws UnsupportedEncodingException, MessagingException, CommandException {
         User user = new User();
         user.setEmail("surnamen746@gmail.com");
         user.setFirstName("Yoy");
@@ -53,7 +61,7 @@ public class MailSender {
         return session;
     }
 
-    public static String sendConfirmationEmail(User user) throws MessagingException, UnsupportedEncodingException {
+    public static String sendConfirmationEmail(User user) throws MessagingException, UnsupportedEncodingException, CommandException {
 
 //        MailSender javaEmail = new MailSender();
         String token = new RandomString().nextString();
@@ -128,7 +136,7 @@ public class MailSender {
         msg.setContent(multipart);
     }
 
-    private static MimeMessage emailMessage(User user, String token) throws AddressException, MessagingException, UnsupportedEncodingException {
+    private static MimeMessage emailMessage(User user, String token) throws  MessagingException, UnsupportedEncodingException {
         String[] toEmails = {"surnamen746@gmail.com"};
 //        String emailSubject = "Test email subject";
 //        String emailBody = "This is an email sent by <b>//howtodoinjava.com</b>.";
@@ -156,23 +164,25 @@ public class MailSender {
         return emailMessage;
     }
 
-    private static void sendEmail(User user, String token) throws AddressException, MessagingException, UnsupportedEncodingException {
-        /**
-         * Sender's credentials
-         * */
-        String fromUser = "universityadmission488@gmail.com";
-        String fromUserEmailPassword = "password1234password";
+    private static void sendEmail(User user, String token) throws MessagingException, UnsupportedEncodingException, CommandException {
+        String fromUser = null;
+        String fromUserEmailPassword = null;
+        String emailHost = null;
+        String protocol = null;
 
-        String emailHost = "smtp.gmail.com";
-        Transport transport = SESSION.getTransport("smtp");
+        try (InputStream input = MailSender.class.getClassLoader().getResourceAsStream(("mail.properties"))) {
+            Properties prop = new Properties();
+            prop.load(input);
+            fromUser = prop.getProperty("from");
+            fromUserEmailPassword = prop.getProperty("password");
+            emailHost = prop.getProperty("emailHost");
+            protocol = prop.getProperty("protocol");
+        } catch (IOException e) {
+            throw new CommandException("can't load property file", e);
+        }
+        Transport transport = SESSION.getTransport(protocol);
         transport.connect(emailHost, fromUser, fromUserEmailPassword);
-        /**
-         * Draft the message
-         * */
         MimeMessage emailMessage = emailMessage(user, token);
-        /**
-         * Send the mail
-         * */
         transport.sendMessage(emailMessage, emailMessage.getAllRecipients());
         transport.close();
         System.out.println("Email sent successfully.");

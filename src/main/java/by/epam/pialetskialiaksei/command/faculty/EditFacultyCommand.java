@@ -44,7 +44,7 @@ public class EditFacultyCommand implements Command {
 
         } catch (
                 DaoException e) {
-            throw new CommandException("Exception in ApplyFacultyCommand", e);
+            throw new CommandException(e);
         }
     }
 }

@@ -17,28 +17,51 @@
     <script src="js/scrollButton.js"></script>
     <script src="js/sideBar.js"></script>
 </head>
+<style>
+    .pag {
+        display: inline-block;
+    }
+
+    .pag a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+    }
+
+    .pag a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .pag a:hover:not(.active) {
+        background-color: #ddd;
+    }
+</style>
 <body>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
-
-<%@ include file="/WEB-INF/view/jspf/navbar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
 <%--<ctg:navbar/>--%>
+
 <div id="container">
     <div class="content">
-        <div class="search" style="display: flex; justify-content: center; left: 100%;">
-            <h4>Search:</h4>
-            <input type="text" oninput="searchFor(this.value)" placeholder="Search faculty"
-                   style=" background: #4e9af1;display: inline-block;width: 50%;margin-left: 5%;">
-            <input type="button" value="search!" style="width: 10%;">
+        <div class="search">
+            <h4><fmt:message key="faculties.text.search"/></h4>
+            <input type="text" oninput="searchFor(this.value)" placeholder="<fmt:message key="faculties.ph.search"/>">
         </div>
-        <h1 id="facultyLabel"><fmt:message key="faculty.label.faculties"/></h1>
-        <h1 id="message" style="color: red; margin-top: 25%; display: none;">No results</h1>
+        <h1 id="facultyLabel"><fmt:message key="faculties.text.faculties"/></h1>
+        <div id="pagination" class="info" style="align-items: center;">
+        </div>
+        <h1 id="message"><fmt:message key="faculties.text.no_results"/></h1>
     </div>
 
     <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
 </div>
 </body>
 <script>
+    let faculties = [];
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(window).scrollTop() > 10) {
@@ -61,31 +84,29 @@
                 "Content-Type": "application/json; charset=utf-8"
             },
             success: function (data) {
-
                 let facultiesGson = $.parseJSON(data);
-
-                // let element = document.getElementById('all_subjects');
                 let element = $('.content');
                 for (let i = 0; i < facultiesGson.length; i++) {
                     let info = document.createElement("div");
-                    $(info).attr("class", "info");
-                    $(info).attr("id", facultiesGson[i].faculty.id);
+                    $(info)
+                        .attr("class", "info")
+                        .attr("id", facultiesGson[i].faculty.id)
+                        .css("display", "flex")
+                        .css("width", "80%");
                     // $(element).append("<div class=\"info\">\n" +
                     $(info).append(
-                        "                <div class=\"photo-greeting\" style=\"border: solid 2pt rgb(0, 4, 255);\">" +
-                        // "                    <img src=\"images/faculty/faculty-image.png\" class=\"photo\">" +
-                        // "                    <img src=\"images/faculty/"+facultiesGson[i].faculty.image+"\" class=\"photo\">" +
+                        "                <div class=\"image-greeting\">" +
                         "                    <div class=\"greeting\" style=\" text-align: center;\">" +
-                        "                        <h1>" + <c:if test="${sessionScope.lang eq 'ru'}">
+                        "                        <h2>" + <c:if test="${sessionScope.lang eq 'ru'}">
                         facultiesGson[i].faculty.nameRu +
                         </c:if>
                         <c:if test="${sessionScope.lang eq 'en'}">
                         facultiesGson[i].faculty.nameEng +
                         </c:if>
-                        "                        </h1><br>" +
-                        "<h1>" +
-                        "                            <fmt:message key="faculty.label.information"/>" +
-                        "                        </h1>" +
+                        "                        </h2><br>" +
+                        "<h3>" +
+                        "                            <fmt:message key="faculties.text.information"/>" +
+                        "                        </h3>" +
                         "                    </div>" +
                         "                </div>" +
                         "                <div id=\"faculty-label\">" +
@@ -98,7 +119,6 @@
                         "                </div>");
                     let subjects = document.createElement("div");
                     $(subjects).attr("id", "entrant_subjects");
-                    $(subjects).css("border", "solid 2pt rgb(0, 255, 21)");
 
                     for (let j = 0; j < facultiesGson[i].subjects.length; j++) {
                         $(subjects).append("<div class=\"subject-field\"\n" +
@@ -115,27 +135,24 @@
                             "                        </div>");
                     }
                     $(info).append(subjects);//
-                    // $(element).append( subjects);
-                    // $(element).append(
-                    <%--<c:if test="${requestScope.results eq false}">--%>
                     <c:choose>
                     <c:when test="${requestScope.results eq false}">
-                    <c:if test="${userRole eq 'client'}">
+                    <c:if test="${sessionScope.userRole eq 'client'}">
                     <c:choose>
-                    <c:when test="${not empty applied}">
+                    <c:when test="${not empty requestScope.applied}">
                     let facultyId = facultiesGson[i].faculty.id;
-                    if (facultyId === ${applied}) {
+                    if (facultyId === ${requestScope.applied}) {
                         let button_apply = document.createElement("input");
                         $(button_apply).attr("type", "button");
                         $(button_apply).attr("class", "btn");
-                        $(button_apply).val("<fmt:message key="faculty.button.pick_up_documents"/>");
+                        $(button_apply).val("<fmt:message key="faculties.button.pick_up_documents"/>");
                         button_apply.addEventListener("click", unapply_button_click);
                         $(info).append(button_apply);
                     } else {
                         let button_unapply = document.createElement("input");
                         $(button_unapply).attr("type", "button");
                         $(button_unapply).attr("class", "btn");
-                        $(button_unapply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
+                        $(button_unapply).val("<fmt:message key="faculties.button.apply"/>");
                         button_unapply.addEventListener("click", apply_button_click);
                         $(info).append(button_unapply);
                     }
@@ -144,55 +161,59 @@
                     let button_apply = document.createElement("input");
                     $(button_apply).attr("type", "button");
                     $(button_apply).attr("class", "btn");
-                    $(button_apply).val("<fmt:message key="faculty.view_jsp.button.apply"/>");
+                    $(button_apply).val("<fmt:message key="faculties.button.apply"/>");
                     button_apply.addEventListener("click", apply_button_click);
                     $(info).append(button_apply);
                     </c:otherwise>
                     </c:choose>
-                    </c:if>
                     <c:choose>
                     <c:when test="${not empty applied}">
                     if (facultyId === ${applied}) {
                         // $(element).prepend(info);
-                        $(info).insertAfter("#facultyLabel");
+                        // $(info).insertAfter("#facultyLabel");
+                        faculties.unshift(info);
                     } else {
-                        $(element).append(info);
+                        // $(element).append(info);
+                        faculties.push(info);
                     }
                     </c:when>
                     <c:otherwise>
-                    $(element).append(info);
+                    // $(element).append(info);
+                    // $(element).append(info);
+                    faculties.push(info);
                     </c:otherwise>
                     </c:choose>
+                    </c:if>
                     </c:when>
-                    <c:otherwise>$(element).append(info);
+                    <c:otherwise>
+                    // $(element).append(info);
+                    faculties.push(info);
                     </c:otherwise>
                     </c:choose>
-                    <%--</c:if>--%>
 
-                    <c:if test="${userRole eq 'admin'}">
-                    $(info).append("<form type='GET' action='controller'>" +
+                    <c:if test="${sessionScope.userRole eq 'admin'}">
+                    $(info).append("<form method='GET' action='controller'>" +
                         "<input type='submit' class='btn' value='Change'>" +
                         "<input type='hidden' name='command' value='viewFaculty'>" +
-                        "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>  " +
+                        "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>" +
                         "</form>");
-                    $(element).append(info);
+                    // $(element).append(info);
+                    faculties.push(info);
                     </c:if>
-                    // $(info).append("<a href='controller?command=viewFaculty&facultyId'>");
                 }
-
-
+                loadPagination();
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
                 var errorMsg = 'Ajax request failed: ' + xhr.responseText;
                 $('#content').html(errorMsg);
             }
         });
 
-
         function apply_button_click() {
-            alert("apply_button_click!!");
             <c:choose>
-            <c:when test="${not empty applied}">
+            <c:when test="${not empty requestScope.applied}">
+            <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
             alert("you are already applied");
             </c:when>
             <c:otherwise>
@@ -210,14 +231,14 @@
                 success: function (data) {
                     let dataJson = JSON.parse(data);
                     if (dataJson.error === 'none') {
-                        alert("successful");
                         $("#facultiesHeader").click();
                     } else {
+                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
                         alert("Cant apply:" + dataJson.error);
-                        // document.location.reload(true);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
+                    <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
                     var errorMsg = 'Ajax request failed: ' + xhr.responseText;
                     $('#content').html(errorMsg);
                 }
@@ -241,31 +262,68 @@
                 },
                 success: function (data) {
                     if (data === 'error') {
-                        alert("cant apply");
+                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
+                        alert("cant unapply");
                     } else {
-                        alert("successful");
+                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
                         $("#facultiesHeader").click();
-                        // document.location.reload(true);
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    var errorMsg = 'Ajax request failed: ' + xhr.responseText;
+                    <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
                     $('#content').html(errorMsg);
                 }
             });
         }
     });
 
+    function addPaginationButtons(pagination){
+        let count = 0;
+        // if (faculties.length % 3 === 0) {
+        //     count = faculties.length / 3;
+        // } else {
+        //     count = Math.floor(faculties.length / 3) + 1;
+        // }
+        (faculties.length%3===0) ? count = faculties.length / 3 : count = Math.floor(faculties.length / 3) + 1;
+        let pagBar = document.createElement("div");
+        pagBar.classList.add("pag");
+        for(let i=0; i<count; i++){
+            let button = document.createElement("span");
+            button.addEventListener(reloadPagination());
+            $(pagBar).append(button);
+        }
+    }
+
+    function loadPagination() {
+        let pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+        addPaginationButtons(pagination);
+        for (let i = 0; i < 3; i++) {
+            if (faculties[i].style.display === "flex") {
+                $(pagination).append(faculties[i]);
+            }
+        }
+    }
+
+    function reloadPagination() {
+        let button = event.target;
+        alert(button.innerHTML);
+    }
+
     function searchFor(value) {
-        let elements = document.getElementsByClassName("info");
+        // let elements = document.getElementsByClassName("info");
         let hasOne = false;
-        for (let i = 0; i < elements.length; i++) {
-            let greeting = (elements[i]).getElementsByClassName("greeting")[0];
-            let name = greeting.getElementsByTagName("h1")[0].innerHTML;
+        // for (let i = 0; i < elements.length; i++) {
+        for (let i = 0; i < faculties.length; i++) {
+            // let greeting = (elements[i]).getElementsByClassName("greeting")[0];
+            // let name = greeting.getElementsByTagName("h2")[0].innerHTML;
+            let name = (faculties[i]).getElementsByClassName("greeting")[0].getElementsByTagName("h2")[0].innerHTML;
             if ((name.toUpperCase()).search((value.toUpperCase())) === -1) {
-                elements[i].style.display = "none";
+                // elements[i].style.display = "none";
+                faculties[i].style.display = "none";
             } else {
-                elements[i].style.display = "flex";
+                // elements[i].style.display = "flex";
+                faculties[i].style.display = "flex";
                 hasOne = true;
             }
         }
@@ -281,6 +339,7 @@
         } else {
             $("#message").css("display", "none");
         }
+        loadPagination();
     }
 </script>
 </html>

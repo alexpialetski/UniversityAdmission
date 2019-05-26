@@ -1,10 +1,10 @@
 .header {
     overflow: hidden;
     background-color: #f1f1f1;
-    padding: 20px 10px;
+    padding: 20px 10px 5px 10px;
 }
 
-.header .form{
+.header .form {
     float: left;
 }
 
@@ -39,8 +39,14 @@
     display: flex;
 }
 
-.header input{
-    border:none;
+.header input {
+    border: none;
+}
+
+.language-icon {
+    max-height: 16px;
+    width: auto;
+    margin: 0 5px;
 }
 
 @media screen and (max-width: 600px) {

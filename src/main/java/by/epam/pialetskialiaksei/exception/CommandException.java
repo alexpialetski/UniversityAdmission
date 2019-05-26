@@ -19,4 +19,9 @@ public class CommandException extends Throwable {
     public CommandException(Throwable cause) {
         super(cause);
     }
+
+    @Override
+    public String getMessage() {
+        return "CommandException: " + super.getMessage();
+    }
 }

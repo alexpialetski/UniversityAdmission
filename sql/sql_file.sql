@@ -212,7 +212,7 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `university_admission`.`mail` ;
 
 CREATE TABLE `university_admission`.`mail` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `mailId` VARCHAR(45) NOT NULL,
   `key` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id`),
@@ -229,6 +229,7 @@ USE `university_admission`;
 CREATE  OR REPLACE VIEW university_admission.`faculties_report_sheet` AS
     SELECT
        `facultyId`,
+       university_admission.user.id as User_idUser,
        university_admission.user.first_name,
        university_admission.user.last_name,
        university_admission.user.email,
@@ -243,7 +244,7 @@ CREATE  OR REPLACE VIEW university_admission.`faculties_report_sheet` AS
            university_admission.entrant ON `entrantId` = university_admission.entrant.id
                   INNER JOIN
            university_admission.user ON university_admission.entrant.User_idUser = university_admission.user.id
-    ORDER BY `total_sum`, university_admission.faculty.id DESC;
+    ORDER BY `total_sum` DESC, university_admission.faculty.id;
 
 
 
@@ -264,29 +265,26 @@ CREATE  OR REPLACE VIEW `entrant_marks_sum` AS
     GROUP BY faculty_entrants.Faculty_idFaculty, entrantId;
 
 
---          getBudgetEntrants
 DROP PROCEDURE IF EXISTS `getBudgetEntrants`;
 CREATE PROCEDURE `getBudgetEntrants`(faculty_id INT, numberOfSeats INT)
 BEGIN
   DECLARE numberOfRecords INT DEFAULT 0;
   SELECT COUNT(*) INTO numberOfRecords FROM `faculties_report_sheet` where faculties_report_sheet.facultyId = faculty_id;
   if numberOfRecords > numberOfSeats then
-    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
-                                            total_sum, form_id)
-    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 1 AS form_id
+    INSERT INTO university_admission.result(User_idUser, faculty_id, form_id)
+    SELECT User_idUser, facultyId, 1 AS form_id
     FROM faculties_report_sheet
     WHERE faculties_report_sheet.facultyId = faculty_id
     ORDER BY faculties_report_sheet.total_sum DESC LIMIT numberOfSeats;
   end if;
-  if numberOfRecords <= numberOfSeats then
-    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
-                                            total_sum, form_id)
-    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 1 AS form_id
+  if numberOfRecords <= numberOfSeats THEN
+    INSERT INTO university_admission.result(User_idUser, faculty_id, form_id)
+    SELECT User_idUser, facultyId, 1 AS form_id
     FROM faculties_report_sheet
     WHERE faculties_report_sheet.facultyId = faculty_id
     ORDER BY faculties_report_sheet.total_sum DESC;
   end if;
-END
+END;
 
 
 --          getNotBudgetEntrants
@@ -298,14 +296,13 @@ BEGIN
   SELECT COUNT(*) INTO numberOfRecords FROM `faculties_report_sheet` where faculties_report_sheet.facultyId = faculty_id;
   if numberOfRecords > numberOfBudgetSeats then
     set variable = numberOfSeats - numberOfBudgetSeats;
-    INSERT INTO university_admission.result(faculty_id, first_name, last_name, email, preliminary_sum, diplomaMark,
-                                            total_sum, form_id)
-    SELECT facultyId, first_name, last_name, email, preliminary_sum, diplomaMark, total_sum, 2 AS form_id
+    INSERT INTO university_admission.result(User_idUser, faculty_id, form_id)
+    SELECT User_idUser, facultyId, 2 AS form_id
     FROM faculties_report_sheet
     WHERE faculties_report_sheet.facultyId = faculty_id
     ORDER BY faculties_report_sheet.total_sum DESC LIMIT variable offset numberOfBudgetSeats;
   end if;
-END
+END;
 
 
 --          getScore
@@ -319,29 +316,61 @@ BEGIN
     set variable = numberOfSeats - 1;
     SELECT total_sum from faculties_report_sheet where faculties_report_sheet.facultyId = faculty_id order by faculties_report_sheet.total_sum desc limit 1 offset variable;
   end if;
-END
+END;
+
+--      result
+
+DROP TABLE IF EXISTS `university_admission`.`result` ;
 
 CREATE TABLE IF NOT EXISTS `university_admission`.`result` (
+  `User_idUser` INT(11) NOT NULL,
   `faculty_id` INT(11) NOT NULL,
-  `first_name` VARCHAR(45) NOT NULL,
-  `last_name` VARCHAR(45) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `preliminary_sum` INT(11) NOT NULL,
-  `diplomaMark` INT(11) NULL DEFAULT NULL,
-  `total_sum` INT(11) NULL DEFAULT NULL,
-  `form_id` INT NOT NULL,
-  PRIMARY KEY (`form_id`),
+  `form_id` INT(11) NOT NULL,
+  INDEX `fk_result_formOfEducation1` (`form_id` ASC) VISIBLE,
+  INDEX `fk_result_user1_idx` (`User_idUser` ASC) VISIBLE,
+  INDEX `fk_result_faculty1_idx` (`faculty_id` ASC) VISIBLE,
   CONSTRAINT `fk_result_formOfEducation1`
     FOREIGN KEY (`form_id`)
-    REFERENCES `mydb`.`formOfEducation` (`id`)
+    REFERENCES `university_admission`.`formofeducation` (`id`),
+  CONSTRAINT `fk_result_user1`
+    FOREIGN KEY (`User_idUser`)
+    REFERENCES `university_admission`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_result_faculty1`
+    FOREIGN KEY (`faculty_id`)
+    REFERENCES `university_admission`.`faculty` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
+DEFAULT CHARACTER SET = utf8;
+
+--
+DROP TABLE IF EXISTS `university_admission`.`result` ;
+
+CREATE TABLE IF NOT EXISTS `university_admission`.`result` (
+  `User_idUser` INT(11) NOT NULL,
+  `faculty_id` INT(11) NOT NULL,
+  `form_id` INT(11) NOT NULL,
+  INDEX `fk_result_formOfEducation1` (`form_id` ASC) VISIBLE,
+  INDEX `fk_result_user1_idx` (`User_idUser` ASC) VISIBLE,
+  CONSTRAINT `fk_result_formOfEducation1`
+    FOREIGN KEY (`form_id`)
+    REFERENCES `university_admission`.`formofeducation` (`id`),
+  CONSTRAINT `fk_result_user1`
+    FOREIGN KEY (`User_idUser`)
+    REFERENCES `university_admission`.`user` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+--
+
+DROP TABLE IF EXISTS `university_admission`.`formOfEducation` ;
 
 CREATE TABLE IF NOT EXISTS `university_admission`.`formOfEducation` (
   `id` INT NOT NULL,
   `formRu` VARCHAR(45) NOT NULL,
   `formEng` VARCHAR(45) NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
+ENGINE = InnoDB;

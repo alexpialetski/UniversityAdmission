@@ -50,7 +50,10 @@ public class MarkDAO extends SqlDAO {
                                                             "       university_admission.subject.name_eng as Subject_name_eng\n" +
                                                             "FROM university_admission.mark\n" +
                                                             "       inner join university_admission.subject on mark.Subject_idSubject = subject.id\n" +
-                                                            "WHERE university_admission.mark.Entrant_idEntrant = ?;";
+                                                            "WHERE university_admission.mark.Entrant_idEntrant = ? LIMIT 3;";
+    private static final String FIND_ENTRANT_SUBJECT = "SELECT mark.id, mark.Subject_idSubject, mark.Entrant_idEntrant, mark.value\n" +
+                                                        "FROM university_admission.mark\n" +
+                                                        "WHERE university_admission.mark.Subject_idSubject = ? LIMIT 1;";
     private final static Logger LOG = LogManager
             .getLogger(MarkDAO.class);
 
@@ -191,6 +194,34 @@ public class MarkDAO extends SqlDAO {
         try {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_MARK);
+            pstmt.setInt(1, entityPK);
+            rs = pstmt.executeQuery();
+            connection.commit();
+            if (rs.next()) {
+//                mark = unmarshal(rs);
+//                mark = markBuilder.build(rs);
+                mark = (Mark) createBuilder().build(rs);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Can not find a mark", e);
+//            rollback(connection);
+//            LOG.error("Can not find a mark", e);
+        } finally {
+            releaseConnection(connection);
+            close(pstmt);
+            close(rs);
+        }
+        return mark;
+    }
+
+    public Mark findEntrantSubject(int entityPK) throws DaoException {
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        Mark mark = null;
+        try {
+            connection = getConnection();
+            pstmt = connection.prepareStatement(FIND_ENTRANT_SUBJECT);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
             connection.commit();

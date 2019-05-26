@@ -1,5 +1,6 @@
 package by.epam.pialetskialiaksei.command;
 
+import by.epam.pialetskialiaksei.command.admin.ViewResultCommand;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.command.faculty.*;
 import by.epam.pialetskialiaksei.command.profile.*;
@@ -24,11 +25,11 @@ public class CommandManager {
         commands.put("viewWelcome", new ViewWelcomeCommand());
         commands.put("viewProfile", new ViewProfileCommand());
         commands.put("client_registration", new ClientRegistrationCommand());
-        commands.put("admin_registration", new AdminRegistrationCommand());
+        commands.put("adminRegistration", new AdminRegistrationCommand());
         commands.put("view_registration", new ViewRegistrationCommand());
         commands.put("editProfile", new EditProfileCommand());
         commands.put("getOtherSubjects", new GetOtherSubjectsCommand());
-        commands.put("changeSubjects", new ChangeSubjectsCommand());
+        commands.put("changeSubjects", new ChangeEntrantSubjectsCommand());
         commands.put("changeFacultySubjects", new ChangeFacultySubjectsCommand());
         commands.put("changeDiploma", new ChangeDiplomaCommand());
         commands.put("logout", new LogoutCommand());
@@ -48,6 +49,8 @@ public class CommandManager {
         commands.put("editFaculty", new EditFacultyCommand());
         commands.put("makeResult", new MakeResultCommand());
         commands.put("deleteResults", new DeleteResultsCommand());
+        commands.put("viewCurrentScore", new ViewCurrentScoreCommand());
+        commands.put("viewResults", new ViewResultCommand());
     }
     public static Command get(String commandName) {
         return commands.get(commandName);

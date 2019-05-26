@@ -51,14 +51,14 @@ public class ConfirmRegistrationCommand implements Command {
             Mail dbMail = mailDAO.find(mail);
 
             String result = null;
-            if (dbMail != null && userKey.equals(dbMail.getKey())) {
+            if (dbMail.getKey() != null && userKey.equals(dbMail.getKey())) {
                 mailDAO.delete(mail);
                 return "okay";
             } else {
                 mailDAO.delete(mail);
                 return "false";
             }
-        } catch (DaoException e) {
+        } catch (Exception e) {
             throw new CommandException(e);
         }
     }

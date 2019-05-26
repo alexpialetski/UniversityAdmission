@@ -40,7 +40,7 @@ public class ViewProfileCommand implements Command {
             String result = null;
 
             HttpSession session = request.getSession(false);
-            String userEmail = String.valueOf(session.getAttribute("user"));
+            String userEmail = String.valueOf(session.getAttribute("email"));
 
             UserDAO userDAO = new UserDAO();
             User user = userDAO.find(userEmail);

@@ -1,0 +1,47 @@
+<%--===========================================================================
+SideBar (left area).
+===========================================================================--%>
+<div id=sidebar>
+    <div class="toggle-btn" onclick="toggleSidebar()"><span></span> <span></span> <span></span></div>
+    <ul style="padding-left: 10px;">
+        <li>
+            <form class="form" action="controller" method="GET">
+                <input type="hidden" name="command" value="viewProfile">
+                <input class="default" type="submit" value="<fmt:message key="sideBar.profile"/>">
+            </form>
+        </li>
+        <li>
+            <form class="form" action="controller" method="GET">
+                <input type="hidden" name="command" value="viewFaculties">
+                <input id="facultiesHeader" class="default" type="submit"
+                       value="<fmt:message key="sideBar.faculties"/>">
+            </form>
+        </li>
+        <c:if test="${sessionScope.userRole eq 'admin'}">
+            <li>
+                <form class="form" action="controller" method="GET">
+                    <input type="hidden" name="command" value="viewAllSubjects">
+                        <%--<input id="facultiesHeader" class="default" type="submit"--%>
+                    <input class="default" type="submit"
+                           value="<fmt:message key="sideBar.subjects"/>">
+                </form>
+            </li>
+            <li>
+                <form class="form" action="controller" method="GET">
+                    <input type="hidden" name="command" value="viewResults">
+                        <%--<input id="facultiesHeader" class="default" type="submit"--%>
+                    <input class="default" type="submit"
+                           value="<fmt:message key="sideBar.result"/>">
+                </form>
+            </li>
+        </c:if>
+        <li>
+            <form class="form" action="controller" method="GET">
+                <input type="hidden" name="command" value="viewCurrentScore">
+                <%--<input id="facultiesHeader" class="default" type="submit"--%>
+                <input class="default" type="submit"
+                       value="<fmt:message key="sideBar.score"/>">
+            </form>
+        </li>
+    </ul>
+</div>

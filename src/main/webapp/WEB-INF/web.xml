@@ -15,7 +15,7 @@
 
     <welcome-file-list>
         <!--<welcome-file>welcome.jsp</welcome-file>-->
-        <welcome-file>welcome1.jsp</welcome-file>
+        <welcome-file>welcome.jsp</welcome-file>
     </welcome-file-list>
 
     <!--============================================================ i18n support

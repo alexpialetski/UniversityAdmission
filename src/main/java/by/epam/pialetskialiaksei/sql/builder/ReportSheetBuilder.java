@@ -9,13 +9,14 @@ import org.apache.logging.log4j.Logger;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReporstSheetBuilder extends SetBuilder<EntrantReportSheet> {
+public class ReportSheetBuilder extends SetBuilder<EntrantReportSheet> {
     private final static Logger LOG = LogManager
-            .getLogger(ReporstSheetBuilder.class);
+            .getLogger(ReportSheetBuilder.class);
 
     public EntrantReportSheet build(ResultSet rs) {
         EntrantReportSheet reportSheet = new EntrantReportSheet();
         try {
+            reportSheet.setUserId(rs.getInt(Fields.USER_FOREIGN_KEY_ID));
             reportSheet.setFacultyId(rs.getInt(Fields.REPORT_SHEET_FACULTY_ID));
             reportSheet.setFirstName(rs.getString(Fields.REPORT_SHEET_USER_FIRST_NAME));
             reportSheet.setLastName(rs.getString(Fields.REPORT_SHEET_USER_LAST_NAME));

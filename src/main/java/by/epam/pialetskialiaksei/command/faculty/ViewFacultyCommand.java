@@ -61,19 +61,6 @@ public class ViewFacultyCommand implements Command {
             request.setAttribute("facultyInfo", facultyInfoModel);
             LOG.trace("Set request parameter: 'facultyInfoModel' = "
                     + facultyInfoModel);
-//        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-//        List<User> users = facultyEntrantDAO.findUsers(facultyId);
-//        request.setAttribute("users", users);
-//        LOG.trace("Set request parameter: 'users' = "
-//                + users);
-
-//Entrant entrant = new Entrant();
-////        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-//        FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
-//        if (facultyEntrant != null) {
-//            request.setAttribute("applied", facultyEntrant.getFacultyId());
-//        }
-
             String role = String.valueOf(session.getAttribute("userRole"));
             if ("client".equals(role)) {
 //            result = Path.FORWARD_FACULTY_VIEW_CLIENT;

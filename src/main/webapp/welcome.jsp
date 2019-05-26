@@ -1,44 +1,40 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
+
 <fmt:setLocale value="${sessionScope.lang}"/>
 
-<html  lang="${sessionScope.lang}">
+<html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="css/login-example.css">
-    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <title>Client-view</title>
+    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
+    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
+    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="js/jquery-1.11.2.min.js"></script>
+    <script src="js/scrollButton.js"></script>
+    <script src="js/sideBar.js"></script>
 </head>
 <body>
-<img src="images/bg-login.jpg" class="bg-image" style="background-size: cover;background-position: center;">
-<ul>
-    <li><a href="?sessionLocale=en"><fmt:message key="language.en" /></a></li>
-    <li><a href="?sessionLocale=ru"><fmt:message key="language.ru" /></a></li>
-</ul>
-<%--<c:if test="${not empty param.sessionLocale}">--%>
-    <%--<h1>${sessionScope.lang}</h1>--%>
-<%--</c:if>--%>
-<div class="main-container">
-    <img src="images/login.png" id="overlay">
-    <h1 style="margin-bottom: 0; margin-top: 8%"><fmt:message key="welcome_jsp.label.login" /></h1>
-    <form action="controller" method="POST" class="form-container">
-        <input type="hidden" name="command" value="login">
-        <input type="hidden" name="type" value="POST">
-        <div class="input-form">
-            <input type="email" name="email" placeholder="<fmt:message key="profile.view_jsp.label.email"/>" class="input-field" required>
+
+<%--<ctg:header company="University admission"/>--%>
+<%@ include file="/WEB-INF/view/jspf/header.jspf" %>
+
+<c:if test="${not empty userRole}">
+    <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
+</c:if>
+
+<div id="container">
+    <div class="content">
+        <div style="display: flex; align-content: center; justify-content: center">
+            <h1>Welcome on out website!</h1>
         </div>
-        <div class="input-form">
-            <input type="password" name="password" placeholder="<fmt:message key="welcome_jsp.label.password" />" class="input-field" required>
-        </div>
-        <input type="submit" class="btn" style="background-color:#4e9af1" value="<fmt:message key="welcome_jsp.button.login" />">
-        <c:if test="${not empty message}">
-            <h3>${message}</h3>
-        </c:if>
-    </form>
-    <p><fmt:message key="welcome_jsp.label.not_registered_msg" />
-        <a href="controller?command=view_registration"><fmt:message key="welcome_jsp.label.register_here_msg" />!</a>
-    </p>
+    </div>
 </div>
+<%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
+
 </body>
 </html>

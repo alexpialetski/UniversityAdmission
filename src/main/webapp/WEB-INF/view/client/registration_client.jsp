@@ -75,8 +75,8 @@
 <body>
 <img src="images/bg-login.jpg" class="bg-image">
 <ul>
-    <li><a href="?command=view_registration&sessionLocale=en"><fmt:message key="language.en" /></a></li>
-    <li><a href="?command=view_registration&sessionLocale=ru"><fmt:message key="language.ru" /></a></li>
+    <li><a href="?command=view_registration&sessionLocale=en"><fmt:message key="header.language.en" /></a></li>
+    <li><a href="?command=view_registration&sessionLocale=ru"><fmt:message key="header.language.ru" /></a></li>
 </ul>
 <div id="dialogoverlay"></div>
 <div id="dialogbox">

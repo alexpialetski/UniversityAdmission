@@ -30,7 +30,7 @@ public class ChangeDiplomaCommand implements Command {
         LOG.debug("Start executing Command");
         try {
             HttpSession session = request.getSession(false);
-            String userEmail = String.valueOf(session.getAttribute("user"));
+            String userEmail = String.valueOf(session.getAttribute("email"));
 
             UserDAO userDAO = new UserDAO();
             User user = userDAO.find(userEmail);

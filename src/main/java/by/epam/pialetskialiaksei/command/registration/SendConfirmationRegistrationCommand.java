@@ -4,11 +4,13 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.Entrant;
+import by.epam.pialetskialiaksei.entity.Mail;
 import by.epam.pialetskialiaksei.entity.Role;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.EntrantDAO;
+import by.epam.pialetskialiaksei.sql.DAO.MailDAO;
 import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import by.epam.pialetskialiaksei.util.ActionType;
 import by.epam.pialetskialiaksei.util.MailUtils;
@@ -54,18 +56,21 @@ public class SendConfirmationRegistrationCommand implements Command {
         if (!valid) {
             request.setAttribute("errorMessage", "Please fill all fields!");
             LOG.error("errorMessage: Not all fields are filled");
-            result = Path.REDIRECT_CLIENT_REGISTRATION_PAGE;
+//            result = Path.REDIRECT_CLIENT_REGISTRATION_PAGE;
         } else {
             User user = new User(email, password, firstName, lastName,
                     Role.CLIENT);
-//			MailUtils.sendConfirmationEmail(user);
             try {
-                MailSender.sendConfirmationEmail(user);
-            } catch (MessagingException e) {
-                e.printStackTrace();
+                MailDAO mailDAO = new MailDAO();
+                String key = MailSender.sendConfirmationEmail(user);
+                Mail mail = new Mail();
+                mail.setMailId(email+password);
+                mail.setKey(key);
+                mailDAO.create(mail);
+            } catch (MessagingException | DaoException e) {
+                throw new CommandException(e);
             }
         }
-
         return "";
     }
 }

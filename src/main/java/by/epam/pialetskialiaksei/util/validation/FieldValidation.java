@@ -9,7 +9,8 @@ package by.epam.pialetskialiaksei.util.validation;
 public class FieldValidation {
 
 	private static final String positiveDecimalNumberRegEx = "\\d+";
-	private static final String filledRegex = "^\\p{L}[\\p{L}\\s]*\\p{L}$";
+//	private static final String filledRegex = "^\\p{L}[\\p{L}\\s]*\\p{L}$";
+	private static final String filledRegex = "^\\p{L}[\\p{L}\\s]*";
 	private static final String isLatinWord = "[a-zA-Z ]+";
 	private static final String isCyrillicWord = "[а-яА-Я ]+";
 

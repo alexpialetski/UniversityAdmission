@@ -36,8 +36,13 @@ public class Fields {
     public static final String FACULTY_FOREIGN_NAME_RU = "Faculty_name_ru";
     public static final String FACULTY_FOREIGN_NAME_ENG = "Faculty_name_eng";
 
-    public static final String FORM_OF_EDUCATION_FORM_RU = "form_ru";
-    public static final String FORM_OF_EDUCATION_FORM_ENG = "form_eng";
+    public static final String FORM_OF_EDUCATION_FORM_RU = "formRu";
+    public static final String FORM_OF_EDUCATION_FORM_ENG = "formEng";
+    public static final String FORM_OF_EDUCATION_ID_FOREIGN = "form_id";
+
+    public static final String MARKS_SUM_DIPLOMA_MARK = "diplomaMark";
+    public static final String MARKS_SUM_PRELIMINARY_SUM = "preliminary_sum";
+    public static final String MARKS_SUM_TOTAL_SUM = "total_sum";
 
     public static final String SUBJECT_NAME_RU = "name_ru";
     public static final String SUBJECT_NAME_ENG = "name_eng";

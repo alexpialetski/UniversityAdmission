@@ -33,16 +33,12 @@ public class GetFacultyUsersCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
         try {
-            String result = null;
-
             int facultyId = Integer.parseInt(request.getParameter("facultyId"));
             LOG.trace("Get the request parameter: 'facultyId' = "
                     + facultyId);
 
             ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
             List<EntrantReportSheet> entrants = reportSheetDAO.getReport(facultyId);
-//        FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
-//        List<User> users = facultyEntrantDAO.findUsers(facultyId);
 
             return new Gson().toJson(entrants);
         } catch (DaoException e) {

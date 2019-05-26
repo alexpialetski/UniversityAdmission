@@ -41,8 +41,6 @@ public class MakeResultCommand implements Command {
 
             ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
             reportSheetDAO.makeResult(faculties);
-//        FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
-//        List<FacultyInfoModel> facultyInfoModels = facultySubjectDAO.findAll();
 
             return Path.REDIRECT_TO_PROFILE;
         } catch (DaoException e) {
