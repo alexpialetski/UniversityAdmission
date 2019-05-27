@@ -4,10 +4,10 @@ INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUE
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Lillian","Wilder","dolor.Fusce.mi@liberoatauctor.co.uk",6152,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Kameko","Bush","tortor@inaliquet.net",2556,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Brennan","Irwin","aliquam@quisdiam.edu",5965,1);
-INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Shafira","Barnett","Aliquam.ultrices.iaculis@Nullamvitaediam.net",6577,1);
+INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Shafira","Barnett","iaculis@Nullamvitaediam.net",6577,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Macey","Jefferson","sit.amet.diam@sitamet.edu",1282,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Darth","Vader","vader@gmail.com",1234,2);
-INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Shafira","Barnett","Aliquam.ultrices.iaculis@Nullamvitaediam.net",6577,1);
+INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Shafira","Barnett","Aliquam@Nullamvitaediam.net",6577,1);
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Ulla","Barnett","et.magna.Praesent@aceleifend.org",1675,"client");
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Hector","Guerra","ligula@etipsum.co.uk",1364,"client");
 INSERT INTO `user` (`first_name`,`last_name`,`email`,`password`,`role_id`) VALUES ("Peter","Vega","mauris.sapien@enimdiam.ca",1974,"client");

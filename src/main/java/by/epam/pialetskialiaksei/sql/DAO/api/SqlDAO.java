@@ -29,7 +29,9 @@ public abstract class SqlDAO {
     }
     protected void close(ResultSet resultSet){
         try {
-            resultSet.close();
+            if(resultSet!=null) {
+                resultSet.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

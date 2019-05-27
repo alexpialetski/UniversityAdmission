@@ -4,6 +4,8 @@ public final class Path {
         // pages of Mechanical Engineering
 //        public static final String LOGIN_PAGE = "welcome.jsp";
         public static final String LOGIN_PAGE = "login.jsp";
+        public static final String REDIRECT_LOGIN_PAGE = "controller?command=viewLogin";
+
         public static final String WELCOME_PAGE = "welcome.jsp";
 
         public static final String ERROR_PAGE = "/WEB-INF/client/errorPage.jsp";

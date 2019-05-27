@@ -7,24 +7,19 @@ public class Faculty extends Entity {
     private String nameEng;
     private String infoRu;
     private String infoEng;
-    private byte budgetSeats;
-    private byte totalSeats;
-    private int passingScore;
+    private int budgetSeats;
+    private int totalSeats;
 
     public Faculty() {
     }
 
-    public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, int passingScore, byte budgetSeats, byte totalSeats) {
+    public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, int budgetSeats, int totalSeats) {
         this.nameRu = nameRu;
         this.nameEng = nameEng;
         this.infoRu = infoRu;
         this.infoEng = infoEng;
-        this.passingScore = passingScore;
         this.budgetSeats = budgetSeats;
         this.totalSeats = totalSeats;
-    }
-    public Faculty(String nameRu, String nameEng, String infoRu, String infoEng, byte budgetSeats, byte totalSeats) {
-        this(nameRu, nameEng, infoRu, infoEng, 0, budgetSeats, totalSeats);
     }
 
     public String getNameRu() {
@@ -59,7 +54,7 @@ public class Faculty extends Entity {
         this.infoEng = infoEng;
     }
 
-    public byte getBudgetSeats() {
+    public int getBudgetSeats() {
         return budgetSeats;
     }
 
@@ -67,20 +62,12 @@ public class Faculty extends Entity {
         this.budgetSeats = budgetSeats;
     }
 
-    public byte getTotalSeats() {
+    public int getTotalSeats() {
         return totalSeats;
     }
 
     public void setTotalSeats(byte totalSeats) {
         this.totalSeats = totalSeats;
-    }
-
-    public int getPassingScore() {
-        return passingScore;
-    }
-
-    public void setPassingScore(int passingScore) {
-        this.passingScore = passingScore;
     }
 
     @Override
@@ -92,7 +79,6 @@ public class Faculty extends Entity {
                 ", infoEng='" + infoEng + '\'' +
                 ", budgetSeats=" + budgetSeats +
                 ", totalSeats=" + totalSeats +
-                ", passingScore=" + passingScore +
                 "} " + super.toString();
     }
 }

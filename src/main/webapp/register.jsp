@@ -43,10 +43,10 @@
 <div class="loader" style="display:none"></div>
 
 <div class="alert-boxes">
-    <c:if test="${not empty requestScope.errorMessage}">
+    <c:if test="${not empty sessionScope.errorMessage}">
         <div class="alert warning">
             <span class="closebtn">&times;</span>
-            <strong>Warning!</strong> <c:out value="${requestScope.errorMessage}"/>
+            <strong>Warning!</strong> <c:out value="${sessionScope.errorMessage}"/>
         </div>
     </c:if>
 </div>

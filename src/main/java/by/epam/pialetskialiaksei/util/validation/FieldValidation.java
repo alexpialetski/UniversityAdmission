@@ -69,38 +69,39 @@ public class FieldValidation {
 		return true;
 	}
 
-	public static boolean isPositiveDecimalNumber(String... values) {
+	public static boolean isPositiveDecimalNumber(int... values) {
 
 		if (checkNull(values)) {
 			return false;
 		}
 
-		for (String value : values) {
-			if (!value.matches(positiveDecimalNumberRegEx)) {
+		for (int value : values) {
+//			if (!value.matches(positiveDecimalNumberRegEx)) {
+			if (value > 0) {
 				return false;
 			}
 		}
 		return true;
 	}
 
-	public static boolean isPositiveByte(Number... values) {
+//	public static boolean isPositiveByte(Number... values) {
+//
+//		if (checkNull(values)) {
+//			return false;
+//		}
+//
+//		for (Number value : values) {
+//			Long longValue = value.longValue();
+//
+//			if (longValue.compareTo((long) 0) < 0
+//					|| longValue.compareTo((long) Byte.MAX_VALUE) > 0) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
 
-		if (checkNull(values)) {
-			return false;
-		}
-
-		for (Number value : values) {
-			Long longValue = value.longValue();
-
-			if (longValue.compareTo((long) 0) < 0
-					|| longValue.compareTo((long) Byte.MAX_VALUE) > 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static boolean checkBudgetLowerTotal(byte budget, byte total) {
+	public static boolean checkBudgetLowerTotal(int budget, int total) {
 		return budget < total;
 	}
 }

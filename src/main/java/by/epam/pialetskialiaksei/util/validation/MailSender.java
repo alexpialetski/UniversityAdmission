@@ -1,24 +1,18 @@
 package by.epam.pialetskialiaksei.util.validation;
 
-import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
+import by.epam.pialetskialiaksei.command.client.registration.ClientRegistrationCommand;
 import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.exception.CommandException;
-import by.epam.pialetskialiaksei.exception.ConnectionPoolException;
-import by.epam.pialetskialiaksei.sql.connection.BasicConnectionPool;
-import by.epam.pialetskialiaksei.sql.connection.api.ConnectionPool;
 import by.epam.pialetskialiaksei.util.RandomString;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.jws.soap.SOAPBinding;
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;

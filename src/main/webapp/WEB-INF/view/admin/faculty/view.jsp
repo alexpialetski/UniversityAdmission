@@ -27,18 +27,6 @@
 <div id="container">
     <div class="content">
         <%--<div class="info">--%>
-            <%--<div class="photo-greeting" style="border: solid 2pt rgb(0, 4, 255);">--%>
-                <%--<img src="images/faculty-image.png" class="photo">--%>
-                <%--<div class="greeting" style=" text-align: center;">--%>
-                    <%--<h1><c:out--%>
-                            <%--value="${lang eq 'ru' ? facultyInfo.faculty.nameRu : facultyInfo.faculty.nameEng}"></c:out></h1>--%>
-                    <%--<h1><fmt:message key="faculty.label.information"/></h1>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-            <%--<div id=\"faculty-label\">--%>
-                <%--<fmt:message key="faculty.label.temp"/>--%>
-            <%--</div>--%>
-        <%--</div>--%>
         <div class="info">
             <div><h2><fmt:message key="profile.view_jsp.label.profile"/></h2></div>
             <form id="faculty" class="form-input" method="POST" action="controller">

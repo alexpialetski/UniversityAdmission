@@ -30,7 +30,7 @@ public class FacultyEntrantDAO extends SqlDAO {
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
-    private static final String FIND_FACULTY_BY_ENTRANT_ID = "SELECT faculty.id, faculty.name_ru, faculty.name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu, faculty.passingScore\n" +
+    private static final String FIND_FACULTY_BY_ENTRANT_ID = "SELECT faculty.id, faculty.name_ru, faculty.name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu\n" +
             "FROM faculty_entrants\n" +
             "       INNER JOIN faculty ON faculty_entrants.Faculty_idFaculty = faculty.id\n" +
             "WHERE Entrant_idEntrant = ?;";
@@ -170,13 +170,6 @@ public class FacultyEntrantDAO extends SqlDAO {
             if (rs.next()) {
                 FacultyBuilder facultyBuilder= new FacultyBuilder();
                 faculty = facultyBuilder.build(rs);
-            }
-            if (!rs.next()) {
-                facultyEntrant = null;
-            } else {
-//                facultyEntrant = unmarshal(rs);
-//                facultyEntrant = facultyEntrantBuilder.build(rs);
-                facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty entrant", e);

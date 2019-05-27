@@ -2,37 +2,33 @@ package by.epam.pialetskialiaksei.util.validation;
 
 public class FacultyInputValidator {
 
-	/**
-	 * Validates user input for faculty.
-	 *
-	 * @return <code>true</code> if parameters valid, <code>false</code>
-	 *         otherwise.
-	 */
-	public static boolean validateParameters(String facultyNameRu,
-			String facultyNameEng, String facultyBudgetSeats,
-			String facultyTotalSeats) {
-		if (!FieldValidation.isCyrillicWord(facultyNameRu)
-				|| !FieldValidation.isLatinWord(facultyNameEng)) {
-			return false;
-		}
+    /**
+     * Validates user input for faculty.
+     *
+     * @return <code>true</code> if parameters valid, <code>false</code>
+     * otherwise.
+     */
+    public static boolean validateParameters(String facultyNameRu, String facultyNameEng, int facultyBudgetSeats,
+                                             int facultyTotalSeats) {
+//        if (!FieldValidation.isCyrillicWord(facultyNameRu)
+//                || !FieldValidation.isLatinWord(facultyNameEng)) {
+//            return false;
+//        }
+//
+//        if (!FieldValidation.isPositiveDecimalNumber(facultyBudgetSeats,
+//                facultyTotalSeats)) {
+//            return false;
+//        }
+//
+//        if (!FieldValidation.isPositiveByte(facultyBudgetSeats,
+//                facultyTotalSeats)) {
+//            return false;
+//        }
 
-		if (!FieldValidation.isPositiveDecimalNumber(facultyBudgetSeats,
-				facultyTotalSeats)) {
-			return false;
-		}
-
-		if (!FieldValidation.isPositiveByte(Long.valueOf(facultyBudgetSeats),
-				Long.valueOf(facultyTotalSeats))) {
-			return false;
-		}
-
-		Byte budget = Byte.valueOf(facultyBudgetSeats);
-		Byte total = Byte.valueOf(facultyTotalSeats);
-
-		if (!FieldValidation.checkBudgetLowerTotal(budget, total)) {
-			return false;
-		}
-
-		return true;
-	}
+        return FieldValidation.checkBudgetLowerTotal(facultyBudgetSeats, facultyTotalSeats) &&
+//                FieldValidation.isPositiveByte(facultyBudgetSeats, facultyTotalSeats) &&
+                FieldValidation.isPositiveDecimalNumber(facultyBudgetSeats, facultyTotalSeats) &&
+                FieldValidation.isCyrillicWord(facultyNameRu) &&
+                FieldValidation.isLatinWord(facultyNameEng);
+    }
 }

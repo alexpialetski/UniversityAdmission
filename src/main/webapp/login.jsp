@@ -13,7 +13,8 @@
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <%--<link rel="stylesheet" type="text/css" href="css/loader.css">--%>
+    <link rel="stylesheet" type="text/css" href="css/messages.css">
+<%--<link rel="stylesheet" type="text/css" href="css/loader.css">--%>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <%--<link rel="stylesheet" type="text/css" href="css/login-example1.css">--%>
     <link rel="stylesheet" type="text/css" href="css/general.css">
@@ -84,6 +85,14 @@
 
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
+<div class="alert-boxes">
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <div class="alert warning">
+            <span class="closebtn">&times;</span>
+            <strong>Warning!</strong> <c:out value="${sessionScope.errorMessage}"/>
+        </div>
+    </c:if>
+</div>
 
 <div id="container">
     <div class="content">
@@ -119,4 +128,8 @@
 </div>
 <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
 </body>
+<script src="js/messages.js"></script>
+<script>
+    loadMessages();
+</script>
 </html>

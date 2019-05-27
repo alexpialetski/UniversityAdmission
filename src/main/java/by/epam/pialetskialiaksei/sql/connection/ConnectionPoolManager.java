@@ -12,9 +12,6 @@ import java.util.Properties;
 public class ConnectionPoolManager {
     private final static ConnectionPoolManager INSTANCE = new ConnectionPoolManager();
     private static ConnectionPool connectionPool;
-    private static final String URL = "jdbc:mysql://localhost:3306/university_admission?autoReconnect=true&useSSL=false";
-    private static final String USER = "root";
-    private static final String PASSWORD = "root";
 
     private static String url;
     private static String user;

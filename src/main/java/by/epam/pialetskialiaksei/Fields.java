@@ -29,7 +29,7 @@ public class Fields {
     public static final String FACULTY_NAME_ENG = "name_eng";
     public static final String FACULTY_BUDGET_SEATS = "budget_seats";
     public static final String FACULTY_TOTAL_SEATS = "total_seats";
-    public static final String FACULTY_PASSING_SCORE = "passingScore";
+//    public static final String FACULTY_PASSING_SCORE = "passingScore";
     public static final String FACULTY_INFO_RU = "infoRu";
     public static final String FACULTY_INFO_ENG = "infoEng";
     public static final String FACULTY_FOREIGN_KEY_ID = "Faculty_idFaculty";

@@ -10,7 +10,6 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.InternetHeaders;
 import javax.mail.internet.MimeBodyPart;
@@ -19,7 +18,7 @@ import javax.mail.internet.MimeMultipart;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
-import by.epam.pialetskialiaksei.command.registration.ClientRegistrationCommand;
+import by.epam.pialetskialiaksei.command.client.registration.ClientRegistrationCommand;
 
 import by.epam.pialetskialiaksei.entity.User;
 import org.apache.logging.log4j.LogManager;

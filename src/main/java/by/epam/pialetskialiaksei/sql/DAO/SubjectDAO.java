@@ -104,7 +104,7 @@ public class SubjectDAO extends SqlDAO {
         }
     }
 
-    public void update(Subject[] entity) throws DaoException {
+    public void update(List<Subject> entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {
@@ -147,7 +147,7 @@ public class SubjectDAO extends SqlDAO {
         }
     }
 
-    public void delete(int[] entity) throws DaoException {
+    public void delete(List<Integer> entity) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
         try {

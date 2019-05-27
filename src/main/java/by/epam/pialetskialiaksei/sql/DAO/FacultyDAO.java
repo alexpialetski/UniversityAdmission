@@ -20,13 +20,11 @@ import java.util.List;
 import javax.sql.DataSource;
 
 public class FacultyDAO extends SqlDAO {
-//    private FacultyBuilder facultyBuilder = new FacultyBuilder();
-
-    private static final String FIND_ALL_FACULTIES = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty;";
-    private static final String FIND_FACULTY_BY_ID = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
-    private static final String FIND_FACULTY_BY_NAME = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu, passingScore FROM university_admission.faculty WHERE faculty.name_ru = ? OR faculty.name_eng = ? LIMIT 1;";
+    private static final String FIND_ALL_FACULTIES = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty;";
+    private static final String FIND_FACULTY_BY_ID = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
+    private static final String FIND_FACULTY_BY_NAME = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty WHERE faculty.name_ru = ? OR faculty.name_eng = ? LIMIT 1;";
 //    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats, faculty.infoEng, faculty.infoRu) VALUES (?,?,?,?,?,?);";
-    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats, faculty.passingScore) VALUES (?,?,?,?,?);";
+    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats) VALUES (?,?,?,?);";
     private static final String UPDATE_FACULTY = "UPDATE faculty SET faculty.name_ru=?, faculty.name_eng=?, faculty.total_seats=?, faculty.budget_seats=?,  faculty.infoRu = ?, faculty.infoEng = ? WHERE faculty.id=? LIMIT 1;";
     private static final String DELETE_FACULTY = "DELETE FROM university_admission.faculty WHERE faculty.id=? LIMIT 1;";
 
@@ -45,8 +43,8 @@ public class FacultyDAO extends SqlDAO {
             int counter = 1;
             pstmt.setString(counter++, entity.getNameRu());
             pstmt.setString(counter++, entity.getNameEng());
-            pstmt.setByte(counter++, entity.getTotalSeats());
-            pstmt.setByte(counter++, entity.getBudgetSeats());
+            pstmt.setInt(counter++, entity.getTotalSeats());
+            pstmt.setInt(counter++, entity.getBudgetSeats());
 //            pstmt.setString(counter++, entity.getInfoRu());
 //            pstmt.setString(counter++, entity.getInfoEng());
 
@@ -75,8 +73,8 @@ public class FacultyDAO extends SqlDAO {
             int counter = 1;
             pstmt.setString(counter++, entity.getNameRu());
             pstmt.setString(counter++, entity.getNameEng());
-            pstmt.setByte(counter++, entity.getTotalSeats());
-            pstmt.setByte(counter++, entity.getBudgetSeats());
+            pstmt.setInt(counter++, entity.getTotalSeats());
+            pstmt.setInt(counter++, entity.getBudgetSeats());
             pstmt.setString(counter++, entity.getInfoRu());
             pstmt.setString(counter++, entity.getInfoEng());
 
@@ -125,9 +123,6 @@ public class FacultyDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             if (rs.next()) {
-                faculty = null;
-//                faculty = unmarshal(rs);
-//                faculty = facultyBuilder.build(rs);
                 faculty = (Faculty) createBuilder().build(rs);
             }
         } catch (SQLException e) {
@@ -157,8 +152,6 @@ public class FacultyDAO extends SqlDAO {
             if (!rs.next()) {
                 faculty = null;
             } else {
-//                faculty = unmarshal(rs);
-//                faculty = facultyBuilder.build(rs);
                 faculty = (Faculty)createBuilder().build(rs);
             }
         } catch (SQLException e) {
@@ -184,8 +177,6 @@ public class FacultyDAO extends SqlDAO {
             rs = pstmt.executeQuery();
 //            connection.commit();
             while (rs.next()) {
-//                faculties.add(unmarshal(rs));
-//                faculties.add(facultyBuilder.build(rs));
                 faculties.add((Faculty) createBuilder().build(rs));
             }
         } catch (SQLException e) {
