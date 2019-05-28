@@ -42,7 +42,8 @@ public class ChangeEntrantSubjectsCommand implements Command {
             FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
             FacultyEntrant facultyEntrant = facultyEntrantDAO.find(entrant);
             if (facultyEntrant != null) {
-                return "";
+                return "{\"errorEng\":\"You cant change subjects because you are already applied\"," +
+                        "\"errorRu\":\"Вы не можете изменить предметы, так как уже подали документы\"}";
             }
 
             String jsonString = request.getParameter("subjects");
@@ -59,7 +60,7 @@ public class ChangeEntrantSubjectsCommand implements Command {
             } else {
                 markDAO.create(marks);
             }
-            return "";
+            return "{\"errorEng\":\"none\"}";
         } catch (DaoException e) {
             throw new CommandException(e);
         }

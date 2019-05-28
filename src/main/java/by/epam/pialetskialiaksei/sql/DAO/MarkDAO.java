@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MarkDAO extends SqlDAO {
-//    private MarkBuilder markBuilder= new MarkBuilder();
-//    private SubjectBuilder subjectBuilder = new SubjectBuilder();
 
     private static final String FIND_ALL_MARKS = "SELECT * FROM university_admission.mark;";
     private static final String FIND_MARK = "SELECT * FROM university_admission.mark WHERE mark.id = ? LIMIT 1;";
@@ -38,12 +36,9 @@ public class MarkDAO extends SqlDAO {
                                                         "       university_admission.mark.value,\n" +
                                                         "       university_admission.mark.Entrant_idEntrant,\n" +
                                                         "       university_admission.mark.Subject_idSubject\n" +
-//                                                        "       university_admission.exam_type.exam_type\n" +
                                                         "FROM university_admission.mark\n" +
                                                         "       INNER JOIN university_admission.subject\n" +
                                                         "                  ON university_admission.mark.Subject_idSubject = university_admission.subject.id\n" +
-//                                                        "       INNER JOIN university_admission.exam_type\n" +
-//                                                        "                  ON university_admission.mark.exam_type_id= university_admission.exam_type.id\n" +
                                                         "WHERE university_admission.mark.Entrant_idEntrant = ?;";
     private static final String FIND_SUBJECTS_OF_ENTRANT = "SELECT university_admission.subject.id as Subject_idSubject,\n" +
                                                             "       university_admission.subject.name_ru as Subject_name_ru,\n" +
@@ -66,11 +61,9 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(INSERT_MARK,
                     Statement.RETURN_GENERATED_KEYS);
             int counter = 1;
-            // pstmt.setInt(1, user.getId());
-            pstmt.setInt(counter++, entity.getEntrantId());
+                        pstmt.setInt(counter++, entity.getEntrantId());
             pstmt.setInt(counter++, entity.getSubjectId());
             pstmt.setInt(counter++, entity.getMark());
-//            pstmt.setString(counter++, entity.getExamType());
 
             pstmt.execute();
             connection.commit();
@@ -80,8 +73,6 @@ public class MarkDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not create a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not create a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -97,8 +88,7 @@ public class MarkDAO extends SqlDAO {
             for(Mark mark: entity) {
                 pstmt = connection.prepareStatement(INSERT_MARK);
                 int counter = 1;
-                // pstmt.setInt(1, user.getId());
-                pstmt.setInt(counter++, mark.getEntrantId());
+                                pstmt.setInt(counter++, mark.getEntrantId());
                 pstmt.setInt(counter++, mark.getSubjectId());
                 pstmt.setInt(counter++, mark.getMark());
 
@@ -106,8 +96,6 @@ public class MarkDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not create a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not create a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -124,17 +112,12 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(counter++, entity.getEntrantId());
             pstmt.setInt(counter++, entity.getSubjectId());
             pstmt.setInt(counter++, entity.getMark());
-//            pstmt.setString(counter++, entity.getExamType());
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not update a mark", e);
         } finally {
-//            close(connection);
             releaseConnection(connection);
             close(pstmt);
         }
@@ -151,15 +134,11 @@ public class MarkDAO extends SqlDAO {
                 pstmt.setInt(counter++, mark.getEntrantId());
                 pstmt.setInt(counter++, mark.getSubjectId());
                 pstmt.setInt(counter++, mark.getMark());
-//                pstmt.setString(counter++, mark.getExamType());
                 pstmt.setInt(counter, mark.getId());
                 pstmt.executeUpdate();
             }
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not update a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -175,11 +154,8 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not delete a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -196,16 +172,11 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_MARK);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
-//                mark = unmarshal(rs);
-//                mark = markBuilder.build(rs);
                 mark = (Mark) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not find a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -224,16 +195,11 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ENTRANT_SUBJECT);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
-//                mark = unmarshal(rs);
-//                mark = markBuilder.build(rs);
                 mark = (Mark) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not find a mark", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -253,14 +219,10 @@ public class MarkDAO extends SqlDAO {
             rs = pstmt.executeQuery();
             connection.commit();
             while (rs.next()) {
-//                users.add(unmarshal(rs));
-//                users.add(markBuilder.build(rs));
                 users.add((Mark) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all marks", e);
-//            rollback(connection);
-//            LOG.error("Can not find all marks", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -279,21 +241,15 @@ public class MarkDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_MARKS_OF_ENTRANT);
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             SubjectBuilder subjectBuilder = new SubjectBuilder();
             while (rs.next()) {
-//                Subject subject = unmarshalSubject(rs);
                 Subject subject = subjectBuilder.buildForeign(rs);
-//                Mark mark = unmarshal(rs);
-//                Mark mark = markBuilder.build(rs);
                 Mark mark = (Mark) createBuilder().build(rs);
                 ClientSubject clientSubject = new ClientSubject(subject,mark);
                 clientSubjects.add(clientSubject);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all not faculty clientSubjects", e);
-//            rollback(connection);
-//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -313,16 +269,12 @@ public class MarkDAO extends SqlDAO {
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
             SubjectBuilder subjectBuilder = new SubjectBuilder();
-//            connection.commit();
             while (rs.next()) {
-//                Subject subject = unmarshalSubject(rs);
                 Subject subject = subjectBuilder.buildForeign(rs);
                 subjects.add(subject);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all not faculty clientSubjects", e);
-//            rollback(connection);
-//            LOG.error("Can not find all not faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

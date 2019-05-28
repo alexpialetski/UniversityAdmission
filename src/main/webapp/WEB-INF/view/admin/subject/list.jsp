@@ -5,23 +5,15 @@
 
 <html lang="${sessionScope.lang}">
 <head>
-    <title>Title</title>
+    <title><fmt:message key="title.subjects"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/table.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
 </head>
 <body>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
 <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 <div id="container">
     <div class="content">
         <h2><fmt:message key="subjects.text.subjects"/></h2>
@@ -60,6 +52,7 @@
 </div>
 </body>
 <script>
+    loadMessages();
     $(document).ready(function () {
         updateSubjects();
 
@@ -125,14 +118,24 @@
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-                    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-                    document.location.reload(true)
+                    let error = JSON.parse(data);
+                    if (error.errorEng === "none") {
+                        document.location.reload(true)
+                    } else {
+                        stopLoader();
+                        <c:choose>
+                        <c:when test="${sessionScope.lang eq 'ru'}">
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                        </c:when>
+                        <c:otherwise>
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                        </c:otherwise>
+                        </c:choose>
+                    }
                 },
 
                 error: function (xhr, ajaxOptions, thrownError) {
-                    //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-                    var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                    $('#content').html(errorMsg);
+                    window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                 }
             });
         }
@@ -177,7 +180,6 @@
             $("#subject_delete_cancel").show();
             $("#subject_delete").hide();
             let hiddenElements = $('.hidden');
-
             for (let i = 0; i < hiddenElements.length; i++) {
                 $(hiddenElements[i]).css("display", "block");
             }
@@ -206,13 +208,22 @@
                         "Content-Type": "application/json; charset=utf-8"
                     },
                     success: function (data) {
-                        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-                        document.location.reload(true)
+                        let error = JSON.parse(data);
+                        if (error.errorEng === "none") {
+                            document.location.reload(true)
+                        } else {
+                            <c:choose>
+                            <c:when test="${sessionScope.lang eq 'ru'}">
+                            createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                            </c:when>
+                            <c:otherwise>
+                            createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                            </c:otherwise>
+                            </c:choose>
+                        }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        //aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-                        var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                        $('#content').html(errorMsg);
+                        window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                     }
                 });
             }

@@ -57,7 +57,7 @@ public class UpdateSubjectsCommand implements Command {
                         subjectsIdThatCantBeUpdated.toString().replaceAll(REGEX, "") +
                         ", они не действительны введены.\"}";
             }
-            return "{\"error\":\"none\"}";
+            return "{\"errorEng\":\"none\"}";
         } catch (DaoException e) {
             throw new CommandException(e);
         }

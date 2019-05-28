@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 
 
 public class FacultyEntrantDAO extends SqlDAO {
-//    private FacultyEntrantBuilder facultyEntrantBuilder = new FacultyEntrantBuilder();
 
     private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.faculty_entrants;";
     private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
@@ -61,15 +60,12 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getEntrantId());
 
             pstmt.execute();
-//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not create a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not create a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -86,11 +82,8 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt.setInt(1, entity.getFacultyId());
             pstmt.setInt(2, entity.getEntrantId());
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not delete a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -112,11 +105,8 @@ public class FacultyEntrantDAO extends SqlDAO {
             while (rs.next()) {
                 users.add(userBuilder.buildForeign(rs));
             }
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -135,18 +125,13 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_ENTRANT_BY_ENTRANT_ID);
             pstmt.setInt(1, entrant.getId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (!rs.next()) {
                 facultyEntrant = null;
             } else {
-//                facultyEntrant = unmarshal(rs);
-//                facultyEntrant = facultyEntrantBuilder.build(rs);
                 facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -166,15 +151,12 @@ public class FacultyEntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_BY_ENTRANT_ID);
             pstmt.setInt(1, entrantId);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
                 FacultyBuilder facultyBuilder= new FacultyBuilder();
                 faculty = facultyBuilder.build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -200,14 +182,10 @@ public class FacultyEntrantDAO extends SqlDAO {
             if (!rs.next()) {
                 facultyEntrant = null;
             } else {
-//                facultyEntrant = unmarshal(rs);
-//                facultyEntrant = facultyEntrantBuilder.build(rs);
                 facultyEntrant = (FacultyEntrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -227,14 +205,10 @@ public class FacultyEntrantDAO extends SqlDAO {
             rs = pstmt.executeQuery();
             connection.commit();
             while (rs.next()) {
-//                facultyEntrants.add(unmarshal(rs));
-//                facultyEntrants.add(facultyEntrantBuilder.build(rs));
                 facultyEntrants.add((FacultyEntrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all faculty entrants", e);
-//            rollback(connection);
-//            LOG.error("Can not find all faculty entrants", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

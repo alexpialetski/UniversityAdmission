@@ -19,11 +19,6 @@ import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class ViewProfileCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -64,7 +59,6 @@ public class ViewProfileCommand implements Command {
             String role = user.getRole();
 
             if ("client".equals(role)) {
-                // should not be null !!
                 EntrantDAO entrantDAO = new EntrantDAO();
                 Entrant entrant = entrantDAO.find(user);
 

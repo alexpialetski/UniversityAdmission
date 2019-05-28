@@ -21,7 +21,6 @@ public class MarkBuilder extends SetBuilder<Mark> {
             mark.setEntrantId(rs.getInt(Fields.ENTRANT_FOREIGN_KEY_ID));
             mark.setSubjectId(rs.getInt(Fields.SUBJECT_FOREIGN_KEY_ID));
             mark.setMark(rs.getByte(Fields.MARK_VALUE));
-//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to mark", e);
         }
@@ -35,7 +34,6 @@ public class MarkBuilder extends SetBuilder<Mark> {
             mark.setEntrantId(rs.getInt(Fields.ENTRANT_FOREIGN_KEY_ID));
             mark.setSubjectId(rs.getInt(Fields.ENTITY_ID));
             mark.setMark(rs.getInt(Fields.MARK_VALUE));
-//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to subject", e);
         }

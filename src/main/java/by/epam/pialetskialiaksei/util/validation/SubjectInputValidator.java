@@ -10,12 +10,8 @@ public class SubjectInputValidator {
 	 */
 	public static boolean validateParameters(String subjectNameRu,
 			String subjectNameEng) {
-		if (!FieldValidation.isCyrillicWord(subjectNameRu)) {
-			return false;
-		}
-		if (!FieldValidation.isLatinWord(subjectNameEng)) {
-			return false;
-		}
-		return true;
+		return FieldValidation.isCyrillicWord(subjectNameRu)&&
+				FieldValidation.isLatinWord(subjectNameEng)&&
+				FieldValidation.checkScript(subjectNameEng, subjectNameRu);
 	}
 }

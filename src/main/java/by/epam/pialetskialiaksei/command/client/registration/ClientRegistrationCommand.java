@@ -20,11 +20,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Invoked when client registers in system.
- *
- * @author Mark Norkin
- */
 public class ClientRegistrationCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -50,7 +45,6 @@ public class ClientRegistrationCommand implements Command {
             boolean validUser = ProfileInputValidator.validateUserParameters(firstName,
                     lastName, email, password);
 
-//            LOG.trace(valid);
             boolean validEntrant = ProfileInputValidator.validateEntrantParameters(town, district,
                     school);
             if (!validUser||!validEntrant) {

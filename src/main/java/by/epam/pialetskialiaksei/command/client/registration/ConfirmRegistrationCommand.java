@@ -13,11 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Invoked when client registers in system.
- *
- * @author Mark Norkin
- */
 public class ConfirmRegistrationCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;

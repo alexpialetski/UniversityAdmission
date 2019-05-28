@@ -8,7 +8,8 @@ import by.epam.pialetskialiaksei.entity.User;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.MailDAO;
-import by.epam.pialetskialiaksei.util.validation.MailSender;
+import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
+import by.epam.pialetskialiaksei.util.MailUtils;
 import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,11 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * Invoked when client registers in system.
- *
- * @author Mark Norkin
- */
 public class SendConfirmationRegistrationCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -38,7 +34,6 @@ public class SendConfirmationRegistrationCommand implements Command {
             String password = request.getParameter(Fields.USER_PASSWORD);
             String firstName = request.getParameter(Fields.USER_FIRST_NAME);
             String lastName = request.getParameter(Fields.USER_LAST_NAME);
-            String lang = request.getParameter(Fields.USER_LANG);
 
             boolean valid = ProfileInputValidator.validateUserParameters(firstName,
                     lastName, email, password);
@@ -52,8 +47,14 @@ public class SendConfirmationRegistrationCommand implements Command {
             } else {
                 User user = new User(email, password, firstName, lastName,
                         Role.CLIENT);
+                UserDAO userDAO = new UserDAO();
+                User user1 = userDAO.find(user.getEmail());
+                if(user1!=null){
+                    return "{\"errorEng\":\" There is already user with such email.\"," +
+                            "\"errorRu\":\" Уже есть пользователь с таким эл. адресом.\"}";
+                }
                 MailDAO mailDAO = new MailDAO();
-                String key = MailSender.sendConfirmationEmail(user);
+                String key = MailUtils.sendConfirmationEmail(user);
                 Mail mail = new Mail();
                 mail.setMailId(email + password);
                 mail.setKey(key);

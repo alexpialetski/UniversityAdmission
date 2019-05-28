@@ -24,7 +24,6 @@ public class ClientSubjectBuilder extends SetBuilder<ClientSubject> {
             mark.setEntrantId(rs.getInt("entrant_id"));
             mark.setSubjectId(rs.getInt(Fields.ENTITY_ID));
             mark.setMark(rs.getInt(Fields.MARK_VALUE));
-//            mark.setExamType(rs.getString(Fields.MARK_EXAM_TYPE));
         } catch (SQLException e) {
             LOG.error("Can not unmarshal ResultSet to subject", e);
         }

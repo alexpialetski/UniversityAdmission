@@ -20,7 +20,7 @@ public class ProfileInputValidator {
 
     public static boolean validateEntrantParameters(String city,
                                                     String district, String school) {
-        return FieldValidation.isFilled(city, district) && (!school.isEmpty());
+        return FieldValidation.isFilled(city, district) && (!school.isEmpty()) && FieldValidation.checkScript(city, district, school);
     }
 
 }

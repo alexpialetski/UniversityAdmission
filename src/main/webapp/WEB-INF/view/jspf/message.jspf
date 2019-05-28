@@ -1,0 +1,19 @@
+<%--===========================================================================
+Footer (bottom area).
+===========================================================================--%>
+<div class="alert-boxes">
+    <c:if test="${not empty sessionScope.errorEng}">
+        <div class="alert warning">
+            <span class="closebtn">&times;</span>
+            <c:choose>
+                <c:when test="${sessionScope.lang eq 'ru'}">
+                    <strong><fmt:message key="message.warning"/></strong> <c:out value="${sessionScope.errorRu}"/>
+                </c:when>
+                <c:otherwise>
+                    <strong><fmt:message key="message.warning"/></strong> <c:out value="${sessionScope.errorEng}"/>
+                </c:otherwise>
+            </c:choose>
+
+        </div>
+    </c:if>
+</div>

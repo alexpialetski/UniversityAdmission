@@ -19,7 +19,6 @@ import org.apache.logging.log4j.Logger;
 /**
  * Invoked when user logins in the system.
  *
- * @author Mark Norkin.
  */
 public class LoginCommand implements Command {
 
@@ -50,14 +49,8 @@ public class LoginCommand implements Command {
                         "Не удается найти пользователя с таким логином / паролем ");
                 result = Path.REDIRECT_LOGIN_PAGE;
             } else {
-//			HttpSession oldSession = request.getSession(false);
-//			HttpSession session = request.getSession(true);
-//			if(oldSession != null){
-//				String lang = (String) oldSession.getAttribute("lang");
-//				session.setAttribute("lang", lang);
-//			}else{
-//				session.setAttribute("lang", "ru");
-//			}
+
+
                 HttpSession session = request.getSession(true);
 
                 session.setAttribute("email", user.getEmail());
@@ -67,8 +60,6 @@ public class LoginCommand implements Command {
                 LOG.trace("Set the session attribute: 'userRole' = "
                         + user.getRole());
 
-//            session.setAttribute("lang", user.getLang());
-//            LOG.trace("Set the session attribute 'lang' = " + user.getLang());
 
                 LOG.info("User: " + user + " logged as " + user.getRole());
 

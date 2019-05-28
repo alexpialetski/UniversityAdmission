@@ -1,29 +1,20 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
-
 <fmt:setLocale value="${sessionScope.lang}"/>
 
 <html lang="${sessionScope.lang}">
 <head>
+    <title><fmt:message key="title.adminProfile"/></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
 </head>
 <body>
 
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
 <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -49,36 +40,13 @@
                 <input type="email" class="input-field" name="email"
                        placeholder="<fmt:message key="profile.text.ph.email"/>"
                        value="<c:out value="${requestScope.email}"></c:out>" required="required" disabled>
-                <button type="submit" id="profile_submit" class="btn" style="display: none"><fmt:message
+                <button type="submit" id="profile_submit" onclick="validateInputs()" class="btn" style="display: none"><fmt:message
                         key="button.submit"/></button>
                 <button type="button" id="profile_cancel" class="btn" style="display: none"><fmt:message
                         key="button.cancel"/></button>
                 <button type="button" id="profile_change" class="btn"><fmt:message
                         key="button.change"/></button>
             </form>
-        </div>
-
-        <div class="info">
-            <form id="register" class="form-input" method="POST" action="controller" style="display:none;">
-                <div><h2><fmt:message key="admin.text.register"/></h2></div>
-                <input type="hidden" name="command" value="adminRegistration">
-                <input type="text" class="input-field" name="first-name"
-                       placeholder="<fmt:message key="profile.text.ph.first_name"/>"
-                       required="required" disabled>
-                <input type="text" class="input-field" name="last-name"
-                       placeholder="<fmt:message key="profile.text.ph.last_name"/>"
-                       required="required" disabled>
-                <input type="email" class="input-field" name="email"
-                       placeholder="<fmt:message key="profile.text.ph.email"/>"
-                       required="required" disabled>
-                <button type="submit" id="validationButton" class="btn" style="display: none"></button>
-            </form>
-            <input type="button" id="admin_register" class="btn" onclick="registerAdmin()" value="<fmt:message
-                        key="admin.button.registerAdmin"/>">
-            <input type="button" id="admin_submit" class="btn" onclick="submitRegister()" value="<fmt:message
-                        key="button.submit"/>" style="display: none">
-            <input type="button" id="admin_cancel" class="btn" onclick="cancelRegisterAdmin()" value="<fmt:message
-                        key="button.cancel"/>" style="display: none">
         </div>
         <c:choose>
             <c:when test="${requestScope.results eq false}">
@@ -103,6 +71,7 @@
 <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
 </body>
 <script>
+    loadMessages();
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(window).scrollTop() > 10) {
@@ -120,7 +89,6 @@
         $("#profile_change").click(profile_change_click);
 
         function profile_change_click() {
-            alert("Dont profile_change_click!!");
             $("#profile_submit").show();
             $("#profile_cancel").show();
             $("#profile_change").hide();
@@ -130,27 +98,6 @@
         $("#profile_cancel").click(profile_cancel_click);
 
         function profile_cancel_click() {
-            alert("Dont profile_change_click!!");
-            $("#profile_cancel").hide();
-            $("#profile_submit").hide();
-            $("#profile_change").show();
-            $("#profile input[type=text]").attr("disabled", true);
-        }
-
-        $("#register_change").click(register_change_click);
-
-        function register_change_click() {
-            alert("Dont profile_change_click!!");
-            $("#profile_submit").show();
-            $("#profile_cancel").show();
-            $("#profile_change").hide();
-            $("#profile input[type=text]").attr("disabled", false);
-        }
-
-        $("#register_cancel").click(register_cancel_click);
-
-        function register_cancel_click() {
-            alert("Dont profile_change_click!!");
             $("#profile_cancel").hide();
             $("#profile_submit").hide();
             $("#profile_change").show();
@@ -158,27 +105,13 @@
         }
     });
 
-    function registerAdmin() {
-        $("#register").show();
-        $("#admin_submit").show();
-        $("#admin_cancel").show();
-        $("#admin_register").hide();
-        $("#register input").attr("disabled", false);
-    }
-
-    function cancelRegisterAdmin() {
-        $("#register").hide();
-        $("#admin_submit").hide();
-        $("#admin_cancel").hide();
-        $("#admin_register").show();
-        $("#register input").attr("disabled", true);
-    }
-
-    function submitRegister() {
-        if (!$("#register").checkValidity()) {
-            $("#validationButton").click();
-        } else {
-            $("#register").submit();
+    function validateInputs() {
+        let inputs = $("input");
+        for (let i = 0; i < inputs.length; ++i) {
+            if (!validateScript(inputs[i].value)) {
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="error.script"/>");
+                return false;
+            }
         }
     }
 </script>

@@ -5,16 +5,7 @@
     <short-name>ctg</short-name>
     <uri>/WEB-INF/tld/custom</uri>
     <tag>
-        <name>header</name>
-        <tag-class>by.epam.pialetskialiaksei.tag.HeaderTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>company</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-    <tag>
+        <description>Tag that calculate total sum.</description>
         <name>totalScore</name>
         <tag-class>by.epam.pialetskialiaksei.tag.TotalScoreTag</tag-class>
         <body-content>empty</body-content>
@@ -33,15 +24,5 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
-    </tag>
-    <tag>
-        <name>navbar</name>
-        <tag-class>by.epam.pialetskialiaksei.tag.NavbarTag</tag-class>
-        <body-content>empty</body-content>
-    </tag>
-    <tag>
-        <name>footer</name>
-        <tag-class>by.epam.pialetskialiaksei.tag.FooterTag</tag-class>
-        <body-content>empty</body-content>
     </tag>
 </taglib>

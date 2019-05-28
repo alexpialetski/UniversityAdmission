@@ -18,11 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class UnApplyFacultyCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -46,7 +41,7 @@ public class UnApplyFacultyCommand implements Command {
             int facultyId = Integer.parseInt(request.getParameter("facultyId"));
             FacultyEntrantDAO facultyEntrantDAO = new FacultyEntrantDAO();
             facultyEntrantDAO.delete(new FacultyEntrant(facultyId, entrant.getId()));
-            return "";
+            return "{\"errorEng\":\"none\"}";
         }catch (DaoException e){
             throw new CommandException(e);
         }

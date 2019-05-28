@@ -24,8 +24,7 @@ import java.util.List;
 
 
 public class FacultySubjectDAO extends SqlDAO {
-    //    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects;";
-    private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
+        private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
                                                             "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu,\n" +
                                                             "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
                                                             "FROM university_admission.faculty_subjects\n" +
@@ -48,7 +47,6 @@ public class FacultySubjectDAO extends SqlDAO {
                                                             "                  on faculty_subjects.Subject_idSubject = subject.id\n" +
                                                             "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
                                                             "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?;";
-//                                                            "LIMIT 3;";
 
     private static final String FIND_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.id = ? LIMIT 3;";
     private static final String INSERT_FACULTY_SUBJECT = "INSERT INTO university_admission.faculty_subjects (university_admission.faculty_subjects.Faculty_idFaculty, university_admission.faculty_subjects.Subject_idSubject) VALUES (?,?);";
@@ -72,15 +70,12 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getSubjectId());
 
             pstmt.execute();
-//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not create a faculty subject", e);
-//            rollback(connection);
-//            LOG.error("Can not create a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -94,16 +89,13 @@ public class FacultySubjectDAO extends SqlDAO {
         try {
             connection = getConnection();
             pstmt = connection.prepareStatement(DELETE_FACULTY_SUBJECT);
-            // pstmt.setInt(1, entity.getId());
-            pstmt.setInt(1, entity.getFacultyId());
+                        pstmt.setInt(1, entity.getFacultyId());
             pstmt.setInt(2, entity.getSubjectId());
 
             pstmt.execute();
             connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete a faculty subject", e);
-//            rollback(connection);
-//            LOG.error("Can not delete a faculty subject", e);
         } finally {
             close(connection);
             close(pstmt);
@@ -119,11 +111,8 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete all clientSubjects of a given Faculty", e);
-//            rollback(connection);
-//            LOG.error("Can not delete all clientSubjects of a given Faculty", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -140,7 +129,6 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_SUBJECTS_BY_ID);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-//            connection.commit();
             subjects = new ArrayList<>();
             SubjectBuilder subjectBuilder = new SubjectBuilder();
             while (rs.next()) {
@@ -148,8 +136,6 @@ public class FacultySubjectDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty subject", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -186,8 +172,6 @@ public class FacultySubjectDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all faculty clientSubjects", e);
-//            rollback(connection);
-//            LOG.error("Can not find all faculty clientSubjects", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -206,17 +190,12 @@ public class FacultySubjectDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_SUBJECTS);
             pstmt.setInt(1, facultyId);
             rs = pstmt.executeQuery();
-//            connection.commit();
             facultySubjects = new ArrayList<>();
             while (rs.next()) {
-//                facultySubjects.add(unmarshal(rs));
-//                facultySubjects.add(facultySubjectBuilder.build(rs));
                 facultySubjects.add((FacultySubject) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty subject", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty subject", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -236,13 +215,9 @@ public class FacultySubjectDAO extends SqlDAO {
                 pstmt.setInt(counter++, facultyId);
                 pstmt.setInt(counter++, oldSubjectId);
                 pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a mark", e);
-//            rollback(connection);
-//            LOG.error("Can not update a mark", e);
         } finally {
-//            close(connection);
             releaseConnection(connection);
             close(pstmt);
         }

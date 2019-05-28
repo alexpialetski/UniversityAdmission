@@ -22,11 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class ViewResultCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;

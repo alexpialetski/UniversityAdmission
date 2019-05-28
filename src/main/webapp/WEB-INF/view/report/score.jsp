@@ -1,31 +1,20 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
-
 <fmt:setLocale value="${sessionScope.lang}"/>
 
 <html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/table.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
+    <title><fmt:message key="title.score"/></title>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
 </head>
 <body>
 
-<%--<ctg:header company="University admission"/>--%>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
-<%--<ctg:navbar/>--%>
 <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -48,10 +37,11 @@
         </table>
     </div>
 </div>
-<%--<ctg:footer/>--%>
+
 <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
 </body>
 <script>
+    loadMessages();
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(window).scrollTop() > 10) {

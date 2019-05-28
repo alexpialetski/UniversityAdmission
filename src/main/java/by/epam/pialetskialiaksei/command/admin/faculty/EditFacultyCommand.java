@@ -31,7 +31,7 @@ public class EditFacultyCommand implements Command {
             String infoEng = request.getParameter("infoEng");
 
             boolean valid = FacultyInputValidator.validateParameters(nameRu,
-                    nameEng, budgetSeats, totalSeats);
+                    nameEng, budgetSeats, totalSeats, infoRu, infoEng);
 
             if (!valid) {
                 request.getSession().setAttribute("errorEng",

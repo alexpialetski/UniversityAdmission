@@ -62,7 +62,7 @@ public class EditProfileCommand implements Command {
                         request.getSession().setAttribute("errorRu",
                                 "Пожалуйста, заполните все поля правильно!");
                         LOG.error("errorMessage: Not all fields are properly filled");
-                        return Path.REDIRECT_EDIT_PROFILE;
+                        return Path.REDIRECT_TO_PROFILE;
                     }
 
                     entrant.setCity(city);

@@ -46,21 +46,12 @@ public class MailDAO extends SqlDAO {
                 pstmt.executeUpdate();
                 close(rs);
             }
-//            pstmt = connection.prepareStatement(CREATE_MAIL_RECORD);
 
-//            connection.commit();
-//            rs = pstmt.getGeneratedKeys();
-//            if (rs.next()) {
-//                entity.setId(rs.getInt(Fields.GENERATED_KEY));
-//            }
         } catch (SQLException e) {
             throw new DaoException("Can not create an email key", e);
-//            rollback(connection);
-//            LOG.error("Can not create an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
-//            close(rs);
         }
     }
 
@@ -77,11 +68,8 @@ public class MailDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update an email key", e);
-//            rollback(connection);
-//            LOG.error("Can not update an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -97,11 +85,8 @@ public class MailDAO extends SqlDAO {
             pstmt.setString(1, entity.getMailId());
 
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete an email key", e);
-//            rollback(connection);
-//            LOG.error("Can not delete an email key", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -118,14 +103,11 @@ public class MailDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_MAIL_RECORD);
             pstmt.setString(1, entitie.getMailId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
                 mail = (Mail) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find an mail", e);
-//            rollback(connection);
-//            LOG.error("Can not find an mail", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

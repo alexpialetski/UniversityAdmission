@@ -13,11 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class DeleteResultsCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;

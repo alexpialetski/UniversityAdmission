@@ -1,26 +1,14 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
-
 <fmt:setLocale value="${sessionScope.lang}"/>
 
 <html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/messages.css">
-<%--<link rel="stylesheet" type="text/css" href="css/loader.css">--%>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <%--<link rel="stylesheet" type="text/css" href="css/login-example1.css">--%>
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
+    <title><fmt:message key="title.login"/></title>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <style>
     .circle {
@@ -31,7 +19,6 @@
         transform: translate(0%, -195%);
     }
     .circle .border {
-        /* content: ''; */
         position: absolute;
         top: -5px;
         bottom: 0;
@@ -85,14 +72,7 @@
 
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
-<div class="alert-boxes">
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="alert warning">
-            <span class="closebtn">&times;</span>
-            <strong>Warning!</strong> <c:out value="${sessionScope.errorMessage}"/>
-        </div>
-    </c:if>
-</div>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -119,10 +99,14 @@
                     <h3>${message}</h3>
                 </c:if>
             </form>
-            <p><fmt:message key="welcome_jsp.label.not_registered_msg"/>
-                <a href="controller?command=view_registration"><fmt:message
-                        key="welcome_jsp.label.register_here_msg"/>!</a>
+            <p style="font-size: 18px;"><fmt:message key="welcome_jsp.label.not_registered_msg"/>
+                <%--<a href="controller?command=view_registration"><fmt:message--%>
+                        <%--key="welcome_jsp.label.register_here_msg"/>!</a>--%>
             </p>
+            <form class="form" action="controller" method="GET">
+                <input type="hidden" name="command" value="view_registration">
+                <input style="color: black;text-align: center;padding: 4px 10px;font-size: 18px;line-height: 25px;border-radius: 10px;background-color: rgb(115, 212, 167);box-shadow: 0 4px 8px 0 rgba(197, 197, 197, 0.2), 0 6px 20px 0 rgba(197, 197, 197, 0.2);border-color: rgba(255,255,255,1);" type="submit" value="<fmt:message key="welcome_jsp.label.register_here_msg"/>">
+            </form>
         </div>
     </div>
 </div>

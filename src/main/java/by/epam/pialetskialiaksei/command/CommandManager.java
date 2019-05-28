@@ -5,7 +5,6 @@ import by.epam.pialetskialiaksei.command.admin.faculty.ChangeFacultySubjectsComm
 import by.epam.pialetskialiaksei.command.admin.faculty.EditFacultyCommand;
 import by.epam.pialetskialiaksei.command.admin.faculty.GetFacultyUsersCommand;
 import by.epam.pialetskialiaksei.command.admin.faculty.ViewFacultyCommand;
-import by.epam.pialetskialiaksei.command.admin.registration.AdminRegistrationCommand;
 import by.epam.pialetskialiaksei.command.admin.report.DeleteResultsCommand;
 import by.epam.pialetskialiaksei.command.admin.report.MakeResultCommand;
 import by.epam.pialetskialiaksei.command.api.Command;
@@ -46,7 +45,6 @@ public class CommandManager {
         commands.put("viewWelcome", new ViewWelcomeCommand());
         commands.put("viewProfile", new ViewProfileCommand());
         commands.put("client_registration", new ClientRegistrationCommand());
-        commands.put("adminRegistration", new AdminRegistrationCommand());
         commands.put("view_registration", new ViewRegistrationCommand());
         commands.put("editProfile", new EditProfileCommand());
         commands.put("getOtherSubjects", new GetOtherSubjectsCommand());

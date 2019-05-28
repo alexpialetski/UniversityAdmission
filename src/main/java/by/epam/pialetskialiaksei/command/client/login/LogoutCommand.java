@@ -14,11 +14,6 @@ import by.epam.pialetskialiaksei.exception.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/**
- * Invoked when user wants to logout from the system.
- *
- * @author Mark Norkin
- */
 public class LogoutCommand implements Command {
 
     private static final long serialVersionUID = -2785976616686657267L;

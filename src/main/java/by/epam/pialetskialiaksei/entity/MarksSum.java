@@ -1,13 +1,5 @@
 package by.epam.pialetskialiaksei.entity;
 
-/**
- * Entrant entity. This transfer object characterized by city, district, school,
- * foreign user id field and blocked state, which is <code>false</code by
- * default, but may be changed by admin.
- *
- * @author Mark Norkin
- *
- */
 public class MarksSum extends Entity {
 
 	private static final long serialVersionUID = 2565574420335652970L;

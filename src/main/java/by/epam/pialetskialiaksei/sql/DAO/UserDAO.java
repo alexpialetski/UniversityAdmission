@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDAO extends SqlDAO {
-//    private UserBuilder userBuilder = new UserBuilder();
 
     private static final String FIND_ALL_USERS = "SELECT user.id, user.first_name, user.last_name, user.email, user.password, role.role_name\n" +
                                                     "FROM university_admission.user\n" +
@@ -63,10 +62,8 @@ public class UserDAO extends SqlDAO {
             pstmt.setString(counter++, user.getEmail());
             pstmt.setString(counter++, user.getPassword());
             pstmt.setInt(counter++, Role.valueOf(user.getRole().toUpperCase()).getVal());
-//            pstmt.setBoolean(counter, user.getActiveStatus());
 
             pstmt.execute();
-//            connection.commit();
             generatedKeys = pstmt.getGeneratedKeys();
 
             if (generatedKeys.next()) {
@@ -74,8 +71,6 @@ public class UserDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not create a user", e);
-//            rollback(connection);
-//            LOG.error("Can not create a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -94,17 +89,12 @@ public class UserDAO extends SqlDAO {
             pstmt.setString(counter++, user.getLastName());
             pstmt.setString(counter++, user.getEmail());
             pstmt.setString(counter++, user.getPassword());
-//            pstmt.setString(counter++, user.getRole());
             pstmt.setInt(counter++, Role.valueOf(user.getRole().toUpperCase()).getVal());
-//            pstmt.setBoolean(counter++, user.getActiveStatus());
             pstmt.setInt(counter++, user.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a user", e);
-//            rollback(connection);
-//            LOG.error("Can not update a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -124,11 +114,8 @@ public class UserDAO extends SqlDAO {
             pstmt.setInt(counter, user.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a user", e);
-//            rollback(connection);
-//            LOG.error("Can not update a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -144,22 +131,14 @@ public class UserDAO extends SqlDAO {
             pstmt.setInt(1, user.getId());
 
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete a user", e);
-//            rollback(connection);
-//            LOG.error("Can not delete a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
         }
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see ua.nure.norkin.SummaryTask4.repository.Repository#find(int)
-     */
     public User find(int userId) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
@@ -174,14 +153,10 @@ public class UserDAO extends SqlDAO {
             if (!rs.next()) {
                 user = null;
             } else {
-//                user = unmarshal(rs);
-//                user = userBuilder.build(rs);
                 user = (User) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a user", e);
-//            rollback(connection);
-//            LOG.error("Can not find a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -201,19 +176,13 @@ public class UserDAO extends SqlDAO {
             pstmt.setString(1, email);
             pstmt.setString(2, password);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (!rs.next()) {
                 user = null;
             } else {
-//                user = unmarshal(rs);
-//                user = userBuilder.build(rs);
                 user = (User) createBuilder().build(rs);
             }
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not find a user", e);
-//            rollback(connection);
-//            LOG.error("Can not find a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -232,19 +201,13 @@ public class UserDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_USER_BY_EMAIL);
             pstmt.setString(1, email);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (!rs.next()) {
                 user = null;
             } else {
-//                user = unmarshal(rs);
-//                user = userBuilder.build(rs);
                 user = (User) createBuilder().build(rs);
             }
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not find a user", e);
-//            rollback(connection);
-//            LOG.error("Can not find a user", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -264,14 +227,10 @@ public class UserDAO extends SqlDAO {
             rs = pstmt.executeQuery();
             connection.commit();
             while (rs.next()) {
-//                users.add(unmarshal(rs));
-//                users.add(userBuilder.build(rs));
                 users.add((User) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all users", e);
-//            rollback(connection);
-//            LOG.error("Can not find all users", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

@@ -1,9 +1,13 @@
 package by.epam.pialetskialiaksei.command.admin.faculty;
 
 import by.epam.pialetskialiaksei.command.api.Command;
+import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
 import by.epam.pialetskialiaksei.entity.FacultySubject;
 import by.epam.pialetskialiaksei.exception.CommandException;
+import by.epam.pialetskialiaksei.exception.DaoException;
+import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
+import by.epam.pialetskialiaksei.sql.DAO.ReportSheetDAO;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,6 +32,14 @@ public class ChangeFacultySubjectsCommand implements Command {
         LOG.debug("Start executing Command");
         try {
             int facultyId = Integer.parseInt(request.getParameter("facultyId"));
+
+            ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
+            List<EntrantReportSheet> entrants = reportSheetDAO.getReport(facultyId);
+            if(!entrants.isEmpty()){
+                return "{\"errorEng\":\"You cant change subjects because somebody is already applied\"," +
+                        "\"errorRu\":\"Вы не можете изменить предметы, так как уже кто-то подал документы\"}";
+            }
+
             String jsonString = request.getParameter("subjects");
             jsonString = jsonString.replaceAll("\\?", facultyId + "");
             LOG.info("Json of subjects to change: " + jsonString);
@@ -57,8 +69,8 @@ public class ChangeFacultySubjectsCommand implements Command {
                 }
             }
             executorService.invokeAll(taskList);
-            return "";
-        } catch (InterruptedException e) {
+            return "{\"errorEng\":\"none\"}";
+        } catch (InterruptedException | DaoException e) {
             throw new CommandException("Exception in ChangeFacultySubjectsCommand", e);
         }
     }

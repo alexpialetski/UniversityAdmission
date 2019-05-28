@@ -6,17 +6,8 @@
 <html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="${pageContext.request.contextPath}/js/jquery-1.11.2.min.js"></script>
-    <script src="<c:url value="/js/scrollButton.js"/>"></script>
-    <script src="<c:url value="/js/sideBar.js"/>"></script>
+    <title><fmt:message key="title.clientView"/></title>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
 </head>
 <style>
     h4 {
@@ -27,6 +18,7 @@
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
 <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -146,11 +138,11 @@
                 <input type="text" class="input-field" name="school"
                        placeholder="<fmt:message key="profile.text.ph.school"/>"
                        value="<c:out value="${requestScope.school}"></c:out>" required="required" disabled>
-                <button type="submit" id="profile_submit" class="btn" style="display: none"><fmt:message
+                <button type="submit" id="profile_submit" onclick="validateInputs()" class="btn" style="display: none"><fmt:message
                         key="button.submit"/></button>
-                <button type="button" id="profile_cancel" class="btn" style="display: none"><fmt:message
+                <button type="button" id="profileCancel" class="btn" style="display: none"><fmt:message
                         key="button.cancel"/></button>
-                <button type="button" id="profile_change" class="btn"><fmt:message
+                <button type="button" id="profileChange" class="btn"><fmt:message
                         key="button.change"/></button>
             </form>
         </div>
@@ -163,19 +155,19 @@
                 </div>
             </c:if>
             <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
-                <input type="button" id="diploma_cancel" class="btn" style="display: none"
+                <input type="button" id="diplomaCancel" class="btn" style="display: none"
                        value="<fmt:message key="button.cancel"/>">
-                <input type="button" id="diploma_submit" class="btn" style="display: none"
+                <input type="button" id="diplomaSubmit" class="btn" style="display: none"
                        value="<fmt:message key="button.submit"/>">
-                <input type="button" id="diploma_change" class="btn"
+                <input type="button" id="diplomaChange" class="btn"
                        value="<fmt:message key="button.change"/>">
-                <h4 id="errorDiploma" style="display: none"></h4>
             </c:if>
         </div>
 
         <div class="info">
             <h2><fmt:message key="profile.view_jsp.label.subjects"/></h2>
-            <ctg:totalScore marks="${requestScope.jsonMarks}" lang="${sessionScope.lang}" diploma="${requestScope.diploma}"/>
+            <ctg:totalScore marks="${requestScope.jsonMarks}" lang="${sessionScope.lang}"
+                            diploma="${requestScope.diploma}"/>
             <c:if test="${not empty requestScope.marks}">
                 <div id="entrant_subjects">
                     <c:forEach var="mark_subject" items="${requestScope.marks}">
@@ -203,7 +195,6 @@
                     <h1><b><fmt:message key="profile.text.no_subjects_message"/></b></h1>
                 </div>
             </c:if>
-            <%--<c:if test="${requestScope.applied eq false or requestScope.results eq false}}">--%>
             <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
                 <input type="button" id="subject_cancel" class="btn" style="display: none"
                        value="<fmt:message key="button.cancel"/>">
@@ -216,10 +207,11 @@
         </div>
     </div>
 </div>
-<%--<ctg:footer/>--%>
+
 <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
 </body>
 <script>
+    loadMessages();
     $(document).ready(function () {
         $(window).scroll(function () {
             if ($(window).scrollTop() > 10) {
@@ -234,58 +226,50 @@
             $('html, body').animate({scrollTop: 0}, '300');
         });
 
-        $("#profile_change").click(profile_change_click);
+        $("#profileChange").click(profileChange_click);
 
-        function profile_change_click() {
-            alert("Dont profile_change_click!!");
+        function profileChange_click() {
             $("#profile_submit").show();
-            $("#profile_cancel").show();
-            $("#profile_change").hide();
+            $("#profileCancel").show();
+            $("#profileChange").hide();
             $("#profile input[type=text]").attr("disabled", false);
         }
 
-        $("#profile_cancel").click(profile_cancel_click);
+        $("#profileCancel").click(profileCancelClick);
 
-        function profile_cancel_click() {
-            alert("Dont profile_change_click!!");
-            $("#profile_cancel").hide();
+        function profileCancelClick() {
+            $("#profileCancel").hide();
             $("#profile_submit").hide();
-            $("#profile_change").show();
+            $("#profileChange").show();
             $("#profile input[type=text]").attr("disabled", true);
         }
 
-        $("#diploma_change").click(diploma_change_click);
+        $("#diplomaChange").click(diplomaChangeClick);
 
-        function diploma_change_click() {
-            alert("Dont diploma_change_click!!");
-            $("#diploma_submit").show();
-            $("#diploma_cancel").show();
-            $("#diploma_change").hide();
+        function diplomaChangeClick() {
+            $("#diplomaSubmit").show();
+            $("#diplomaCancel").show();
+            $("#diplomaChange").hide();
             $("#diploma input").attr("disabled", false);
         }
 
-        $("#diploma_cancel").click(diploma_cancel_click);
+        $("#diplomaCancel").click(diplomaCancelClick);
 
-        function diploma_cancel_click() {
-            alert("Dont diploma_cancel_click!!");
-            $("#diploma_submit").hide();
-            $("#diploma_cancel").hide();
-            $("#diploma_change").show();
+        function diplomaCancelClick() {
+            $("#diplomaSubmit").hide();
+            $("#diplomaCancel").hide();
+            $("#diplomaChange").show();
             $("#diploma input")
                 .val("")
                 .attr("disabled", true);
-            $("#errorDiploma")
-                .css("display", "none")
-                .text("");
         }
 
-        $("#diploma_submit").click(diploma_submit_click);
+        $("#diplomaSubmit").click(diplomaSubmit_click);
 
-        function diploma_submit_click() {
+        function diplomaSubmit_click() {
             let input = $("#diploma input");
             let diploma = getValueOfInput(input);
             if (validateMark(diploma) && input[0].checkValidity()) {
-                alert("ajax");
                 $.ajax({
                     url: 'controller',
                     type: 'get',
@@ -295,51 +279,53 @@
                         "Content-Type": "application/json; charset=utf-8"
                     },
                     success: function (data) {
-                        var empt = $("#errorDiploma").html();
-                        if (empt != null || empt != "") {
-                            $("#errorDiploma").html("");
+                        let error = JSON.parse(data);
+                        if (error.errorEng === "none") {
+                            $("#diplomaSubmit").hide();
+                            $("#diplomaCancel").hide();
+                            $("#diplomaChange").show();
+                            $("#diploma input")
+                                .attr("placeholder", diploma)
+                                .attr("disabled", true)
+                                .val("");
+                        } else {
+                            <c:choose>
+                            <c:when test="${sessionScope.lang eq 'ru'}">
+                            createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                            </c:when>
+                            <c:otherwise>
+                            createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                            </c:otherwise>
+                            </c:choose>
+                            $("#diploma input")
+                                .attr("placeholder", diploma)
+                                .attr("disabled", true)
+                                .val("");
                         }
-                        alert("success");
-                        $("#diploma_submit").hide();
-                        $("#diploma_cancel").hide();
-                        $("#diploma_change").show();
-                        $("#diploma input")
-                            .attr("placeholder", diploma)
-                            .attr("disabled", true)
-                            .val("");
-                        $("#errorDiploma")
-                            .css("display", "none")
-                            .text("");
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        alert("error" + xhr);
-                        $("#errorDiploma").val("check your mark, pls!");
+                        window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                     }
                 });
             } else {
-                $("#errorDiploma")
-                    .css("display", "inline-block")
-                    .text("check your mark, pls!");
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="message.mark"/>");
             }
         }
 
         $("#subject_change").click(subject_change_click);
 
         function subject_change_click() {
-            alert("Dont subject_change_click!!");
             $("#subject_submit").show();
             $("#subject_cancel").show();
             $("#subject_change").hide();
             $(".subject-field input").attr("disabled", false);
 
             if ($('.noSubjects').length) {
-                alert("element(s) found");
                 $('.noSubjects').hide();
             }
 
             let entrant_subjects = $(".subject-field");
             for (let i = 0; i < entrant_subjects.length; i++) {
-                let subject = entrant_subjects[i].firstChild;
                 let button_delete = document.createElement("input");
                 $(button_delete).attr("type", "button");
                 $(button_delete).attr("class", "subject_delete_button");
@@ -361,7 +347,6 @@
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-
                     let subjectsGson = $.parseJSON(data);
 
                     let element = document.getElementById('all_subjects');
@@ -400,8 +385,7 @@
 
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                    $('#content').html(errorMsg);
+                    window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                 }
             });
         }
@@ -409,7 +393,6 @@
         $("#subject_add_button").click(subject_add_button_click);
 
         function subject_add_button_click() {
-            alert("Dont subject_add_button_click!!");
             let button = event.target;
             let subject_id = $(button).attr("id");
             let subject_div = $(button).parent();
@@ -440,7 +423,6 @@
         $("#subject_delete_button").click(subject_delete_button_click);
 
         function subject_delete_button_click() {
-            alert("Dont subject_delete_button_click!!");
             let button = event.target;
             let subject_div = $(button).parent();
 
@@ -463,9 +445,7 @@
         $("#subject_cancel").click(subject_cancel_click);
 
         function subject_cancel_click() {
-            alert("Dont subject_cancel_click!!");
             if ($('.noSubjects').length) {
-                alert("element(s) found");
                 $("div #entrant_subjects").empty();
                 $("div #all_subjects").empty();
                 $("div #entrant_subjects").append("<div class=\"noSubjects\">\n" +
@@ -475,12 +455,10 @@
                 $("#subject_submit").hide();
                 $("#subject_change").show();
             } else {
-                alert("nothing found");
-                <%--let subjects =${jsonMarks}.clientSubjects;--%>
                 let subjects =${jsonMarks};
                 $("div #entrant_subjects").empty();
                 $("div #all_subjects").empty();
-                for (var i = 0; i < subjects.length; i++) {
+                for (let i = 0; i < subjects.length; i++) {
                     let subjectName;
                     <c:if test="${sessionScope.lang eq 'ru'}">
                     subjectName = subjects[i].subject.nameRu;
@@ -489,7 +467,7 @@
                     subjectName = subjects[i].subject.nameEng;
                     </c:if>
                     $("div #entrant_subjects").append(
-                        "<div class=\"subject-field\" style=\"display:flex; justify-content: space-between;\">" +
+                        "<div class=\"subject-field\" id='"+subjects[i].subject.id+"'>" +
                         "   <input type=\"hidden\" class=\"id\" id=\"" + subjects[i].subject.id + "\" disabled>" +
                         "   <h4>" + subjectName + "</h4>" +
                         "   <input type=\"number\" class=\"mark no-spinners\" placeholder=\"" + subjects[i].mark.mark + "\" disabled>" +
@@ -503,26 +481,22 @@
             }
         }
 
-
         $("#subject_submit").click(subject_submit_click);
 
         function subject_submit_click() {
             let childs = document.getElementById("entrant_subjects").getElementsByTagName('div');
             if (childs.length > 3) {
-                $("#error").text("Too much subjects");
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="message.mark.tooMuch"/>");
             } else if (childs.length < 3) {
-                $("#error").text("Not enough subjects");
-            } else if (!validateMarks(childs)) {
-                $("#error").text("Marks have to be between 0 and 100");
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="message.mark.notEnough"/>");
+            } else if (!validateEntrantMarks(childs)) {
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="message.mark.range"/>");
             } else {
-                <%--let s =${jsonMarks}.clientSubjects;--%>
                 let s =${jsonMarks};
-                if (compareArrays(childs, s)) {
-                    alert("old");
+                if (compareEntrantMarks(childs, s)) {
                     subject_cancel_click();
                 } else {
                     let jsonString = makeJsonOfSubjects(childs);
-                    alert("new");
                     $.ajax({
                         url: 'controller',
                         type: 'get',
@@ -532,13 +506,22 @@
                             "Content-Type": "application/json; charset=utf-8"
                         },
                         success: function (data) {
-                            alert("success");
-                            document.location.reload(true)
+                            let error = JSON.parse(data);
+                            if (error.errorEng === "none") {
+                                document.location.reload(true)
+                            } else {
+                                <c:choose>
+                                <c:when test="${sessionScope.lang eq 'ru'}">
+                                createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                                </c:when>
+                                <c:otherwise>
+                                createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                                </c:otherwise>
+                                </c:choose>
+                            }
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
-                            alert("error");
-                            var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                            $('#content').html(errorMsg);
+                            window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                         }
                     });
                 }
@@ -546,7 +529,7 @@
         }
     });
 
-    function compareArrays(array1, array2) {
+    function compareEntrantMarks(array1, array2) {
         if (!(array1.length === array2.length)) {
             return false;
         }
@@ -555,8 +538,6 @@
             let mark2 = array2[i].mark.mark;
             let subjectid1 = parseInt(array1[i].getAttribute('id'));
             let subjectid2 = array2[i].subject.id;
-            let b1 = mark1 !== mark2;
-            let b2 = subjectid1 !== subjectid2;
             if (mark1 !== mark2 || subjectid1 !== subjectid2) {
                 return false
             }
@@ -565,7 +546,6 @@
     }
 
     function makeJsonOfSubjects(subjects) {
-        <%--let mark_id =${jsonMarks}.clientSubjects--%>
         let mark_id =${jsonMarks};
         let lengthOfMarks = mark_id.length;
         let obj = [];
@@ -584,11 +564,17 @@
         return JSON.stringify(obj);
     }
 
-    function validateMark(mark) {
-        return mark != null && mark > 0 && mark <= 100 && /^[1-9]\d*$/.test(mark);
+    function validateInputs() {
+        let inputs = $("input");
+        for (let i = 0; i < inputs.length; ++i) {
+            if (!validateScript(inputs[i].value)) {
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="error.script"/>");
+                return false;
+            }
+        }
     }
 
-    function validateMarks(subjects) {
+    function validateEntrantMarks(subjects) {
         let mark;
         for (let i = 0; i < subjects.length; i++) {
             mark = parseInt(getValueOfInput(subjects[i].getElementsByClassName('mark')));
@@ -597,6 +583,10 @@
             }
         }
         return true;
+    }
+
+    function validateMark(mark) {
+        return mark != null && mark > 0 && mark <= 100 && /^[1-9]\d*$/.test(mark);
     }
 
     function getValueOfInput(element) {

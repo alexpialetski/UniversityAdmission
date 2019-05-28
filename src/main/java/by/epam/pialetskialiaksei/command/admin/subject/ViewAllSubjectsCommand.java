@@ -17,11 +17,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class ViewAllSubjectsCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -40,7 +35,6 @@ public class ViewAllSubjectsCommand implements Command {
 
             String role = (String) session.getAttribute("userRole");
 
-// TODO: 18.05.2019 delete client.equals
             if ("admin".equals(role) || "client".equals(role)) {
                 SubjectDAO subjectDAO = new SubjectDAO();
                 List<Subject> allSubjects = subjectDAO.findAll();
@@ -57,9 +51,6 @@ public class ViewAllSubjectsCommand implements Command {
 
                 result = Path.FORWARD_SUBJECT_VIEW_ALL_ADMIN;
             }
-//		} else if ("client".equals(role)) {
-//			result = Path.REDIRECT_TO_PROFILE;
-//		}
             return result;
         } catch (DaoException e) {
             throw new CommandException(e);

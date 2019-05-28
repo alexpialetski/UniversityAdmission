@@ -15,12 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
-//public class ApplyFacultyCommand extends Command {
+
 public class ApplyFacultyCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
@@ -29,14 +24,13 @@ public class ApplyFacultyCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request,
-//                          HttpServletResponse response, ActionType actionType)
                           HttpServletResponse response)
             throws IOException, ServletException, CommandException {
         LOG.debug("Command execution starts");
         try {
             String alreadyApplied = request.getParameter("applied");
             if (alreadyApplied != null) {
-                return "{\"errorEng\":\"You are already applied.\","+
+                return "{\"errorEng\":\"You are already applied.\"," +
                         "\"errorRu\":\"Вы уже подали документы на факультет.\"}";
             } else {
                 HttpSession session = request.getSession(false);
@@ -56,11 +50,10 @@ public class ApplyFacultyCommand implements Command {
                 FacultySubjectDAO facultySubjectDAO = new FacultySubjectDAO();
                 List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
                 if ((subjectsOfEntrant.size() == facultySubjects.size()) && facultySubjects.containsAll(subjectsOfEntrant) && subjectsOfEntrant.containsAll(facultySubjects)) {
-//                    FacultyDAO facultyDAO = new FacultyDAO();
                     facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
-                    return "{\"error\":\"none\"}";
+                    return "{\"errorEng\":\"none\"}";
                 } else {
-                    return "{\"errorEng\":\"You havent got required subjects.\","+
+                    return "{\"errorEng\":\"You havent got required subjects.\"," +
                             "\"errorRu\":\"У вас не совпадают предметы с этим факультетом.\"}";
                 }
             }

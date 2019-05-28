@@ -13,13 +13,6 @@ public abstract class SqlDAO {
         ConnectionPoolManager.getInstance().releaseConnection(connection);
     }
     protected abstract SetBuilder createBuilder();
-    protected void rollback(Connection connection){
-        try {
-            connection.rollback();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
     protected void close(Connection connection){
         try {
             connection.close();

@@ -22,7 +22,6 @@ import java.util.List;
 import static org.apache.logging.log4j.core.util.Closer.close;
 
 public class EntrantDAO extends SqlDAO {
-//    private EntrantBuilder entrantBuilder = new EntrantBuilder();
 
     private static final String FIND_ALL_ENTRANTS = "SELECT id, city, district, school, User_idUser, diplomaMark\n" +
                                                     "FROM university_admission.entrant;";
@@ -71,14 +70,11 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setInt(counter++, entity.getUserId());
             pstmt.setInt(counter, 0);
             pstmt.execute();
-//            connection.commit();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 entity.setId(rs.getInt(Fields.GENERATED_KEY));
             }
         } catch (SQLException e) {
-//            rollback(connection);
-//            LOG.error("Can not create an entrant", e);
             throw new DaoException(e);
         } finally {
             releaseConnection(connection);
@@ -99,16 +95,12 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setString(counter++, entity.getSchool());
             pstmt.setInt(counter++, entity.getUserId());
             pstmt.setInt(counter++, entity.getDiplomaMark());
-//            pstmt.setBoolean(counter++, entity.getBlockedStatus());
 
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update an entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not update an entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -124,11 +116,8 @@ public class EntrantDAO extends SqlDAO {
             pstmt.setInt(1, entity.getId());
 
             pstmt.execute();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not delete an entrant", e);
-//            rollback(connection);
-//            LOG.error("Can not delete an entrant", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -145,7 +134,6 @@ public class EntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ENTRANT);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (!rs.next()) {
                 entrant = null;
             } else {
@@ -171,10 +159,7 @@ public class EntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ENTRANT_BY_USER_ID);
             pstmt.setInt(1, user.getId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             if(rs.next()){
-//                entrant = unmarshal(rs);
-//                entrant = entrantBuilder.build(rs);
                 entrant = (Entrant) createBuilder().build(rs);
             }
         } catch (SQLException e) {
@@ -196,7 +181,6 @@ public class EntrantDAO extends SqlDAO {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_ALL_ENTRANTS);
             rs = pstmt.executeQuery();
-//            connection.commit();
             while (rs.next()) {
                 users.add((Entrant) createBuilder().build(rs));
 
@@ -221,14 +205,11 @@ public class EntrantDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ALL_FACULTY_ENTRANTS);
             pstmt.setInt(1, faculty.getId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             while (rs.next()) {
                 facultyEntrants.add((Entrant) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find faculty entrants", e);
-//            rollback(connection);
-//            LOG.error("Can not find faculty entrants", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -241,14 +222,6 @@ public class EntrantDAO extends SqlDAO {
     protected SetBuilder createBuilder() {
         return new EntrantBuilder();
     }
-
-    /**
-     * Unmarshals Entrant record in database to Java Entrant instance.
-     *
-     * @param rs - ResultSet record
-     * @return Entrant instance of this record
-     */
-
 }
 
 

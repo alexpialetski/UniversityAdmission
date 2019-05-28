@@ -2,18 +2,18 @@
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf"%>
 
 <head>
-
-<title>${title}</title>
-
-<link rel="stylesheet" type="text/css" media="screen"
-	href="css/main.css" />
-
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
- <script type="text/javascript"
-	src="script/jquery-1.11.2.min.js"></script>
-<script type="text/javascript"
-	src="script/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="css/jquery.dataTables.min.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="css/scrollButton.css">
+	<link rel="stylesheet" type="text/css" href="css/footer.css">
+	<link rel="stylesheet" type="text/css" href="css/header.css">
+	<link rel="stylesheet" type="text/css" href="css/sidebar.css">
+	<link rel="stylesheet" type="text/css" href="css/table.css">
+	<link rel="stylesheet" type="text/css" href="css/general.css">
+	<link rel="stylesheet" type="text/css" href="css/messages.css">
+	<script src="js/jquery-1.11.2.min.js"></script>
+	<script src="js/scrollButton.js"></script>
+	<script src="js/sideBar.js"></script>
+	<script src="js/validation.js"></script>
+	<script src="js/messages.js"></script>
 </head>

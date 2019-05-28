@@ -1,36 +1,24 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
-
 <fmt:setLocale value="${sessionScope.lang}"/>
 
 <html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <link rel="stylesheet" type="text/css" href="css/messages.css">
+    <title><fmt:message key="title.registration"/></title>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
     <link rel="stylesheet" type="text/css" href="css/dialog.css">
     <link rel="stylesheet" type="text/css" href="css/loader.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
-    <script src="js/validation.js"></script>
-    <script src="js/messages.js"></script>
     <script src="js/dialog.js"></script>
     <script src="js/loader.js"></script>
 </head>
-
 <body>
 
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
+
 <div id="dialogoverlay"></div>
 <div id="dialogbox">
     <div>
@@ -42,20 +30,11 @@
 
 <div class="loader" style="display:none"></div>
 
-<div class="alert-boxes">
-    <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="alert warning">
-            <span class="closebtn">&times;</span>
-            <strong>Warning!</strong> <c:out value="${sessionScope.errorMessage}"/>
-        </div>
-    </c:if>
-</div>
-
 <div id="container">
     <div class="content">
         <div class="main-container">
             <h1><fmt:message key="header.register"/></h1>
-            <form action="controller" method="POST" class="form-container">
+            <form id="registration" action="controller" method="POST" class="form-container">
                 <input type="hidden" name="command" value="client_registration">
                 <input type="hidden" name="lang" value="en">
                 <div class="input-form">
@@ -95,8 +74,13 @@
                 <input id="validationButton" type="submit" style="display: none">
             </form>
             <p><fmt:message key="registration.label.alredy_registered_msg"/>
-                <a href="?command=viewLogin"><fmt:message key="registration.label.login_here_msg"/>!</a>
+                <%--<a href="?command=viewLogin"><fmt:message key="registration.label.login_here_msg"/>!</a>--%>
             </p>
+            <form style="font-size: 18px;" class="form" action="controller" method="GET">
+                <input type="hidden" name="command" value="viewLogin">
+                <input style="color: black;text-align: center;padding: 4px 10px;font-size: 18px;line-height: 25px;border-radius: 10px;background-color: rgb(115, 212, 167);box-shadow: 0 4px 8px 0 rgba(197, 197, 197, 0.2), 0 6px 20px 0 rgba(197, 197, 197, 0.2);border-color: rgba(255,255,255,1);"
+                       type="submit" value="<fmt:message key="registration.label.login_here_msg"/>">
+            </form>
         </div>
     </div>
 </div>
@@ -106,25 +90,26 @@
     $(document).ready(function () {
         loadMessages();
     });
+
     function validateInputs() {
         if (!$(".main-container form")[0].checkValidity()) {
             $("#validationButton").click();
             return false;
         }
-        let inputs = $("input[type='text']");
+        let inputs = $("input");
         for (let i = 0; i < inputs.length; ++i) {
             if (!validateScript(inputs[i].value)) {
-                createElement("warning", "Warning", "Scripts are not allowed");
+                createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="error.script"/>");
                 return false;
             }
         }
         let passwords = $("input[type='password']");
         if (passwords[0].value.length < 4) {
-            createElement("warning", "Warning", "Password is less than 4 symbols");
+            createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="error.passwordLength"/>");
             return false;
         }
         if (passwords[0].value !== passwords[1].value) {
-            createElement("warning", "Warning", "Passwords are not the same");
+            createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="error.passwordNotSame"/>");
             return false;
         }
         runLoader();
@@ -132,7 +117,6 @@
     }
 
     function fun() {
-        alert("Send confirm");
         let first_name = $('input[name="first_name"]').val();
         let last_name = $('input[name="last_name"]').val();
         let email = $('input[name="email"]').val();
@@ -151,7 +135,19 @@
             },
             success: function (data) {
                 stopLoader();
-                Prompt.render('Check your email and insert key:','checkKey');
+                let error = JSON.parse(data);
+                if (error.errorEng === "none") {
+                    Prompt.render('<fmt:message key="message.email"/>', 'checkKey');
+                } else {
+                    <c:choose>
+                    <c:when test="${sessionScope.lang eq 'ru'}">
+                    createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                    </c:when>
+                    <c:otherwise>
+                    createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                    </c:otherwise>
+                    </c:choose>
+                }
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
@@ -175,11 +171,19 @@
                 "Content-Type": "application/json; charset=utf-8"
             },
             success: function (data) {
-                if (data === "okay") {
-                    $("form").submit();
+                let error = JSON.parse(data);
+                if (error.errorEng === "none") {
+                    $("#registration").submit();
                 } else {
                     stopLoader();
-                    createElement("warning", "Warning", "Someting gone wrong, check your key");
+                    <c:choose>
+                    <c:when test="${sessionScope.lang eq 'ru'}">
+                    createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                    </c:when>
+                    <c:otherwise>
+                    createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                    </c:otherwise>
+                    </c:choose>
                 }
             },
             error: function (xhr, ajaxOptions, thrownError) {

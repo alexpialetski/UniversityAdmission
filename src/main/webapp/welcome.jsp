@@ -1,14 +1,13 @@
 <%@ include file="/WEB-INF/view/jspf/directive/page.jspf" %>
 <%@ include file="/WEB-INF/view/jspf/directive/taglib.jspf" %>
 
-
 <fmt:setLocale value="${sessionScope.lang}"/>
 
 <html lang="${sessionScope.lang}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Client-view</title>
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
@@ -20,7 +19,6 @@
 </head>
 <body>
 
-<%--<ctg:header company="University admission"/>--%>
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 
 <c:if test="${not empty userRole}">
@@ -30,11 +28,10 @@
 <div id="container">
     <div class="content">
         <div style="display: flex; align-content: center; justify-content: center">
-            <h1>Welcome on out website!</h1>
+            <h1><fmt:message key="profile.text.greeting"/></h1>
         </div>
     </div>
 </div>
 <%@ include file="/WEB-INF/view/jspf/footer.jspf" %>
-
 </body>
 </html>

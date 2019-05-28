@@ -57,14 +57,11 @@ public class ReportSheetDAO extends SqlDAO {
             pstmt = connection.prepareStatement(GET_REPORT_SHEET);
             pstmt.setInt(1, facultyId);
             rs = pstmt.executeQuery();
-//            connection.commit();
             while (rs.next()) {
                 entrantsResults.add((EntrantReportSheet) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -83,7 +80,6 @@ public class ReportSheetDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_ENTRANT_RESULT);
             pstmt.setInt(1, facultyId);
             rs = pstmt.executeQuery();
-//            connection.commit();
             UserBuilder userBuilder = new UserBuilder();
             FormOfEducationBuilder formOfEducationBuilder = new FormOfEducationBuilder();
             MarksSumBuilder marksSumBuilder = new MarksSumBuilder();
@@ -96,8 +92,6 @@ public class ReportSheetDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -109,7 +103,6 @@ public class ReportSheetDAO extends SqlDAO {
     public int getScore(int facultyId, int numberOfSeats) throws DaoException {
         Connection connection = null;
         PreparedStatement pstmt = null;
-//        ResultSet rs = null;
         int score = 0;
         try {
             connection = getConnection();
@@ -117,8 +110,6 @@ public class ReportSheetDAO extends SqlDAO {
             pstmt.setInt(1, facultyId);
             pstmt.setInt(2, numberOfSeats);
             pstmt.execute();
-//            rs = pstmt.getResultSet();
-//            connection.commit();
             try(ResultSet resultSet = pstmt.getResultSet()){
                 if (resultSet!=null && resultSet.next()) {
                     return resultSet.getInt(Fields.REPORT_SHEET_ENTRANT_TOTAL_SUM);
@@ -126,12 +117,9 @@ public class ReportSheetDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
-//            close(rs);
         }
         return score;
     }
@@ -159,8 +147,6 @@ public class ReportSheetDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmtForBudget);
@@ -181,8 +167,6 @@ public class ReportSheetDAO extends SqlDAO {
             exists = (rs.getInt("exist") == 1);
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -197,12 +181,9 @@ public class ReportSheetDAO extends SqlDAO {
         try {
             connection = getConnection();
             pstmt = connection.prepareStatement(DELETE_RESULTS);
-//            pstmt.executeQuery();
             pstmt.execute();
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -219,15 +200,12 @@ public class ReportSheetDAO extends SqlDAO {
             pstmt = connection.prepareStatement(GET_FORM_OF_EDUCATION);
             pstmt.setInt(1, user.getId());
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
                 FormOfEducationBuilder formOfEducationBuilder = new FormOfEducationBuilder();
                 formOfEducation =  formOfEducationBuilder.build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not get report sheet", e);
-//            rollback(connection);
-//            LOG.error("Can not get report sheet", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

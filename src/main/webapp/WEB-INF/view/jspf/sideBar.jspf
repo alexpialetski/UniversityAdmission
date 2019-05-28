@@ -26,6 +26,7 @@ SideBar (left area).
                            value="<fmt:message key="sideBar.subjects"/>">
                 </form>
             </li>
+            <c:if test="${results eq true}">
             <li>
                 <form class="form" action="controller" method="GET">
                     <input type="hidden" name="command" value="viewResults">
@@ -34,6 +35,7 @@ SideBar (left area).
                            value="<fmt:message key="sideBar.result"/>">
                 </form>
             </li>
+            </c:if>
         </c:if>
         <li>
             <form class="form" action="controller" method="GET">

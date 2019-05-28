@@ -23,7 +23,6 @@ public class FacultyDAO extends SqlDAO {
     private static final String FIND_ALL_FACULTIES = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty;";
     private static final String FIND_FACULTY_BY_ID = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty WHERE faculty.id = ? LIMIT 1;";
     private static final String FIND_FACULTY_BY_NAME = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty WHERE faculty.name_ru = ? OR faculty.name_eng = ? LIMIT 1;";
-//    private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats, faculty.infoEng, faculty.infoRu) VALUES (?,?,?,?,?,?);";
     private static final String INSERT_FACULTY = "INSERT INTO university_admission.faculty(faculty.name_ru, faculty.name_eng, faculty.total_seats,faculty.budget_seats) VALUES (?,?,?,?);";
     private static final String UPDATE_FACULTY = "UPDATE faculty SET faculty.name_ru=?, faculty.name_eng=?, faculty.total_seats=?, faculty.budget_seats=?,  faculty.infoRu = ?, faculty.infoEng = ? WHERE faculty.id=? LIMIT 1;";
     private static final String DELETE_FACULTY = "DELETE FROM university_admission.faculty WHERE faculty.id=? LIMIT 1;";
@@ -32,37 +31,6 @@ public class FacultyDAO extends SqlDAO {
             .getLogger(FacultyDAO.class);
 
 
-    public void create(Faculty entity) {
-        Connection connection = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-        try {
-            connection = getConnection();
-            pstmt = connection.prepareStatement(INSERT_FACULTY,
-                    Statement.RETURN_GENERATED_KEYS);
-            int counter = 1;
-            pstmt.setString(counter++, entity.getNameRu());
-            pstmt.setString(counter++, entity.getNameEng());
-            pstmt.setInt(counter++, entity.getTotalSeats());
-            pstmt.setInt(counter++, entity.getBudgetSeats());
-//            pstmt.setString(counter++, entity.getInfoRu());
-//            pstmt.setString(counter++, entity.getInfoEng());
-
-            pstmt.execute();
-            connection.commit();
-            rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                entity.setId(rs.getInt(Fields.GENERATED_KEY));
-            }
-        } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not create a faculty", e);
-        } finally {
-            close(connection);
-            close(pstmt);
-            close(rs);
-        }
-    }
 
     public void update(Faculty entity) throws DaoException {
         Connection connection = null;
@@ -81,32 +49,10 @@ public class FacultyDAO extends SqlDAO {
             pstmt.setInt(counter, entity.getId());
 
             pstmt.executeUpdate();
-//            connection.commit();
         } catch (SQLException e) {
             throw new DaoException("Can not update a faculty", e);
-//            rollback(connection);
-//            LOG.error("Can not update a faculty", e);
         } finally {
             releaseConnection(connection);
-            close(pstmt);
-        }
-    }
-
-    public void delete(Faculty entity) {
-        Connection connection = null;
-        PreparedStatement pstmt = null;
-        try {
-            connection = getConnection();
-            pstmt = connection.prepareStatement(DELETE_FACULTY);
-            pstmt.setInt(1, entity.getId());
-
-            pstmt.execute();
-            connection.commit();
-        } catch (SQLException e) {
-            rollback(connection);
-            LOG.error("Can not delete a faculty", e);
-        } finally {
-            close(connection);
             close(pstmt);
         }
     }
@@ -121,14 +67,11 @@ public class FacultyDAO extends SqlDAO {
             pstmt = connection.prepareStatement(FIND_FACULTY_BY_ID);
             pstmt.setInt(1, entityPK);
             rs = pstmt.executeQuery();
-//            connection.commit();
             if (rs.next()) {
                 faculty = (Faculty) createBuilder().build(rs);
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -156,8 +99,6 @@ public class FacultyDAO extends SqlDAO {
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find a faculty", e);
-//            rollback(connection);
-//            LOG.error("Can not find a faculty", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);
@@ -175,14 +116,11 @@ public class FacultyDAO extends SqlDAO {
             connection = getConnection();
             pstmt = connection.prepareStatement(FIND_ALL_FACULTIES);
             rs = pstmt.executeQuery();
-//            connection.commit();
             while (rs.next()) {
                 faculties.add((Faculty) createBuilder().build(rs));
             }
         } catch (SQLException e) {
             throw new DaoException("Can not find all faculties", e);
-//            rollback(connection);
-//            LOG.error("Can not find all faculties", e);
         } finally {
             releaseConnection(connection);
             close(pstmt);

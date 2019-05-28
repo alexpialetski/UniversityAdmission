@@ -22,7 +22,6 @@ public class User extends Entity {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role.getName();
-//        this.lang = lang;
     }
 
     public String getEmail() {

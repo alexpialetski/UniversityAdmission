@@ -5,18 +5,9 @@
 
 <html lang="${sessionScope.lang}">
 <head>
-    <title>Title</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" type="text/css" href="css/client-profile.css">
-    <link rel="stylesheet" type="text/css" href="css/scrollButton.css">
-    <link rel="stylesheet" type="text/css" href="css/footer.css">
-    <link rel="stylesheet" type="text/css" href="css/header.css">
-    <link rel="stylesheet" type="text/css" href="css/sidebar.css">
-    <link rel="stylesheet" type="text/css" href="css/general.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <script src="js/scrollButton.js"></script>
-    <script src="js/sideBar.js"></script>
+    <title><fmt:message key="title.faculties"/></title>
+    <%@ include file="/WEB-INF/view/jspf/head.jspf" %>
 </head>
 <style>
     .pag {
@@ -44,7 +35,7 @@
 <%@ include file="/WEB-INF/view/jspf/header.jspf" %>
 <a id="scrollButton"></a>
 <%@ include file="/WEB-INF/view/jspf/sideBar.jspf" %>
-<%--<ctg:navbar/>--%>
+<%@ include file="/WEB-INF/view/jspf/message.jspf" %>
 
 <div id="container">
     <div class="content">
@@ -62,6 +53,7 @@
 </div>
 </body>
 <script>
+    loadMessages();
     let faculties = [];
     $(document).ready(function () {
         $(window).scroll(function () {
@@ -94,7 +86,6 @@
                         .attr("id", facultiesGson[i].faculty.id)
                         .css("display", "flex")
                         .css("width", "80%");
-                    // $(element).append("<div class=\"info\">\n" +
                     $(info).append(
                         "                <div class=\"image-greeting\">" +
                         "                    <div class=\"greeting\" style=\" text-align: center;\">" +
@@ -135,7 +126,7 @@
                             "                            </h4>" +
                             "                        </div>");
                     }
-                    $(info).append(subjects);//
+                    $(info).append(subjects);
                     <c:choose>
                     <c:when test="${requestScope.results eq false}">
                     <c:if test="${sessionScope.userRole eq 'client'}">
@@ -170,24 +161,18 @@
                     <c:choose>
                     <c:when test="${not empty applied}">
                     if (facultyId === ${applied}) {
-                        // $(element).prepend(info);
-                        // $(info).insertAfter("#facultyLabel");
                         faculties.unshift(info);
                     } else {
-                        // $(element).append(info);
                         faculties.push(info);
                     }
                     </c:when>
                     <c:otherwise>
-                    // $(element).append(info);
-                    // $(element).append(info);
                     faculties.push(info);
                     </c:otherwise>
                     </c:choose>
                     </c:if>
                     </c:when>
                     <c:otherwise>
-                    // $(element).append(info);
                     faculties.push(info);
                     </c:otherwise>
                     </c:choose>
@@ -198,8 +183,7 @@
                         "<input type='hidden' name='command' value='viewFaculty'>" +
                         "<input type='hidden' name='facultyId' value='" + facultiesGson[i].faculty.id + "'>" +
                         "</form>");
-                    // $(element).append(info);
-                        <c:if test="${requestScope.results eq false}">
+                    <c:if test="${requestScope.results eq false}">
                             faculties.push(info);
                         </c:if>
                     </c:if>
@@ -207,17 +191,14 @@
                 loadPagination();
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-                var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                $('#content').html(errorMsg);
+                window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
             }
         });
 
         function apply_button_click() {
             <c:choose>
             <c:when test="${not empty requestScope.applied}">
-            <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-            alert("you are already applied");
+            createElement("warning", "<fmt:message key="message.warning"/>", "<fmt:message key="message.applied"/>");
             </c:when>
             <c:otherwise>
             let button = event.target;
@@ -232,18 +213,22 @@
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-                    let dataJson = JSON.parse(data);
-                    if (dataJson.error === 'none') {
+                    let error = JSON.parse(data);
+                    if (error.errorEng === "none") {
                         $("#facultiesHeader").click();
                     } else {
-                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-                        alert("Cant apply:" + dataJson.error);
+                        <c:choose>
+                        <c:when test="${sessionScope.lang eq 'ru'}">
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                        </c:when>
+                        <c:otherwise>
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                        </c:otherwise>
+                        </c:choose>
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-                    var errorMsg = 'Ajax request failed: ' + xhr.responseText;
-                    $('#content').html(errorMsg);
+                    window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                 }
             });
             </c:otherwise>
@@ -251,7 +236,6 @@
         }
 
         function unapply_button_click() {
-            alert("unapply_button_click!!");
             let button = event.target;
             let subject_div = $(button).parent();
             let facultyId = $(subject_div).attr("id");
@@ -264,17 +248,22 @@
                     "Content-Type": "application/json; charset=utf-8"
                 },
                 success: function (data) {
-                    if (data === 'error') {
-                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-                        alert("cant unapply");
-                    } else {
-                        <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
+                    let error = JSON.parse(data);
+                    if (error.errorEng === "none") {
                         $("#facultiesHeader").click();
+                    } else {
+                        <c:choose>
+                        <c:when test="${sessionScope.lang eq 'ru'}">
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorRu);
+                        </c:when>
+                        <c:otherwise>
+                        createElement("warning", "<fmt:message key="message.warning"/>", error.errorEng);
+                        </c:otherwise>
+                        </c:choose>
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    <%--ALlllerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrt--%>
-                    $('#content').html(errorMsg);
+                    window.location.assign("/UniversityAdmission/WEB-INF/client/errorPage.jsp");
                 }
             });
         }

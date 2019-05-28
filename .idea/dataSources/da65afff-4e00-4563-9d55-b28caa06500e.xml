@@ -1250,13 +1250,13 @@
     </column>
     <column id="314" parent="282" name="total_seats">
       <Position>4</Position>
-      <DataType>tinyint(3) unsigned|0s</DataType>
+      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="315" parent="282" name="budget_seats">
       <Position>5</Position>
-      <DataType>tinyint(3) unsigned|0s</DataType>
+      <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>

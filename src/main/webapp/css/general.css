@@ -1,6 +1,6 @@
 .main-container{
   background-color: rgb(235, 235, 235);
-  color: rgb(115, 212, 167);
+  color: #333;
   border: 3px outset #f1f1f1;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 12px;

@@ -84,21 +84,6 @@ public class BasicConnectionPool implements ConnectionPool {
     }
 
     @Override
-    public String getUrl() {
-        return url;
-    }
-
-    @Override
-    public String getUser() {
-        return user;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
     public void shutdown() throws SQLException {
         for (Connection c : usedConnections) {
             c.close();

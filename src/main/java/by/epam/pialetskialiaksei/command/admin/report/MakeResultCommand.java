@@ -16,11 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * View profile command.
- *
- * @author Mark Norkin
- */
 public class MakeResultCommand implements Command {
 
     private static final long serialVersionUID = -3071536593627692473L;
