@@ -1,7 +1,5 @@
 package by.epam.pialetskialiaksei.filter;
 
-import by.epam.pialetskialiaksei.Path;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;

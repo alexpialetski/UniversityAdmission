@@ -4,6 +4,7 @@ import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
+import by.epam.pialetskialiaksei.socket.ScoreWebSocket;
 import by.epam.pialetskialiaksei.sql.DAO.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,7 +19,7 @@ import java.util.List;
 
 public class ApplyFacultyCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ApplyFacultyCommand.class);
 
@@ -51,6 +52,7 @@ public class ApplyFacultyCommand implements Command {
                 List<Subject> facultySubjects = facultySubjectDAO.findById(facultyId);
                 if ((subjectsOfEntrant.size() == facultySubjects.size()) && facultySubjects.containsAll(subjectsOfEntrant) && subjectsOfEntrant.containsAll(facultySubjects)) {
                     facultyEntrantDAO.create(new FacultyEntrant(facultyId, entrant.getId()));
+                    ScoreWebSocket.updateScore(new FacultyDAO().find(facultyId));
                     return "{\"errorEng\":\"none\"}";
                 } else {
                     return "{\"errorEng\":\"You havent got required subjects.\"," +

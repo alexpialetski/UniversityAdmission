@@ -49,7 +49,7 @@
             </form>
         </div>
         <c:choose>
-            <c:when test="${requestScope.results eq false}">
+            <c:when test="${sessionScope.results eq false}">
                 <div class="info">
                     <form onsubmit="confirm('<fmt:message key="message.confirm"/>')" method="POST" action="controller">
                         <input type="hidden" name="command" value="makeResult">

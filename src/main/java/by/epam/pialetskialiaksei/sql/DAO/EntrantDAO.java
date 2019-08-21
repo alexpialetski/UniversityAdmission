@@ -4,7 +4,6 @@ import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.entity.User;
-import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
 import by.epam.pialetskialiaksei.sql.builder.EntrantBuilder;
@@ -18,8 +17,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.logging.log4j.core.util.Closer.close;
 
 public class EntrantDAO extends SqlDAO {
 

@@ -1,12 +1,5 @@
 package by.epam.pialetskialiaksei.command.client.login;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.User;
@@ -16,13 +9,19 @@ import by.epam.pialetskialiaksei.sql.DAO.UserDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+
 /**
  * Invoked when user logins in the system.
  *
  */
 public class LoginCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(LoginCommand.class);
 

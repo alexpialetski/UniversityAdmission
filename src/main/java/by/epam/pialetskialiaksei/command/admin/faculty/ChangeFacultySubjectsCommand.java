@@ -5,7 +5,6 @@ import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
 import by.epam.pialetskialiaksei.entity.FacultySubject;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
-import by.epam.pialetskialiaksei.sql.DAO.FacultyEntrantDAO;
 import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
 import by.epam.pialetskialiaksei.sql.DAO.ReportSheetDAO;
 import com.google.gson.Gson;
@@ -23,7 +22,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ChangeFacultySubjectsCommand implements Command {
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ChangeFacultySubjectsCommand.class);
 

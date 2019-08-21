@@ -32,7 +32,7 @@ public class EditProfileCommand implements Command {
             String lastName = request.getParameter("last-name");
             String email = (String) session.getAttribute("email");
 
-            boolean valid = ProfileInputValidator.validateUserParameters(firstName, email);
+            boolean valid = ProfileInputValidator.validateUserParameters(firstName, lastName, email);
 
             if (!valid) {
                 request.getSession().setAttribute("errorEng",

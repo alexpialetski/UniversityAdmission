@@ -14,8 +14,9 @@ public class ProfileInputValidator {
                 && (password.length() >= 4);
     }
 
-    public static boolean validateUserParameters(String firstName, String lastName) {
-        return FieldValidation.isFilled(firstName, lastName);
+    public static boolean validateUserParameters(String firstName, String lastName, String email) {
+        return FieldValidation.isFilled(firstName, lastName)&&FieldValidation.checkScript(firstName,lastName)&&
+                (!email.isEmpty() && email.contains("@"));
     }
 
     public static boolean validateEntrantParameters(String city,

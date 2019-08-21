@@ -1,10 +1,6 @@
 package by.epam.pialetskialiaksei.model;
 
-import by.epam.pialetskialiaksei.entity.Entrant;
 import by.epam.pialetskialiaksei.entity.Faculty;
-
-import java.util.List;
-import java.util.Objects;
 
 public class FacultyScoreModel {
     private Faculty faculty;

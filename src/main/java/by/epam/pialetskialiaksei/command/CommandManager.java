@@ -7,6 +7,10 @@ import by.epam.pialetskialiaksei.command.admin.faculty.GetFacultyUsersCommand;
 import by.epam.pialetskialiaksei.command.admin.faculty.ViewFacultyCommand;
 import by.epam.pialetskialiaksei.command.admin.report.DeleteResultsCommand;
 import by.epam.pialetskialiaksei.command.admin.report.MakeResultCommand;
+import by.epam.pialetskialiaksei.command.admin.subject.AddSubjectCommand;
+import by.epam.pialetskialiaksei.command.admin.subject.DeleteSubjectCommand;
+import by.epam.pialetskialiaksei.command.admin.subject.UpdateSubjectsCommand;
+import by.epam.pialetskialiaksei.command.admin.subject.ViewAllSubjectsCommand;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.command.client.ViewWelcomeCommand;
 import by.epam.pialetskialiaksei.command.client.faculty.ApplyFacultyCommand;
@@ -24,11 +28,9 @@ import by.epam.pialetskialiaksei.command.client.registration.ViewRegistrationCom
 import by.epam.pialetskialiaksei.command.client.score.ViewCurrentScoreCommand;
 import by.epam.pialetskialiaksei.command.client.subject.ChangeEntrantSubjectsCommand;
 import by.epam.pialetskialiaksei.command.client.subject.GetOtherSubjectsCommand;
-import by.epam.pialetskialiaksei.command.faculty.*;
-import by.epam.pialetskialiaksei.command.admin.subject.AddSubjectCommand;
-import by.epam.pialetskialiaksei.command.admin.subject.DeleteSubjectCommand;
-import by.epam.pialetskialiaksei.command.admin.subject.UpdateSubjectsCommand;
-import by.epam.pialetskialiaksei.command.admin.subject.ViewAllSubjectsCommand;
+import by.epam.pialetskialiaksei.command.faculty.GetAllFacultiesCommand;
+import by.epam.pialetskialiaksei.command.faculty.GetFacultySubjectsCommand;
+import by.epam.pialetskialiaksei.command.faculty.ViewFacultiesCommand;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,8 +1,5 @@
 package by.epam.pialetskialiaksei.exception;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public class CommandException extends Throwable {
     public CommandException() {
         super();

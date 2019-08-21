@@ -38,7 +38,6 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`user`
   `last_name`  VARCHAR(45)  NOT NULL,
   `email`      VARCHAR(255) NOT NULL,
   `password`   VARCHAR(32)  NOT NULL,
-  --   `lang` ENUM('ru', 'en') NOT NULL DEFAULT 'ru',
   `role_id`    TINYINT(4)   NOT NULL,
   PRIMARY KEY (`id`, `role_id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
@@ -206,6 +205,20 @@ CREATE TABLE `university_admission`.`mail`
   DEFAULT CHARACTER SET = utf8
   COLLATE = utf8_bin;
 
+--          entrant_marks_sum View
+DROP VIEW IF EXISTS `university_admission`.`entrant_marks_sum`;
+CREATE OR REPLACE VIEW `entrant_marks_sum` AS
+SELECT university_admission.faculty_entrants.Faculty_idFaculty AS `facultyId`,
+       university_admission.mark.Entrant_idEntrant             AS `entrantId`,
+       SUM(university_admission.mark.value)                    AS `preliminary_sum`,
+       entrant.diplomaMark
+FROM university_admission.faculty_entrants
+       INNER JOIN university_admission.mark
+                  ON university_admission.faculty_entrants.Entrant_idEntrant =
+                     university_admission.mark.Entrant_idEntrant
+       INNER JOIN entrant on faculty_entrants.Entrant_idEntrant = entrant.id
+GROUP BY faculty_entrants.Faculty_idFaculty, entrantId;
+
 
 --          faculties_report_sheet View
 DROP VIEW IF EXISTS `university_admission`.`faculties_report_sheet`;
@@ -227,21 +240,6 @@ FROM university_admission.`entrant_marks_sum`
        INNER JOIN
      university_admission.user ON university_admission.entrant.User_idUser = university_admission.user.id
 ORDER BY `total_sum` DESC, university_admission.faculty.id;
-
-
---          entrant_marks_sum View
-DROP VIEW IF EXISTS `university_admission`.`entrant_marks_sum`;
-CREATE OR REPLACE VIEW `entrant_marks_sum` AS
-SELECT university_admission.faculty_entrants.Faculty_idFaculty AS `facultyId`,
-       university_admission.mark.Entrant_idEntrant             AS `entrantId`,
-       SUM(university_admission.mark.value)                    AS `preliminary_sum`,
-       entrant.diplomaMark
-FROM university_admission.faculty_entrants
-       INNER JOIN university_admission.mark
-                  ON university_admission.faculty_entrants.Entrant_idEntrant =
-                     university_admission.mark.Entrant_idEntrant
-       INNER JOIN entrant on faculty_entrants.Entrant_idEntrant = entrant.id
-GROUP BY faculty_entrants.Faculty_idFaculty, entrantId;
 
 --      result
 

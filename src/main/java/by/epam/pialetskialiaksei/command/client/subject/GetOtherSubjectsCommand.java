@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetOtherSubjectsCommand implements Command {
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(GetOtherSubjectsCommand.class);
 

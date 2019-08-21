@@ -2,7 +2,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class FormOfEducation extends Entity {
 
-	private static final long serialVersionUID = 2565574420335652970L;
+	private static final long VersionUID = 2565574420335652970L;
 	private String formRu;
 	private String formEng;
 

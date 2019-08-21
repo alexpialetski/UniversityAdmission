@@ -14,15 +14,14 @@ import by.epam.pialetskialiaksei.util.validation.ProfileInputValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class ClientRegistrationCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ClientRegistrationCommand.class);
 

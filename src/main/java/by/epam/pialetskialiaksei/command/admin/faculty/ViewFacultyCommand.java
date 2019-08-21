@@ -2,11 +2,13 @@ package by.epam.pialetskialiaksei.command.admin.faculty;
 
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
-import by.epam.pialetskialiaksei.entity.*;
+import by.epam.pialetskialiaksei.entity.Faculty;
+import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.model.FacultyInfoModel;
-import by.epam.pialetskialiaksei.sql.DAO.*;
+import by.epam.pialetskialiaksei.sql.DAO.FacultyDAO;
+import by.epam.pialetskialiaksei.sql.DAO.FacultySubjectDAO;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +22,7 @@ import java.util.List;
 
 public class ViewFacultyCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ViewFacultyCommand.class);
 

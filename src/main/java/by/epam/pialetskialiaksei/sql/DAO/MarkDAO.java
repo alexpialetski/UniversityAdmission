@@ -7,18 +7,13 @@ import by.epam.pialetskialiaksei.entity.Mark;
 import by.epam.pialetskialiaksei.entity.Subject;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
-import by.epam.pialetskialiaksei.sql.builder.FacultySubjectBuilder;
 import by.epam.pialetskialiaksei.sql.builder.MarkBuilder;
 import by.epam.pialetskialiaksei.sql.builder.SubjectBuilder;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 

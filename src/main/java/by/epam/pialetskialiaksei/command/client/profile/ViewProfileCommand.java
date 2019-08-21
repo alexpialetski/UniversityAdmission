@@ -1,27 +1,25 @@
 package by.epam.pialetskialiaksei.command.client.profile;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import by.epam.pialetskialiaksei.Path;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.*;
 import by.epam.pialetskialiaksei.exception.CommandException;
 import by.epam.pialetskialiaksei.exception.DaoException;
-import by.epam.pialetskialiaksei.model.ClientSubjectsModel;
 import by.epam.pialetskialiaksei.sql.DAO.*;
 import com.google.gson.Gson;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.List;
+
 public class ViewProfileCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ViewProfileCommand.class);
 
@@ -41,7 +39,7 @@ public class ViewProfileCommand implements Command {
 
             ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
             boolean results = reportSheetDAO.areResultExists();
-            request.setAttribute("results", results);
+            request.getSession().setAttribute("results", results);
             LOG.trace("Set the request attribute: 'results' = "
                     + results);
 

@@ -13,10 +13,7 @@ import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,11 +99,12 @@ public class ReportSheetDAO extends SqlDAO {
 
     public int getScore(int facultyId, int numberOfSeats) throws DaoException {
         Connection connection = null;
-        PreparedStatement pstmt = null;
+        CallableStatement pstmt = null;
         int score = 0;
         try {
             connection = getConnection();
-            pstmt = connection.prepareStatement(GET_SCORE);
+//            pstmt = connection.prepareStatement(GET_SCORE);
+            pstmt = connection.prepareCall(GET_SCORE);
             pstmt.setInt(1, facultyId);
             pstmt.setInt(2, numberOfSeats);
             pstmt.execute();
@@ -127,17 +125,17 @@ public class ReportSheetDAO extends SqlDAO {
     public void makeResult(List<Faculty> faculties) throws DaoException {
         List<EntrantReportSheet> entrantsResults = new ArrayList<>();
         Connection connection = null;
-        PreparedStatement pstmtForBudget = null;
-        PreparedStatement pstmtForNotBudget = null;
+        CallableStatement pstmtForBudget = null;
+        CallableStatement pstmtForNotBudget = null;
 
         try {
             connection = getConnection();
             for (Faculty faculty : faculties) {
-                pstmtForBudget = connection.prepareStatement(GET_BUDGET_ENTRANTS);
+                pstmtForBudget = connection.prepareCall(GET_BUDGET_ENTRANTS);
                 pstmtForBudget.setInt(1, faculty.getId());
                 pstmtForBudget.setInt(2, faculty.getBudgetSeats());
 
-                pstmtForNotBudget = connection.prepareStatement(GET_NOT_BUDGET_ENTRANTS);
+                pstmtForNotBudget = connection.prepareCall(GET_NOT_BUDGET_ENTRANTS);
                 pstmtForNotBudget.setInt(1, faculty.getId());
                 pstmtForNotBudget.setInt(2, faculty.getTotalSeats());
                 pstmtForNotBudget.setInt(3, faculty.getBudgetSeats());

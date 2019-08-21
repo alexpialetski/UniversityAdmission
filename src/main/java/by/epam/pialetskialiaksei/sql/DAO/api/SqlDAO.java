@@ -3,7 +3,10 @@ package by.epam.pialetskialiaksei.sql.DAO.api;
 import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import by.epam.pialetskialiaksei.sql.connection.ConnectionPoolManager;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public abstract class SqlDAO {
     protected Connection getConnection(){

@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Subject extends Entity {
 
-	private static final long serialVersionUID = -5388561545513613948L;
+	private static final long VersionUID = -5388561545513613948L;
 	private String nameRu;
 	private String nameEng;
 

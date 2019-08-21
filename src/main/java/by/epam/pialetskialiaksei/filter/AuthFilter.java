@@ -1,22 +1,15 @@
 package by.epam.pialetskialiaksei.filter;
 
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @WebFilter(filterName = "AuthFilter", urlPatterns = {"/controller"})
 public class AuthFilter implements Filter {
@@ -50,6 +43,7 @@ public class AuthFilter implements Filter {
 		accessibleCommands.add("viewLogin");
 		accessibleCommands.add("viewWelcome");
 		accessibleCommands.add("view_registration");
+		accessibleCommands.add("client_registration");
 		accessibleCommands.add("confirm");
 		accessibleCommands.add("sendConfirmation");
 
@@ -69,7 +63,7 @@ public class AuthFilter implements Filter {
 		clientCommands.add("applyOnFaculty");
 		clientCommands.add("unApplyOnFaculty");
 		// admin commands
-		adminCommands.add("admin_registration");
+//		adminCommands.add("admin_registration");
 		adminCommands.add("changeFacultySubjects");
 		adminCommands.add("viewFaculty");
 		adminCommands.add("viewAllSubjects");

@@ -2,7 +2,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class Mail extends Entity {
 
-	private static final long serialVersionUID = 2565574420335652970L;
+	private static final long VersionUID = 2565574420335652970L;
 	private String mailId;
 	private String key;
 

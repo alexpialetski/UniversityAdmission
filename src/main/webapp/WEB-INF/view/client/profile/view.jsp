@@ -24,7 +24,7 @@
     <div class="content">
         <div class="image-greeting">
             <c:choose>
-                <c:when test="${requestScope.results eq true}">
+                <c:when test="${sessionScope.results eq true}">
                     <c:choose>
                         <c:when test="${empty requestScope.formOfEducation}">
                             <c:if test="${not empty requestScope.faculty}">
@@ -154,7 +154,7 @@
                     <input type="number" class="no-spinners" placeholder="<c:out value="${diploma}"></c:out>" disabled>
                 </div>
             </c:if>
-            <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
+            <c:if test="${empty requestScope.faculty and sessionScope.results eq false}">
                 <input type="button" id="diplomaCancel" class="btn" style="display: none"
                        value="<fmt:message key="button.cancel"/>">
                 <input type="button" id="diplomaSubmit" class="btn" style="display: none"
@@ -195,7 +195,7 @@
                     <h1><b><fmt:message key="profile.text.no_subjects_message"/></b></h1>
                 </div>
             </c:if>
-            <c:if test="${empty requestScope.faculty and requestScope.results eq false}">
+            <c:if test="${empty requestScope.faculty and sessionScope.results eq false}">
                 <input type="button" id="subject_cancel" class="btn" style="display: none"
                        value="<fmt:message key="button.cancel"/>">
                 <input type="button" id="subject_submit" class="btn" style="display: none"

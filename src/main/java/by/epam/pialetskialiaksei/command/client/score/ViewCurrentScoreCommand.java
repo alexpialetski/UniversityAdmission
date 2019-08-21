@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewCurrentScoreCommand implements Command {
-
-    private static final long serialVersionUID = -3071536593627692473L;
-
     private static final Logger LOG = LogManager.getLogger(ViewCurrentScoreCommand.class);
 
     @Override

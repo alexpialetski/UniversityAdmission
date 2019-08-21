@@ -1,6 +1,5 @@
 package by.epam.pialetskialiaksei.command.admin.faculty;
 
-import by.epam.pialetskialiaksei.command.admin.faculty.ViewFacultyCommand;
 import by.epam.pialetskialiaksei.command.api.Command;
 import by.epam.pialetskialiaksei.entity.EntrantReportSheet;
 import by.epam.pialetskialiaksei.exception.CommandException;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class GetFacultyUsersCommand implements Command {
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(ViewFacultyCommand.class);
 

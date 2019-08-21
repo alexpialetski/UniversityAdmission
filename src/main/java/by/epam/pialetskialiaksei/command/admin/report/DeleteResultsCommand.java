@@ -15,7 +15,7 @@ import java.io.IOException;
 
 public class DeleteResultsCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(DeleteResultsCommand.class);
 
@@ -27,6 +27,7 @@ public class DeleteResultsCommand implements Command {
         try {
             ReportSheetDAO reportSheetDAO = new ReportSheetDAO();
             reportSheetDAO.deleteResults();
+            request.getSession().removeAttribute("results");
             return Path.REDIRECT_TO_PROFILE;
         } catch (DaoException e) {
             throw new CommandException(e);

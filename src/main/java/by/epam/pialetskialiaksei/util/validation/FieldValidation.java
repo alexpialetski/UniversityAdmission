@@ -5,7 +5,8 @@ import java.util.regex.Pattern;
 public class FieldValidation {
 
     private static final String positiveDecimalNumberRegEx = "\\d+";
-    private static final String filledRegex = "^\\p{L}[\\p{L}\\s]*";
+//    private static final String filledRegex = "^\\p{L}[\\p{L}\\s]*";
+    private static final String filledRegex = ".+";
     private static final String isLatinWord = "[a-zA-Z ]+";
     private static final String isCyrillicWord = "[а-яА-Я ]+";
     private static final String hasScript = "<script>.*</script>";

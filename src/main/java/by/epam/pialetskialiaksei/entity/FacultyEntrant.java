@@ -2,7 +2,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class FacultyEntrant extends Entity {
 
-	private static final long serialVersionUID = 1099698953477481899L;
+	private static final long VersionUID = 1099698953477481899L;
 
 	private int facultyId;
 	private int entrantId;

@@ -3,15 +3,10 @@ package by.epam.pialetskialiaksei.tag;
 import by.epam.pialetskialiaksei.entity.ClientSubject;
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-
-import static java.lang.System.out;
+import java.io.IOException;
 
 /**
  * Custom tag class which needed in apply for faculty user form. The main

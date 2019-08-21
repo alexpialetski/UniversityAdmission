@@ -2,7 +2,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class Mark extends Entity {
 
-	private static final long serialVersionUID = -6225323023971292703L;
+	private static final long VersionUID = -6225323023971292703L;
 	private int subjectId;
 	private int entrantId;
 	private int mark;

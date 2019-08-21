@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class SendConfirmationRegistrationCommand implements Command {
 
-    private static final long serialVersionUID = -3071536593627692473L;
+    private static final long VersionUID = -3071536593627692473L;
 
     private static final Logger LOG = LogManager.getLogger(SendConfirmationRegistrationCommand.class);
 

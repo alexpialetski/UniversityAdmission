@@ -3,7 +3,7 @@ package by.epam.pialetskialiaksei.entity;
 
 public class User extends Entity {
 
-    private static final long serialVersionUID = -6889036256149495388L;
+    private static final long VersionUID = -6889036256149495388L;
 
     private String email;
     private String password;

@@ -1,11 +1,10 @@
 package by.epam.pialetskialiaksei.sql.DAO;
 
-import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Mail;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
-import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import by.epam.pialetskialiaksei.sql.builder.MailBuilder;
+import by.epam.pialetskialiaksei.sql.builder.api.SetBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

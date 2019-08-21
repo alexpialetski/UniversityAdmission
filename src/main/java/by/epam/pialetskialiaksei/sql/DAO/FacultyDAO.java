@@ -1,6 +1,5 @@
 package by.epam.pialetskialiaksei.sql.DAO;
 
-import by.epam.pialetskialiaksei.Fields;
 import by.epam.pialetskialiaksei.entity.Faculty;
 import by.epam.pialetskialiaksei.exception.DaoException;
 import by.epam.pialetskialiaksei.sql.DAO.api.SqlDAO;
@@ -13,11 +12,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
 
 public class FacultyDAO extends SqlDAO {
     private static final String FIND_ALL_FACULTIES = "SELECT id, name_ru, name_eng, total_seats, budget_seats, infoEng, infoRu FROM university_admission.faculty;";
