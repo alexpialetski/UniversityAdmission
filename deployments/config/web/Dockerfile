@@ -4,7 +4,7 @@ FROM maven:alpine
 # image layer
 WORKDIR /app
 # ADD pom.xml /app
-ADD . /app
+ADD .. /app
 RUN mvn verify clean
 
 # Image layer: with the application
