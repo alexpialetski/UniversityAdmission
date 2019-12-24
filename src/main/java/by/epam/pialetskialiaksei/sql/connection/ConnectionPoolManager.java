@@ -5,6 +5,7 @@ import by.epam.pialetskialiaksei.sql.connection.api.ConnectionPool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -33,12 +34,14 @@ public class ConnectionPoolManager {
 
     private void init() throws ConnectionPoolException {
         try {
+            File file = new File("/db.properties");
             InputStream inputStream = ConnectionPool.class.getResourceAsStream("/db.properties");
             Properties properties = new Properties();
             properties.load(inputStream);
             url = properties.getProperty("url");
             user = properties.getProperty("user");
             password = properties.getProperty("password");
+            System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@" + url + user + password);
             maxPoolCapacity = Integer.parseInt(properties.getProperty("maxPoolCapacity"));
             initialPoolCapacity = Integer.parseInt(properties.getProperty("initialPoolCapacity"));
             connectionPool = BasicConnectionPool.create(url, user, password, initialPoolCapacity, maxPoolCapacity);
