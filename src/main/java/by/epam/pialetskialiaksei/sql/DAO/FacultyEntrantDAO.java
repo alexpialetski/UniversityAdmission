@@ -21,24 +21,24 @@ import java.util.List;
 
 public class FacultyEntrantDAO extends SqlDAO {
 
-    private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.faculty_entrants;";
-    private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.id = ? LIMIT 1;";
-    private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty = ? AND faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
-    private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.faculty_entrants WHERE faculty_entrants.Entrant_idEntrant = ? LIMIT 1;";
+    private static final String FIND_ALL_FACULTY_ENTRANTS = "SELECT * FROM university_admission.Faculty_Entrants;";
+    private static final String FIND_FACULTY_ENTRANT_BY_ID = "SELECT * FROM university_admission.Faculty_Entrants WHERE Faculty_Entrants.id = ? LIMIT 1;";
+    private static final String FIND_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "SELECT * FROM university_admission.Faculty_Entrants WHERE Faculty_Entrants.Faculty_idFaculty = ? AND Faculty_Entrants.Entrant_idEntrant = ? LIMIT 1;";
+    private static final String FIND_FACULTY_ENTRANT_BY_ENTRANT_ID = "SELECT id, Entrant_idEntrant, Faculty_idFaculty FROM university_admission.Faculty_Entrants WHERE Faculty_Entrants.Entrant_idEntrant = ? LIMIT 1;";
     private static final String FIND_FACULTY_BY_ENTRANT_ID = "SELECT faculty.id, faculty.name_ru, faculty.name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu\n" +
-            "FROM faculty_entrants\n" +
-            "       INNER JOIN faculty ON faculty_entrants.Faculty_idFaculty = faculty.id\n" +
+            "FROM Faculty_Entrants\n" +
+            "       INNER JOIN faculty ON Faculty_Entrants.Faculty_idFaculty = faculty.id\n" +
             "WHERE Entrant_idEntrant = ?;";
     private static final String FIND_FACULTY_USER_BY_FACULTY_ID = "SELECT user.id as User_idUser,user.first_name,user.last_name,user.email,user.password, role.role_name\n" +
-            "FROM university_admission.faculty_entrants\n" +
+            "FROM university_admission.Faculty_Entrants\n" +
             "       inner join university_admission.entrant e\n" +
-            "                  on faculty_entrants.Entrant_idEntrant = e.id\n" +
+            "                  on Faculty_Entrants.Entrant_idEntrant = e.id\n" +
             "       inner join user on e.User_idUser = user.id\n" +
             "       inner join role on user.role_id = role.id\n" +
-            "WHERE faculty_entrants.Faculty_idFaculty = ?;";
-    private static final String INSERT_FACULTY_ENTRANT = "INSERT INTO university_admission.faculty_entrants(faculty_entrants.Faculty_idFaculty,faculty_entrants.Entrant_idEntrant) VALUES (?,?);";
-    private static final String DELETE_FACULTY_ENTRANT = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.id=? LIMIT 1;";
-    private static final String DELETE_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "DELETE FROM university_admission.faculty_entrants WHERE faculty_entrants.Faculty_idFaculty=? and faculty_entrants.Entrant_idEntrant=? LIMIT 1;";
+            "WHERE Faculty_Entrants.Faculty_idFaculty = ?;";
+    private static final String INSERT_FACULTY_ENTRANT = "INSERT INTO university_admission.Faculty_Entrants(Faculty_Entrants.Faculty_idFaculty,Faculty_Entrants.Entrant_idEntrant) VALUES (?,?);";
+    private static final String DELETE_FACULTY_ENTRANT = "DELETE FROM university_admission.Faculty_Entrants WHERE Faculty_Entrants.id=? LIMIT 1;";
+    private static final String DELETE_FACULTY_ENTRANT_BY_FOREIGN_KEYS = "DELETE FROM university_admission.Faculty_Entrants WHERE Faculty_Entrants.Faculty_idFaculty=? and Faculty_Entrants.Entrant_idEntrant=? LIMIT 1;";
 
     private final static Logger LOG = LogManager
             .getLogger(FacultyEntrantDAO.class);

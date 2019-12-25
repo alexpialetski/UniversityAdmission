@@ -24,35 +24,35 @@ import java.util.List;
 
 
 public class FacultySubjectDAO extends SqlDAO {
-        private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT faculty_subjects.id,\n" +
+        private static final String FIND_ALL_FACULTY_SUBJECTS = "SELECT Faculty_Subjects.id,\n" +
                                                             "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats, faculty.infoEng, faculty.infoRu,\n" +
                                                             "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
-                                                            "FROM university_admission.faculty_subjects\n" +
-                                                            "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
-                                                            "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
+                                                            "FROM university_admission.Faculty_Subjects\n" +
+                                                            "       INNER JOIN subject on Faculty_Subjects.Subject_idSubject = subject.id\n" +
+                                                            "       INNER JOIN faculty on Faculty_Subjects.Faculty_idFaculty = faculty.id\n" +
                                                             "ORDER BY Faculty_idFaculty;";
-    private static final String FIND_FACULTY_INFO_BY_ID = "SELECT faculty_subjects.id,\n" +
+    private static final String FIND_FACULTY_INFO_BY_ID = "SELECT Faculty_Subjects.id,\n" +
                                                             "       faculty.id as Faculty_idFaculty, faculty.name_ru as Faculty_name_ru, faculty.name_eng as Faculty_name_eng, faculty.total_seats, faculty.budget_seats,faculty.infoEng, faculty.infoRu, faculty.image,\n" +
                                                             "       subject.id as Subject_idSubject, subject.name_ru as Subject_name_ru, subject.name_eng as Subject_name_eng\n" +
-                                                            "FROM university_admission.faculty_subjects\n" +
-                                                            "       INNER JOIN subject on faculty_subjects.Subject_idSubject = subject.id\n" +
-                                                            "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
-                                                            "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?\n" +
+                                                            "FROM university_admission.Faculty_Subjects\n" +
+                                                            "       INNER JOIN subject on Faculty_Subjects.Subject_idSubject = subject.id\n" +
+                                                            "       INNER JOIN faculty on Faculty_Subjects.Faculty_idFaculty = faculty.id\n" +
+                                                            "WHERE university_admission.Faculty_Subjects.Faculty_idFaculty = ?\n" +
                                                             "LIMIT 3;";
     private static final String FIND_FACULTY_SUBJECTS_BY_ID = "SELECT subject.id  as Subject_idSubject,\n" +
                                                             "       subject.name_ru  as Subject_name_ru,\n" +
                                                             "       subject.name_eng as Subject_name_eng\n" +
-                                                            "FROM university_admission.faculty_subjects\n" +
+                                                            "FROM university_admission.Faculty_Subjects\n" +
                                                             "       INNER JOIN subject\n" +
-                                                            "                  on faculty_subjects.Subject_idSubject = subject.id\n" +
-                                                            "       INNER JOIN faculty on faculty_subjects.Faculty_idFaculty = faculty.id\n" +
-                                                            "WHERE university_admission.faculty_subjects.Faculty_idFaculty = ?;";
+                                                            "                  on Faculty_Subjects.Subject_idSubject = subject.id\n" +
+                                                            "       INNER JOIN faculty on Faculty_Subjects.Faculty_idFaculty = faculty.id\n" +
+                                                            "WHERE university_admission.Faculty_Subjects.Faculty_idFaculty = ?;";
 
-    private static final String FIND_FACULTY_SUBJECTS = "SELECT * FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.id = ? LIMIT 3;";
-    private static final String INSERT_FACULTY_SUBJECT = "INSERT INTO university_admission.faculty_subjects (university_admission.faculty_subjects.Faculty_idFaculty, university_admission.faculty_subjects.Subject_idSubject) VALUES (?,?);";
-    private static final String DELETE_FACULTY_SUBJECT = "DELETE FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.Faculty_idFaculty=? AND university_admission.faculty_subjects.Subject_idSubject=? LIMIT 1;";
-    private static final String DELETE_ALL_FACULTY_SUBJECTS = "DELETE FROM university_admission.faculty_subjects WHERE university_admission.faculty_subjects.Faculty_idFaculty=?";
-    private static final String UPDATE_FACULTY_SUBJECT_BY_ID = "UPDATE university_admission.faculty_subjects SET Subject_idSubject = ? WHERE Faculty_idFaculty=? AND Subject_idSubject=? LIMIT 1;";
+    private static final String FIND_FACULTY_SUBJECTS = "SELECT * FROM university_admission.Faculty_Subjects WHERE university_admission.Faculty_Subjects.id = ? LIMIT 3;";
+    private static final String INSERT_FACULTY_SUBJECT = "INSERT INTO university_admission.Faculty_Subjects (university_admission.Faculty_Subjects.Faculty_idFaculty, university_admission.Faculty_Subjects.Subject_idSubject) VALUES (?,?);";
+    private static final String DELETE_FACULTY_SUBJECT = "DELETE FROM university_admission.Faculty_Subjects WHERE university_admission.Faculty_Subjects.Faculty_idFaculty=? AND university_admission.Faculty_Subjects.Subject_idSubject=? LIMIT 1;";
+    private static final String DELETE_ALL_FACULTY_SUBJECTS = "DELETE FROM university_admission.Faculty_Subjects WHERE university_admission.Faculty_Subjects.Faculty_idFaculty=?";
+    private static final String UPDATE_FACULTY_SUBJECT_BY_ID = "UPDATE university_admission.Faculty_Subjects SET Subject_idSubject = ? WHERE Faculty_idFaculty=? AND Subject_idSubject=? LIMIT 1;";
 
     private final static Logger LOG = LogManager
             .getLogger(FacultySubjectDAO.class);
