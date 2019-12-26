@@ -54,7 +54,7 @@ public class FacultyEntrantDAO extends SqlDAO {
             int counter = 1;
             pstmt.setInt(counter++, entity.getFacultyId());
             pstmt.setInt(counter, entity.getEntrantId());
-
+            System.out.println(entity.getFacultyId() + " @@@@@@@@@@@@@@@@@@@@@@@@@@@@ " + entity.getEntrantId());
             pstmt.execute();
             rs = pstmt.getGeneratedKeys();
             if (rs.next()) {

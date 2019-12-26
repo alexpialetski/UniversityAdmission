@@ -57,7 +57,7 @@
         });
     });
 
-    var socket = new WebSocket("ws://"+document.location.host+"/UniversityAdmission/score");
+    var socket = new WebSocket("ws://"+document.location.host+"/FinalTask/score");
     socket.onopen = function () {
     };
 

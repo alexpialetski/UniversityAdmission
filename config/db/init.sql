@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`user`
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
 
---          Entrant Table
-DROP TABLE IF EXISTS `university_admission`.`Entrant`;
+--          entrant Table
+DROP TABLE IF EXISTS `university_admission`.`entrant`;
 
 CREATE TABLE IF NOT EXISTS `university_admission`.`entrant`
 (
@@ -74,8 +74,8 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`entrant`
   ENGINE = InnoDB
   DEFAULT CHARACTER SET = utf8;
 
---          Faculty Table
-DROP TABLE IF EXISTS `university_admission`.`Faculty`;
+--          faculty Table
+DROP TABLE IF EXISTS `university_admission`.`faculty`;
 
 CREATE TABLE IF NOT EXISTS `university_admission`.`faculty`
 (
@@ -124,12 +124,12 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`Faculty_Entrants`
   UNIQUE INDEX `idFacultyEntrants_UNIQUE` (`id` ASC),
   CONSTRAINT `fk_Entrant_has_Faculty_Entrant1`
     FOREIGN KEY (`Entrant_idEntrant`)
-      REFERENCES `university_admission`.`Entrant` (`id`)
+      REFERENCES `university_admission`.`entrant` (`id`)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   CONSTRAINT `fk_Entrant_has_Faculty_Faculty1`
     FOREIGN KEY (`Faculty_idFaculty`)
-      REFERENCES `university_admission`.`Faculty` (`id`)
+      REFERENCES `university_admission`.`faculty` (`id`)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION
 )
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `university_admission`.`Faculty_Subjects`
   UNIQUE INDEX `idFacultySubjects_UNIQUE` (`id` ASC),
   CONSTRAINT `fk_Faculty_has_Subject_Faculty1`
     FOREIGN KEY (`Faculty_idFaculty`)
-      REFERENCES `university_admission`.`Faculty` (`id`)
+      REFERENCES `university_admission`.`faculty` (`id`)
       ON DELETE NO ACTION
       ON UPDATE NO ACTION,
   CONSTRAINT `fk_Faculty_has_Subject_Subject1`
